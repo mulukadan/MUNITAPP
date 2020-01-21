@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.munit.m_unitapp">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        tools:node="replace" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".HSMSObjViewActivity"></activity>
+        <activity android:name=".HSMSActivationActivity" />
+        <activity android:name=".PoolHistActivity" />
+        <activity android:name=".PoolHomeActivity" />
+        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ViewUserActivity" />
+        <activity android:name=".UsersActivity" />
+        <activity android:name=".SignIn" />
+        <activity
+            android:name=".PinActivity"
+            android:theme="@style/Themenotitle" />
+        <activity
+            android:name=".SplashScreen"
+            android:theme="@style/Themenotitle">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".AddSales" />
+        <activity android:name=".CashInActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Themenotitle">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+    </application>
+
+</manifest>

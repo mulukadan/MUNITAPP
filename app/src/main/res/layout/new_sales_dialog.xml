@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/CloseDialog"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="7dp"
+        android:background="@drawable/ic_close_black_24dp"
+        android:elevation="5dp" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="15dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:background="#F7F4F4"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/TopupTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:fontFamily="@font/bold"
+                    android:text="New Record"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="#F44336"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:id="@+id/Date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="8"
+                        android:fontFamily="@font/bold"
+                        android:text="16/12/2019"
+                        android:textAlignment="center"
+                        android:textAllCaps="true"
+                        android:textColor="#0F1111"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="2"
+                        android:src="@drawable/calender" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/Rooms"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.CardView
+
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/topcard"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="50"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="10dp"
+
+                        >
+
+                        <RelativeLayout
+                            android:id="@+id/sales"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:id="@+id/blueTable"
+                                android:layout_width="100dp"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:src="@drawable/blue_pool_table" />
+
+                            <TextView
+                                android:id="@+id/T1name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/blueTable"
+                                android:fontFamily="@font/bold"
+                                android:text="Blue Table"
+                                android:textAlignment="center"
+                                android:textColor="#0926C7" />
+
+                            <TextView
+                                android:id="@+id/T1Last"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/T1name"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/regular"
+                                android:text="Last: Ksh 1000"
+                                android:textAlignment="center"
+                                android:textColor="#000000" />
+
+                            <EditText
+                                android:id="@+id/T1Amt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/T1Last"
+                                android:layout_marginTop="10dp"
+                                android:hint="Ksh. 00"
+                                android:inputType="number"
+                                android:textAlignment="center" />
+
+
+                        </RelativeLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/bizcard"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="50"
+                        android:background="?android:attr/selectableItemBackground"
+                        card_view:cardCornerRadius="5dp"
+                        card_view:cardElevation="10dp">
+
+                        <RelativeLayout
+                            android:id="@+id/T2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:id="@+id/redTable"
+                                android:layout_width="100dp"
+                                android:layout_height="60dp"
+                                android:layout_centerHorizontal="true"
+                                android:src="@drawable/red_pool_table" />
+
+                            <TextView
+                                android:id="@+id/T2name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/redTable"
+                                android:fontFamily="@font/bold"
+                                android:text="Blue Table"
+                                android:textAlignment="center"
+                                android:textColor="#C43227" />
+
+                            <TextView
+                                android:id="@+id/T2Last"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/T2name"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/regular"
+                                android:text="Last: Ksh 1000"
+                                android:textAlignment="center"
+                                android:textColor="#000000" />
+
+                            <EditText
+                                android:id="@+id/T2Amt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/T2Last"
+                                android:layout_marginTop="10dp"
+                                android:hint="Ksh. 00"
+                                android:inputType="number"
+                                android:textAlignment="center" />
+
+
+                        </RelativeLayout>
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/LastAllTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Last Total: Ksh. 2300"
+                    android:textAlignment="center" />
+
+
+                <TextView
+                    android:id="@+id/NewAllTotal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/bold"
+                    android:text="Total: Ksh. 0"
+                    android:textAlignment="center"
+                    android:textColor="#176809"
+                    android:textSize="18dp" />
+
+                <Button
+                    android:id="@+id/SaveBtn"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/send_button_bk"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:text="Save"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

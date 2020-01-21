@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "723517059291",
+    "firebase_url": "https://m-unit.firebaseio.com",
+    "project_id": "m-unit",
+    "storage_bucket": "m-unit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723517059291:android:ebed906cd07e4d46195cfe",
+        "android_client_info": {
+          "package_name": "com.munit.m_unitapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "723517059291-or2qf926dqjg1as3m9ltq6fql249ead0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGDaZBTIDV7bGGImtcaAKbwQL-bq3iqFc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "723517059291-or2qf926dqjg1as3m9ltq6fql249ead0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

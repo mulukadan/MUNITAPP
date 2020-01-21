@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">M-UNIT</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="action_ok">OK</string>
+    <string name="msg_token_fmt">SomeMessage</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

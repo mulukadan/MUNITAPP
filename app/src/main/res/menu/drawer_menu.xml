@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single" android:id="@+id/grp1">
+        <item android:id="@+id/home" android:title="Home" android:icon="@drawable/ic_home_black_24dp" />
+        <!--<item android:id="@+id/topupHist" android:title="TopUp History" android:icon="@drawable/ic_home_black_24dp"/>-->
+        <!--<item android:id="@+id/outboxHist" android:title="Outbox History" android:icon="@drawable/ic_home_black_24dp"/>-->
+        <!--<item android:id="@+id/reportsmenu" android:title="Reports" android:icon="@drawable/reports" />-->
+
+
+        <item android:id="@+id/Settingsmenu" android:title="Settings" android:icon="@drawable/setings_icon" />
+        <!--<item android:id="@+id/Help" android:title="Help" android:icon="@drawable/chat" />-->
+    </group>
+    <group android:checkableBehavior="single" android:id="@+id/grp2">
+        <!--<item android:id="@+id/User_Manual" android:title="User Guide" android:icon="@drawable/giude" />-->
+        <!--<item android:id="@+id/ShareApp" android:title="Share App " android:icon="@drawable/ic_home_black_24dp" />-->
+        <item android:id="@+id/Logoutmenu" android:title="Logout" android:icon="@drawable/ic_exit_to_app_black_24dp" />
+    </group>
+
+
+    <!--<item android:title="">-->
+        <!--<menu>-->
+            <!--&lt;!&ndash;<item android:id="@+id/User_Manual" android:title="User Guide" android:icon="@drawable/giude" />&ndash;&gt;-->
+            <!--<item android:id="@+id/Logoutmenu" android:title="Logout" android:icon="@drawable/ic_logout" />-->
+        <!--</menu>-->
+    <!--</item>-->
+
+</menu>
