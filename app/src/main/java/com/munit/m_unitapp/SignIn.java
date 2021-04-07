@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -58,10 +58,13 @@ public class SignIn extends AppCompatActivity {
                     err= 1;
                 }
                 if(err == 0) {
-                    email = email +"@munit.com";
+                    if(!email.contains("@")){
+                        email = email +"@munit.com";
+                    }
+                    userNoEt.setText(email);
                     pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
                     pDialog.setTitleText("Logging in  ...");
-                    pDialog.setCancelable(true);
+                    pDialog.setCancelable(false);
                     pDialog.show();
                     Login();
                 }

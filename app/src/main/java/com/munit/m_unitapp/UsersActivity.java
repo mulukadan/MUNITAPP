@@ -5,15 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,10 +51,6 @@ public class UsersActivity extends AppCompatActivity {
 
     private FloatingActionMenu floatingActionMenu;
     private FloatingActionButton addUserBtn;
-
-//    public School school = new School();
-//    String SchoolId;
-
     private ImageView back_arrow;
 
     RecyclerView usersRV;
@@ -66,6 +63,7 @@ public class UsersActivity extends AppCompatActivity {
     private EditText UserName;
     private EditText password;
     private String AdminEmail, AdminPassword;
+    private Spinner userLevelSpiner;
 
     SweetAlertDialog sdialog;
     String UserType;
@@ -112,6 +110,7 @@ public class UsersActivity extends AppCompatActivity {
         name = UserDialog.findViewById(R.id.name);
         PhoneNo = UserDialog.findViewById(R.id.PhoneNo);
         UserName = UserDialog.findViewById(R.id.UserName);
+        userLevelSpiner = UserDialog.findViewById(R.id.userLevelSpiner);
         password = UserDialog.findViewById(R.id.password);
         SaveBtn = UserDialog.findViewById(R.id.SaveBtn);
 
@@ -162,6 +161,9 @@ public class UsersActivity extends AppCompatActivity {
                 user.setUsername(email);
                 user.setPassword(upassword);
                 user.setId(users.size());
+                user.setActive(true);
+                user.setLevel( userLevelSpiner.getSelectedItemPosition()+1);
+
                 sdialog.setTitleText("Save User?")
                         .setContentText("Are you sure you want to save!")
                         .setConfirmText("Save")

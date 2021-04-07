@@ -1,12 +1,12 @@
 package com.munit.m_unitapp.ADAPTERS;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.google.gson.Gson;
-import com.munit.m_unitapp.DailySalesFragment;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.WeeklySalesFragment;
 
@@ -28,23 +28,30 @@ public class WeeklySalesFragAdapter extends FragmentStatePagerAdapter {
         sales = new ArrayList<>();
         WeeklySalesFragment salesFragment = new WeeklySalesFragment();
         Bundle bundle = new Bundle();
-        position = position + 1;
+//        position = position + 1;
         String date = "";
-
-        for (List<DailySales> userSales : allUsersWeeklySales) {
-            DailySales dailySale = userSales.get(position - 1);
+        for (DailySales dailySales : allUsersWeeklySales.get(position)) {
+            sales.add(dailySales);
             if (date.equals("")) {
-                date = dailySale.getDate();
+                date = dailySales.getDate();
             }
-            sales.add(dailySale);
         }
+
+//        for (List<DailySales> userSales : allUsersWeeklySales) {
+//            if (userSales.size() > 0) {
+//                DailySales dailySale = userSales.get(position - 1);
+//                if (date.equals("")) {
+//                    date = dailySale.getDate();
+//                }
+//                sales.add(dailySale);
+//            }
+//        }
 
         Gson gson = new Gson();
         String salesJson = gson.toJson(sales);
 
-
         bundle.putString("salesjson", salesJson);
-        bundle.putString("date",date);
+        bundle.putString("date", date);
         salesFragment.setArguments(bundle);
         return salesFragment;
     }

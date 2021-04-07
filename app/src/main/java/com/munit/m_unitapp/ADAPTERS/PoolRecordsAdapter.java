@@ -2,10 +2,11 @@ package com.munit.m_unitapp.ADAPTERS;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
@@ -38,12 +39,24 @@ public class PoolRecordsAdapter extends RecyclerView.Adapter<PoolRecordsAdapter.
 
     @Override
     public void onBindViewHolder(myViewHolder holder, int position) {
+
         PoolTableRecord current = data.get(position);
+        double AllTotal = current.getTotal();
+        double biz1Total = current.getBiz1Total();
+        if(current.getTableThreeTotal()>0){
+            holder.biz2Layout.setVisibility(View.VISIBLE);
+        }else {
+            holder.biz2Layout.setVisibility(View.GONE);
+        }
+
         holder.Date.setText(current.getDate());
-        holder.Table1.setText("Ksh.  " + current.getTableOneTotal());
-        holder.Table2.setText("Ksh. " + current.getTableTwoTotal());
-        holder.Total.setText("Ksh. " + current.getTotal());
-        if (current.getTotal() > 9999) {
+        holder.Table1.setText("Ksh.  " + currencyFormatter(current.getTableOneTotal()));
+        holder.Table2.setText("Ksh. " + currencyFormatter(current.getTableTwoTotal()));
+        holder.Table3.setText("Ksh. " + currencyFormatter(current.getTableThreeTotal()));
+        holder.Total.setText("Ksh. " + currencyFormatter(biz1Total));
+        holder.GrantTotal.setText("Ksh. " + currencyFormatter(AllTotal));
+
+        if (biz1Total > 9999) {
             holder.Date.setBackgroundColor(Color.parseColor("#5EBA7D"));
         }
 
@@ -58,7 +71,10 @@ public class PoolRecordsAdapter extends RecyclerView.Adapter<PoolRecordsAdapter.
         TextView Date;
         TextView Table1;
         TextView Table2;
+        TextView Table3;
         TextView Total;
+        TextView GrantTotal;
+        LinearLayout biz2Layout;
 
 //        ImageButton viewBtn, addBtn;
 
@@ -67,7 +83,10 @@ public class PoolRecordsAdapter extends RecyclerView.Adapter<PoolRecordsAdapter.
             Date = itemView.findViewById(R.id.date);
             Table1 = itemView.findViewById(R.id.Table1);
             Table2 = itemView.findViewById(R.id.Table2);
+            Table3 = itemView.findViewById(R.id.Table3);
             Total = itemView.findViewById(R.id.Total);
+            GrantTotal = itemView.findViewById(R.id.GrantTotal);
+            biz2Layout = itemView.findViewById(R.id.biz2Layout);
 
 //            addBtn.setOnClickListener((view) ->{
 //                int pos = getAdapterPosition();
@@ -85,5 +104,8 @@ public class PoolRecordsAdapter extends RecyclerView.Adapter<PoolRecordsAdapter.
         }
     }
 
+    public String currencyFormatter( double amount){
+        return String.format("%,.2f", amount);
+    }
 
 }

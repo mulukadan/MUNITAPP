@@ -1,9 +1,9 @@
 package com.munit.m_unitapp.ADAPTERS;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.munit.m_unitapp.DailySalesFragment;
 import com.munit.m_unitapp.MODELS.DailySales;
@@ -27,11 +27,8 @@ public class DailySalesFragAdapter extends FragmentStatePagerAdapter {
 
         DailySales dailySale = sales.get(position -1);
 
-
         bundle.putString("csl", String.valueOf(dailySale.getComputer_sales()));
         bundle.putString("csr", String.valueOf(dailySale.getComputer_service()));
-        bundle.putString("pics", String.valueOf(dailySale.getPhotos()));
-        bundle.putString("vid", String.valueOf(dailySale.getVideo()));
         bundle.putString("mov", String.valueOf(dailySale.getMovies()));
         bundle.putString("game", String.valueOf(dailySale.getGames()));
         bundle.putString("total", String.valueOf(dailySale.getTotal()));

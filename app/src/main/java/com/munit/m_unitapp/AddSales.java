@@ -2,37 +2,43 @@ package com.munit.m_unitapp;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.gson.Gson;
-import com.munit.m_unitapp.ADAPTERS.SalesCategoryAdapter;
+import com.munit.m_unitapp.DB.Firestore;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.DailySales;
-import com.munit.m_unitapp.MODELS.SalesCategory;
 import com.munit.m_unitapp.MODELS.User;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -54,7 +60,7 @@ public class AddSales extends AppCompatActivity {
     String DateDisplaying;
 
     private DailySales dailySales;
-
+    String dailysalesPath = "dailysales";
     String USERID;
 
     private TextView computerService;
@@ -64,17 +70,31 @@ public class AddSales extends AppCompatActivity {
     private TextView movies;
     private TextView games;
     private TextView Username;
-    private TextView total;
+    private TextView totalTV, TotaltillPay, totalCashPay ;
     private ImageButton editCompSer, editCompSel, editphotos, editvideo, editMovies, editGames;
+    private LinearLayout editTillPayLL;
+    private EditText tillPatED;
+    private Button OkTillPayment, testBtn;
+    private ImageButton edittillpayBtn;
 
     String AmtFor = "";
     Gson gson = new Gson();
+
+    FirebaseFirestore firedb;
+    SweetAlertDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_sales);
         getSupportActionBar().hide();
+
+        firedb = FirebaseFirestore.getInstance();
+
+        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
 
         Bundle extras = getIntent().getExtras();
         String userJson = extras.getString("userJson");
@@ -124,11 +144,9 @@ public class AddSales extends AppCompatActivity {
 
         computerService = findViewById(R.id.computerService);
         computerSales = findViewById(R.id.computerSales);
-        photos = findViewById(R.id.photos);
-        video = findViewById(R.id.video);
         movies = findViewById(R.id.movies);
         games = findViewById(R.id.games);
-        total = findViewById(R.id.total);
+        totalTV = findViewById(R.id.total);
         Username = findViewById(R.id.Username);
         Username.setText(dbuser.getName());
         editCompSer = findViewById(R.id.editCompSer);
@@ -143,18 +161,6 @@ public class AddSales extends AppCompatActivity {
             showDialog("computer_sales", "Ksh. " + dailySales.getComputer_sales());
         });
 
-        editphotos = findViewById(R.id.editphotos);
-        editphotos.setOnClickListener(v -> {
-            icon.setBackgroundResource(R.drawable.photos_icon);
-            showDialog("photos", "Ksh. " + dailySales.getPhotos());
-        });
-
-        editvideo = findViewById(R.id.editvideo);
-        editvideo.setOnClickListener(v -> {
-            icon.setBackgroundResource(R.drawable.video_icon);
-            showDialog("video", "Ksh. " + dailySales.getVideo());
-        });
-
         editMovies = findViewById(R.id.editMovies);
         editMovies.setOnClickListener(v -> {
             icon.setBackgroundResource(R.drawable.movie_icon);
@@ -167,6 +173,74 @@ public class AddSales extends AppCompatActivity {
             showDialog("games", "Ksh. " + dailySales.getGames());
         });
 
+        totalCashPay  = findViewById(R.id.totalCashPay);
+        TotaltillPay  = findViewById(R.id.TotaltillPay);
+        editTillPayLL  = findViewById(R.id.editTillPayLL);
+        editTillPayLL.setVisibility(View.GONE);
+        tillPatED  = findViewById(R.id.tillPatED);
+        edittillpayBtn  = findViewById(R.id.edittillpayBtn);
+        edittillpayBtn.setOnClickListener(v -> {
+            tillPatED.setText("");
+            tillPatED.setError(null);
+            editTillPayLL.setVisibility(View.VISIBLE);
+            edittillpayBtn.setVisibility(View.GONE);
+        });
+        OkTillPayment  = findViewById(R.id.OkTillPayment);
+        OkTillPayment.setOnClickListener(v -> {
+            String amt = tillPatED.getText().toString().trim();
+            if (amt.length()>1){
+                //Save
+                AmtFor = "till";
+                updateDailySale(Integer.parseInt(amt));
+                tillPatED.setText("");
+                editTillPayLL.setVisibility(View.GONE);
+                edittillpayBtn.setVisibility(View.VISIBLE);
+            }else {
+                tillPatED.setError("Enter Amount");
+            }
+        });
+        tillPatED.addTextChangedListener(new TextWatcher() {
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+                if(!s.equals("") ) {
+                    int total = dailySales.getTotal();
+
+                    String amt = tillPatED.getText().toString().trim();
+                    try{
+                        int tillAmt = Integer.parseInt(amt);
+
+                        if (tillAmt<total){
+                            tillPatED.setError(null);
+                            TotaltillPay.setText("Ksh. " + amt);
+                            totalCashPay.setText("Ksh. " + (total-tillAmt));
+                            tillPatED.setError(null);
+                            OkTillPayment.setEnabled(true);
+
+                        }else {
+                            tillPatED.setError("Amount Exceeds the total");
+                            OkTillPayment.setEnabled(false);
+                        }
+
+                    }catch (Exception e){
+                        if(amt.length()>0){
+                            tillPatED.setError("Invalid Amount");
+                        }
+                        TotaltillPay.setText("Ksh. " + dailySales.getMpesaTill());
+                        totalCashPay.setText("Ksh. " + dailySales.getCashPayment());
+                        OkTillPayment.setEnabled(false);
+                    }
+
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+
+            }
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         getDailySale(DateDisplaying, USERID);
 
     }
@@ -215,55 +289,47 @@ public class AddSales extends AppCompatActivity {
     }
 
     public void getDailySale(String date, String userId) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef;
-        String Year = date.substring(date.lastIndexOf("/") + 1);
-        String Month = date.substring(date.indexOf("/") + 1, date.lastIndexOf("/"));
-        String day = date.substring(0, date.indexOf("/"));
+//        Firestore firestore = new Firestore(AddSales.this);
+        pDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Loading");
+        pDialog.show();
 
         daysDate.setText(date);
-
-        if (Month.length() == 1) {
-            Month = "0" + Month;
-        }
-        if (day.length() == 1) {
-            day = "0" + day;
-        }
-
-        final int[] Amount = {10};
-        String newDateFormt = Year + "-" + Month + "-" + day;
-        String path = "depts/sales/dailysales/" + userId + "/" + newDateFormt;
-        myRef = database.getReference(path);
-//        myRef = database.getReference("msg");
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
+        String docId = date.replace("/", "-") + ":" + userId;
+        DocumentReference docRef = firedb.collection(dailysalesPath).document(docId);
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                dailySales = dataSnapshot.getValue(DailySales.class);
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+//                    Log.w(TAG, "Listen failed.", e);
+                    pDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                    pDialog.setContentText(e.getMessage());
+                    pDialog.setConfirmClickListener(sweetAlertDialog -> {
+                        pDialog.dismiss();
+                    });
+                    return;
+                }
 
-                if (dailySales == null) {
+                if (snapshot != null && snapshot.exists()) {
+                    dailySales = snapshot.toObject(DailySales.class);
+                } else {
                     dailySales = new DailySales();
                     dailySales.setDate(DateDisplaying);
                 }
-
+                dailySales.setUserId(USERID);
+                dailySales.setUserName(dbuser.getName());
                 computerService.setText("Ksh. " + dailySales.getComputer_service());
                 computerSales.setText("Ksh. " + dailySales.getComputer_sales());
-                photos.setText("Ksh. " + dailySales.getPhotos());
-                video.setText("Ksh. " + dailySales.getVideo());
                 movies.setText("Ksh. " + dailySales.getMovies());
                 games.setText("Ksh. " + dailySales.getGames());
-                total.setText("Ksh. " + dailySales.getTotal());
-            }
+                totalTV.setText("Ksh. " + dailySales.getTotal());
+                TotaltillPay.setText("Ksh. " + dailySales.getMpesaTill());
+                totalCashPay.setText("Ksh. " + dailySales.getCashPayment());
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                int k = 2;
+                pDialog.dismiss();
             }
         });
-
     }
 
     public void updateDailySale(int amt) {
@@ -274,20 +340,24 @@ public class AddSales extends AppCompatActivity {
             case "computer_sales":
                 dailySales.setComputer_sales(amt);
                 break;
-            case "photos":
-                dailySales.setPhotos(amt);
-                break;
-            case "video":
-                dailySales.setVideo(amt);
-                break;
+//            case "photos":
+//                dailySales.setPhotos(amt);
+//                break;
+//            case "video":
+//                dailySales.setVideo(amt);
+//                break;
             case "movies":
                 dailySales.setMovies(amt);
                 break;
             case "games":
                 dailySales.setGames(amt);
                 break;
+            case "till":
+                dailySales.setMpesaTill(amt);
+                break;
         }
 
-        new firebase().addDailySale(USERID, dailySales);
+//        new firebase().addDailySale(USERID, dailySales);
+        new Firestore(AddSales.this).addDailySale(dailySales);
     }
 }

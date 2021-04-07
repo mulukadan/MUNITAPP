@@ -1,15 +1,20 @@
 package com.munit.m_unitapp;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.drawable.ColorDrawable;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,8 +49,6 @@ public class ViewUserActivity extends AppCompatActivity {
     DatabaseReference myRef;
     firebase db = new firebase();
     private FirebaseAuth mAuth;
-
-
     private ImageView back_arrow;
     private ImageView delete;
     private ImageView reset;
@@ -54,12 +57,23 @@ public class ViewUserActivity extends AppCompatActivity {
     private User user = new User();
     List<User> users = new ArrayList<>();
 
+    private Dialog UserDialog;
+    private ImageView CloseBillDialog;
+    private Button SaveBtn;
     private TextView name;
-    private TextView PhoneNo;
-    private TextView userName;
-    private TextView password;
+    private EditText PhoneNo;
+    private EditText UserName;
+    private EditText password;
+    private String AdminEmail, AdminPassword;
+    private Spinner userLevelSpiner;
+
+    private TextView uName;
+    private TextView uPhoneNo;
+    private TextView uUserName;
+    private TextView uPassword;
     private ImageButton showPassword;
-    private LinearLayout sendPwdLayout;
+    private RelativeLayout sendPwdLayout;
+    private TextView activateDeactivateUser, editBtn, userLevelTv, userStatusTV;
 
     SweetAlertDialog sdialog;
 
@@ -67,7 +81,7 @@ public class ViewUserActivity extends AppCompatActivity {
     private int year, month, day;
     String todate;
 
-    private String AdminEmail, AdminPassword;
+    boolean active = true;
 
 
     @Override
@@ -108,39 +122,146 @@ public class ViewUserActivity extends AppCompatActivity {
         });
 
 
+        UserDialog = new Dialog(this);
+        UserDialog.setCanceledOnTouchOutside(false);
+        UserDialog.setContentView(R.layout.user_dialog);
+        UserDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        CloseBillDialog = UserDialog.findViewById(R.id.CloseBillDialog);
+        name = UserDialog.findViewById(R.id.name);
+        PhoneNo = UserDialog.findViewById(R.id.PhoneNo);
+        UserName = UserDialog.findViewById(R.id.UserName);
+        userLevelSpiner = UserDialog.findViewById(R.id.userLevelSpiner);
+        password = UserDialog.findViewById(R.id.password);
+        SaveBtn = UserDialog.findViewById(R.id.SaveBtn);
+
+        CloseBillDialog.setOnClickListener((view) -> {
+            UserDialog.dismiss();
+        });
+
+        SaveBtn.setOnClickListener((view) -> {
+            String upName = name.getText().toString();
+            String upPhoneNo = PhoneNo.getText().toString().trim();
+            String upPassword = password.getText().toString();
+            int error = 0;
+            if (upName.trim().length() < 2) {
+                name.setError("Enter Name");
+                error = 1;
+            }
+
+            int Index7 = upPhoneNo.indexOf("7");
+            if (Index7 > 0) {
+                upPhoneNo = "0" + upPhoneNo.substring(Index7);
+                if (upPhoneNo.trim().length() != 10) {
+                    PhoneNo.setError("Enter Valid Number");
+                    error = 1;
+                }
+            } else {
+                PhoneNo.setError("Enter Valid Number");
+                error = 1;
+            }
+
+            if (uUserName.length() < 3) {
+                UserName.setError("Enter Username");
+                error = 1;
+            }
+            if (upPassword.trim().length() < 6) {
+                password.setError("At least 6 characters");
+                error = 1;
+            }
+
+            if (error == 0) {
+                String finalUpPhoneNo = upPhoneNo;
+                sdialog.setTitleText("Save User?")
+                        .setContentText("Are you sure you want to save!")
+                        .setConfirmText("Save")
+                        .showCancelButton(true)
+                        .setCancelClickListener(sweetAlertDialog -> {
+                            sdialog.dismiss();
+                        })
+                        .setCancelText("Cancel")
+                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                            @Override
+                            public void onClick(SweetAlertDialog sDialog) {
+                                user.setName(upName);
+                                user.setPhoneNo(finalUpPhoneNo);
+                                user.setPassword(upPassword);
+                                user.setActive(true);
+                                user.setLevel(userLevelSpiner.getSelectedItemPosition() + 1);
+                                updateFirebaseDb();
+                            }
+                        })
+                        .show();
+
+            }
+
+
+        });
+
         sendPwdLayout = findViewById(R.id.sendPwdLayout);
-        password = findViewById(R.id.password);
+        uPassword = findViewById(R.id.password);
         showPassword = findViewById(R.id.showPassword);
-        name = findViewById(R.id.name);
-        name.setText("Name: " + user.getName());
+        uName = findViewById(R.id.name);
+        uPhoneNo = findViewById(R.id.PhoneNo);
+        uUserName = findViewById(R.id.userName);
+        userLevelTv = findViewById(R.id.userLevelTv);
+        userStatusTV = findViewById(R.id.userStatusTV);
 
-        PhoneNo = findViewById(R.id.PhoneNo);
-        PhoneNo.setText("Phone No: " + user.getPhoneNo());
+        editBtn = findViewById(R.id.editBtn);
+        editBtn.setOnClickListener(v -> {
+            setUserDetails();
+        });
+        activateDeactivateUser = findViewById(R.id.activateDeactivateUser);
 
-        userName = findViewById(R.id.userName);
-        userName.setText("Username: " + user.getUsername());
+        if (user.getActive() != null) {
+            active = user.getActive();
+        } else {
+            user.setActive(true);
+        }
+
+        if (user.getLevel() == 0) {
+            user.setLevel(4);
+        }
+
+        activateDeactivateUser.setOnClickListener(v -> {
+            String action = "Activate";
+            if (active) {
+                action = "Deactivate";
+            }
+            sdialog = new SweetAlertDialog(ViewUserActivity.this, SweetAlertDialog.WARNING_TYPE);
+            sdialog.setTitleText(action + " User?")
+                    .setContentText("Are you sure you want to " + action + ": " + user.getName() + "?")
+                    .setConfirmText(action)
+                    .showCancelButton(true)
+                    .setCancelClickListener(sdialog -> {
+                        sdialog.dismiss();
+                    })
+                    .setCancelText("Cancel")
+                    .setConfirmClickListener(sDialog -> {
+                        user.setActive(!user.getActive());
+                        updateFirebaseDb();
+                    })
+                    .show();
+        });
+        editBtn = findViewById(R.id.editBtn);
 
         delete.setOnClickListener(v -> {
+            sdialog = new SweetAlertDialog(ViewUserActivity.this, SweetAlertDialog.WARNING_TYPE);
             sdialog.setTitleText("Delete User?")
                     .setContentText("Are you sure you want to Delete: " + user.getName() + "?")
                     .setConfirmText("Delete")
                     .showCancelButton(true)
-                    .setCancelClickListener(sweetAlertDialog -> {
+                    .setCancelClickListener(sdialog -> {
                         sdialog.dismiss();
                     })
                     .setCancelText("Cancel")
-                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(SweetAlertDialog sDialog) {
-//                            school.getUsers().remove(user);
-                            for (User u : users) {
-                                if (u.getUsername().equals(user.getUsername())) {
-                                    users.remove(u);
-                                    break;
-                                }
+                    .setConfirmClickListener(sDialog -> {
+                        for (User u : users) {
+                            if (u.getUsername().equals(user.getUsername())) {
+                                users.remove(u);
+                                break;
                             }
-                            removeUserFromFirebase(user);
                         }
+                        removeUserFromFirebase(user);
                     })
                     .show();
         });
@@ -172,15 +293,15 @@ public class ViewUserActivity extends AppCompatActivity {
         }
 
         showPassword.setOnClickListener(v -> {
-            String pwd = password.getText().toString();
+            String pwd = uPassword.getText().toString();
             if (pwd.contains("****")) {
-                password.setText("Password: " + user.getPassword());
+                uPassword.setText(user.getPassword());
             } else {
-                password.setText("Password: *********");
+                uPassword.setText("********");
             }
         });
 
-
+        updateUI();
     }
 
     public void fetchData() {
@@ -197,7 +318,7 @@ public class ViewUserActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 users.clear();
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     String Key = postSnapshot.getKey();
                     User user = postSnapshot.getValue(User.class);
 //                      if(room_ic.getId().equals("l Room 12"))
@@ -258,7 +379,7 @@ public class ViewUserActivity extends AppCompatActivity {
                                         .setConfirmText("OK")
                                         .setConfirmClickListener(sweetAlertDialog -> {
                                             finish();
-                                            sdialog.dismissWithAnimation();
+                                            sdialog.dismiss();
                                         })
                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                             }
@@ -335,6 +456,62 @@ public class ViewUserActivity extends AppCompatActivity {
 //            Log.d("Error: " , e.getMessage());
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void updateFirebaseDb() {
+        for (User u : users) {
+            if (u.getUsername().equals(user.getUsername())) {
+                users.remove(u);
+                users.add(user);
+                db.saveUsers(users);
+                break;
+            }
+        }
+        if (sdialog.isShowing()) {
+            sdialog
+                    .setTitleText("Done!")
+                    .setContentText("User Updated Successfully")
+                    .setConfirmText("OK")
+                    .showCancelButton(false)
+                    .setConfirmClickListener(sweetAlertDialog -> {
+                        updateUI();
+                        sdialog.dismiss();
+                    })
+                    .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+        }
+        if(UserDialog.isShowing()){
+            UserDialog.dismiss();
+        }
+    }
+
+    public void updateUI() {
+        uName.setText(user.getName());
+        uPhoneNo.setText(user.getPhoneNo());
+        uUserName.setText(user.getUsername());
+        if (user.getActive()) {
+            activateDeactivateUser.setText("Deactivate");
+            activateDeactivateUser.setBackgroundColor(Color.parseColor("#F3341A"));
+            userStatusTV.setText("User Status: Active");
+            userStatusTV.setTextColor(Color.parseColor("#1A790D"));
+
+        } else {
+            activateDeactivateUser.setText("Activate");
+            activateDeactivateUser.setBackgroundColor(Color.parseColor("#1A790D"));
+            userStatusTV.setText("User Status: Inactive");
+            userStatusTV.setTextColor(Color.parseColor("#F3341A"));
+        }
+        userLevelTv.setText("User Level: " + user.getLevel());
+    }
+
+    public void setUserDetails() {
+        name.setText(user.getName());
+        PhoneNo.setText(user.getPhoneNo());
+        UserName.setText(user.getUsername());
+        UserName.setEnabled(false);
+        password.setText(user.getPassword());
+        userLevelSpiner.setSelection(user.getLevel() - 1);
+        UserDialog.show();
+
     }
 
     public void GetUserInfo() {

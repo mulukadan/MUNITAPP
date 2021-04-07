@@ -2,16 +2,24 @@ package com.munit.m_unitapp;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,15 +28,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.munit.m_unitapp.ADAPTERS.UsersAdapter;
 import com.munit.m_unitapp.MODELS.User;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -47,9 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView UserName;
     private TextView adminSwitch;
     private String UserType;
-
-
     FirebaseUser user;
+    FirebaseFirestore firedb;
     String Username;
     public List<User> users = new ArrayList<>();
     public User userdb = new User();
@@ -59,11 +71,13 @@ public class MainActivity extends AppCompatActivity {
     private TextView DrawerUsername;
     Calendar c = Calendar.getInstance();
 
-    private RelativeLayout sales,pool, logo;
+    private RelativeLayout sales,pool, logo, newsPapers, expense;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        firedb = FirebaseFirestore.getInstance();
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -75,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             UserType = "Admin";
         }
-//        fetchData();
+        fetchData();
         drawerLayout = findViewById(R.id.drawer);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
@@ -131,11 +145,33 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        expense = findViewById(R.id.expense);
+        expense.setOnClickListener((view) -> {
+//            Intent intent = new Intent(MainActivity.this, CashInActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+
+        });
+
+
+        newsPapers = findViewById(R.id.newsPapers);
+        newsPapers.setOnClickListener((view) -> {
+//            Intent intent = new Intent(MainActivity.this, CashInActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(intent);
+
+        });
+
         pool = findViewById(R.id.pool);
         pool.setOnClickListener((view) -> {
-            Intent intent = new Intent(MainActivity.this, PoolHomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            if(userdb.getLevel()<3){
+                Intent intent = new Intent(MainActivity.this, PoolHomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }else {
+                Toast.makeText(MainActivity.this,"Comin Soon!",Toast.LENGTH_SHORT).show();
+            }
+
         });
         logo = findViewById(R.id.logo);
         logo.setOnClickListener((view) -> {
@@ -216,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
         SweetAlertDialog pDialog = new SweetAlertDialog(MainActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         pDialog.setTitleText("Loading ...");
-        pDialog.setCancelable(true);
+        pDialog.setCancelable(false);
         pDialog.show();
 
         // Read from the database
@@ -232,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
 //                      if(room_ic.getId().equals("l Room 12"))
                     users.add(user);
 //                    Rooms.add(room_ic);
-
                 }
                 for (User u : users) {
                     if (u.getUsername().equals(user.getEmail())) {
@@ -259,4 +294,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 }

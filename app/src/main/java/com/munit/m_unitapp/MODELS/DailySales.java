@@ -1,17 +1,22 @@
 package com.munit.m_unitapp.MODELS;
 
 public class DailySales {
-    String user;
+    String userId;
+    String userName;
     String date;
     int computer_service = 0;
     int computer_sales = 0;
-    int photos = 0;
-    int video = 0;
     int movies = 0;
     int games = 0;
+    int mpesaTill =0;
+    int cashPayment =0;
     int total = 0;
 
     public DailySales() {
+    }
+
+    public DailySales(String userId) {
+        this.userId = userId;
     }
 
     public String getDate() {
@@ -38,22 +43,6 @@ public class DailySales {
         this.computer_sales = computer_sales;
     }
 
-    public int getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(int photos) {
-        this.photos = photos;
-    }
-
-    public int getVideo() {
-        return video;
-    }
-
-    public void setVideo(int video) {
-        this.video = video;
-    }
-
     public int getMovies() {
         return movies;
     }
@@ -70,20 +59,41 @@ public class DailySales {
         this.games = games;
     }
 
-    public String getUser() {
-        return user;
+    public String getUserId() { return userId; }
+
+    public void setUserId(String userId) {  this.userId = userId;   }
+
+    public int getMpesaTill() {
+        return mpesaTill;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    public void setMpesaTill(int mpesaTill) {
+        this.mpesaTill = mpesaTill;
+    }
+
+    public int getCashPayment() {
+        cashPayment = getTotal()-getMpesaTill();
+        return cashPayment;
+    }
+
+    public void setCashPayment(int cashPayment) {
+        this.cashPayment = cashPayment;
     }
 
     public int getTotal() {
-        total = computer_service+computer_sales+photos+video+movies+games;
+        total = computer_service+computer_sales+movies+games;
         return total;
     }
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

@@ -2,13 +2,14 @@ package com.munit.m_unitapp.MODELS;
 
 public class User {
     int id;
-    String role;
+    int level;
     String name;
     String username;
     String password;
     String status;
     String imgUrl;
     String phoneNo;
+    Boolean active;
 
     public User() {
     }
@@ -17,12 +18,12 @@ public class User {
 
     public void setId(int id) { this.id = id; }
 
-    public String getRole() {
-        return role;
+    public int getLevel() {
+        return level;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public String getName() {
@@ -71,5 +72,13 @@ public class User {
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

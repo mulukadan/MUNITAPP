@@ -7,10 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,14 +46,14 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class UserProfileActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
-    FirebaseUser user;
+    FirebaseUser Fbuser;
     FirebaseStorage storage;
     StorageReference storageRef;
     StorageReference ProfilePicRef;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
-    String SchoolId;
+    String dbName = "m-unit";
     private User scUser = new User();
     firebase db = new firebase();
 
@@ -80,15 +80,14 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
         setContentView(R.layout.activity_user_profile);
         getSupportActionBar().hide();
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        SchoolId = user.getEmail().substring((user.getEmail().indexOf("@") + 1), user.getEmail().lastIndexOf("."));
+        Fbuser = FirebaseAuth.getInstance().getCurrentUser();
 
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
-        String username = user.getEmail().substring(0, user.getEmail().indexOf("@"));
-        ProfilePicRef = storageRef.child(SchoolId + "/users/" + username + ".jpg");
+        String username = Fbuser.getEmail().substring(0, Fbuser.getEmail().indexOf("@"));
+        ProfilePicRef = storageRef.child("munit" + "/users/" + username + ".jpg");
 
-        fetchData(SchoolId);
+        fetchData();
 
         back_arrow = findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener((view) -> {
@@ -101,7 +100,7 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
         ChangeProfilePic = findViewById(R.id.ChangeProfilePic);
         save = findViewById(R.id.save);
 
-        Picasso.get().load(user.getPhotoUrl()).into(ProfilePic);
+        Picasso.get().load(Fbuser.getPhotoUrl()).into(ProfilePic);
 
         SelectImgDialog = new Dialog(this);
         SelectImgDialog.setCanceledOnTouchOutside(false);
@@ -121,8 +120,8 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
             SelectImgDialog.dismiss();
         });
 
-        userName.setText(user.getDisplayName());
-        email.setText(user.getEmail());
+        userName.setText(Fbuser.getDisplayName());
+        email.setText(Fbuser.getEmail());
 
         ChangeProfilePic.setOnClickListener((view) -> {
             SelectImgDialog.show();
@@ -178,12 +177,13 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
                                         ProfilePicURL = selectedImage.toString();
                                         Picasso.get().load(selectedImage).into(ProfilePic);
 
+
                                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                                 .setDisplayName(userName.getText().toString())
                                                 .setPhotoUri(Uri.parse(ProfilePicURL))
                                                 .build();
 
-                                        user.updateProfile(profileUpdates)
+                                        Fbuser.updateProfile(profileUpdates)
                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                     @Override
                                                     public void onComplete(@NonNull Task<Void> task) {
@@ -222,7 +222,7 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
 
     private void updateFirebaseDb() {
         for (User u : users) {
-            if (u.getUsername().equals(user.getEmail())) {
+            if (u.getUsername().equals(Fbuser.getEmail())) {
                 users.remove(u);
                 users.add(scUser);
                 db.saveUsers(users);
@@ -252,7 +252,7 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
 //                                .setPhotoUri(Uri.parse(ProfilePicURL))
                                 .build();
 
-                        user.updateProfile(profileUpdates)
+                        Fbuser.updateProfile(profileUpdates)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -360,14 +360,14 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
         }
     }
 
-    public void fetchData(String dbRef) {
+    public void fetchData() {
         SweetAlertDialog pDialog = new SweetAlertDialog(UserProfileActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         pDialog.setTitleText("Loading ...");
         pDialog.setCancelable(true);
         pDialog.show();
 
-        myRef = database.getReference(dbRef);
+        myRef = database.getReference( "users");
 
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
@@ -384,7 +384,7 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
                 }
 
                 for (User u : users) {
-                    if (u.getUsername().equals(user.getEmail())) {
+                    if (u.getUsername().equals(Fbuser.getEmail())) {
                         scUser = u;
                         break;
                     }

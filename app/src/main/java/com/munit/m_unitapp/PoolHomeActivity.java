@@ -1,14 +1,17 @@
 package com.munit.m_unitapp;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
@@ -30,9 +34,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class PoolHomeActivity extends AppCompatActivity {
     private ImageView back_arrow;
     private Dialog NewSalesDialog;
-    private ImageView CloseDialog;
-    private TextView Date, T1Last, T2Last, LastAllTotal, NewAllTotal;
-    private EditText T1Amt, T2Amt;
+    private ImageView CloseDialog, calenderIcon;
+    private TextView Date, T1Last, T2Last, T3Last, LastAllTotal, NewAllTotal;
+    private EditText T1Amt, T2Amt, T3Amt;
     private Button SaveBtn;
 
     private RelativeLayout newSales;
@@ -50,6 +54,8 @@ public class PoolHomeActivity extends AppCompatActivity {
     private User dbuser;
     String DateDisplaying;
     PoolTableRecord record = new PoolTableRecord();
+    PoolTableRecord Lastrecord = new PoolTableRecord();
+
     boolean DisplaySalesDialog = false;
 
     @Override
@@ -82,16 +88,23 @@ public class PoolHomeActivity extends AppCompatActivity {
         NewSalesDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         CloseDialog = NewSalesDialog.findViewById(R.id.CloseDialog);
         Date = NewSalesDialog.findViewById(R.id.Date);
+        calenderIcon = NewSalesDialog.findViewById(R.id.calenderIcon);
         T1Last = NewSalesDialog.findViewById(R.id.T1Last);
         T2Last = NewSalesDialog.findViewById(R.id.T2Last);
+        T3Last = NewSalesDialog.findViewById(R.id.T3Last);
         LastAllTotal = NewSalesDialog.findViewById(R.id.LastAllTotal);
         NewAllTotal = NewSalesDialog.findViewById(R.id.NewAllTotal);
         T1Amt = NewSalesDialog.findViewById(R.id.T1Amt);
         T2Amt = NewSalesDialog.findViewById(R.id.T2Amt);
+        T3Amt = NewSalesDialog.findViewById(R.id.T3Amt);
         SaveBtn = NewSalesDialog.findViewById(R.id.SaveBtn);
 
         CloseDialog.setOnClickListener((view) -> {
             NewSalesDialog.dismiss();
+        });
+
+        calenderIcon.setOnClickListener((view) -> {
+            setDate();
         });
 
         T1Amt.addTextChangedListener(new TextWatcher() {
@@ -158,10 +171,43 @@ public class PoolHomeActivity extends AppCompatActivity {
                 }
             }
         });
+        T3Amt.addTextChangedListener(new TextWatcher() {
+            private String previousDigits, num;
+            private boolean textChanged = false;
+
+            @Override
+            public void onTextChanged(CharSequence currentDigits, int start,
+                                      int before, int count) {
+                if (!(previousDigits.equalsIgnoreCase(currentDigits.toString()))) {
+                    textChanged = true;
+                    num = currentDigits.toString();
+                    if (num.length() > 0) {
+                        record.setTableThreeTotal(Double.parseDouble(num));
+                    } else {
+                        record.setTableThreeTotal(0);
+                    }
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                previousDigits = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (textChanged) {
+                    textChanged = false;
+                    NewAllTotal.setText("Total: Ksh. " + (record.getTotal()));
+                }
+            }
+        });
 
         SaveBtn.setOnClickListener(v -> {
             record.setDate(DateDisplaying);
             record.setTotal(record.getTotal());
+            record.setBiz1Total(record.getBiz1Total());
             record.setUser("Mulu");
             new firebase().addPoolSale(record);
             NewSalesDialog.dismiss();
@@ -170,6 +216,7 @@ public class PoolHomeActivity extends AppCompatActivity {
         newSales = findViewById(R.id.newSales);
         newSales.setOnClickListener(v -> {
             DisplaySalesDialog = true;
+            DateDisplaying = todate;
             getPoolSale(DateDisplaying);
 
         });
@@ -179,16 +226,48 @@ public class PoolHomeActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+    @SuppressWarnings("deprecation")
+    public void setDate() {
+        showDialog(999);
+    }
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        // TODO Auto-generated method stub
+        if (id == 999) {
+            return new DatePickerDialog(this,
+                    myDateListener, year, calendar.get(Calendar.MONTH), day);
+        }
+        return null;
+    }
 
+    private DatePickerDialog.OnDateSetListener myDateListener = new
+            DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker arg0,
+                                      int arg1, int arg2, int arg3) {
+                    // TODO Auto-generated method stub
+                    // arg1 = year
+                    // arg2 = month
+                    // arg3 = day
+                    DateDisplaying = arg3 +"/" + (arg2+1) +"/" + arg1;
+//                    Date.setText(DateDisplaying);
+//                    DisplaySalesDialog = true;
+                    getPoolSale(DateDisplaying);
+                }
+            };
     private void prepareNewSalesDialog() {
 //        record = new firebase().getPoolSale(DateDisplaying);
         Date.setText(DateDisplaying);
         T1Amt.setText("" + record.getTableOneTotal());
         T2Amt.setText("" + record.getTableTwoTotal());
-        NewAllTotal.setText("Total: Ksh. " + record.getTotal());
-        T1Amt.setText("" + record.getTableOneTotal());
-        T2Amt.setText("" + record.getTableTwoTotal());
+        T3Amt.setText("" + record.getTableThreeTotal());
 
+        T1Last.setText("Last: Ksh. " + Lastrecord.getTableOneTotal());
+        T2Last.setText("Last: Ksh. " + Lastrecord.getTableTwoTotal());
+        T3Last.setText("Last: Ksh. " + Lastrecord.getTableThreeTotal());
+        LastAllTotal.setText("Last Total: Ksh. " + Lastrecord.getTotal());
+
+        NewAllTotal.setText("Total: Ksh. " + record.getTotal());
         if (DisplaySalesDialog) {
             NewSalesDialog.show();
             DisplaySalesDialog = false;
@@ -225,13 +304,37 @@ public class PoolHomeActivity extends AppCompatActivity {
                     record = new PoolTableRecord();
                     record.setDate(date);
                 }
-                prepareNewSalesDialog();
+                getlastRecord();
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 int k = 2;
+            }
+        });
+    }
+
+    public void getlastRecord(){
+        String path = "depts/pool/collections/";
+        DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference(path);
+        Query lastQuery = dbReference.orderByKey().limitToLast(1);
+        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Lastrecord = dataSnapshot(PoolTableRecord.class);
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Lastrecord.setTableOneTotal(ds.child("tableOneTotal").getValue(Double.class));
+                    Lastrecord.setTableTwoTotal(ds.child("tableTwoTotal").getValue(Double.class));
+                    Lastrecord.setTableThreeTotal(ds.child("tableThreeTotal").getValue(Double.class));
+                    Lastrecord.setTotal(ds.child("total").getValue(Double.class));
+                }
+
+                prepareNewSalesDialog();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("TAG", databaseError.getMessage()); //Don't ignore potential errors!
             }
         });
     }

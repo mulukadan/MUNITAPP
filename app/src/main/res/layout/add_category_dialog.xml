@@ -17,7 +17,7 @@
         android:elevation="5dp"
         android:layout_alignParentRight="true"/>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="15dp"
@@ -50,7 +50,7 @@
                     android:id="@+id/TopupTitle"
                     />
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     >
@@ -63,7 +63,7 @@
                         android:fontFamily="@font/medium"
                         android:hint="Category Name" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <Button
@@ -85,6 +85,6 @@
         </ScrollView>
 
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

@@ -7,13 +7,13 @@
     tools:context=".DailySalesFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         app:cardElevation="10dp"
         app:cardCornerRadius="5dp"
         >
@@ -21,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#F1F5F1"
-            android:padding="10dp"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/Date"
@@ -37,9 +36,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="10"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+                android:weightSum="8"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
                 android:padding="2dp"
                 android:background="#2196F3"
                 >
@@ -74,24 +73,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Pic"
-                    android:fontFamily="@font/medium"
-                    android:textColor="@color/white"
-                    android:textSize="12dp"
-                    />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Vid"
-                    android:fontFamily="@font/medium"
-                    android:textColor="@color/white"
-                    android:textSize="12dp"
-                    />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="Mov"
                     android:fontFamily="@font/medium"
                     android:textColor="@color/white"
@@ -117,20 +98,20 @@
                     />
 
             </LinearLayout>
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/AllUsersRV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
                 >
 
-            </android.support.v7.widget.RecyclerView>
+            </androidx.recyclerview.widget.RecyclerView>
 
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 </FrameLayout>

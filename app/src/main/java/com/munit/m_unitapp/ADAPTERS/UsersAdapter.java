@@ -2,7 +2,7 @@ package com.munit.m_unitapp.ADAPTERS;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +55,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.myViewHolder
         holder.Phone.setText( current.getPhoneNo());
         if(current.getImgUrl()!=null){
             Picasso.get().load(current.getImgUrl()).memoryPolicy(MemoryPolicy.NO_STORE).centerCrop().fit().into(holder.profilePic);
+//            Picasso.get().load(user.getPhotoUrl()).memoryPolicy(MemoryPolicy.NO_STORE).centerCrop().fit().into(ProfilePic);
 //            Picasso.with(getActivity()).load(backdropURL).memoryPolicy(MemoryPolicy.NO_STORE).centerCrop().fit().into(backdropView);
         }
 
