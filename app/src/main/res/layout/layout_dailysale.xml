@@ -21,6 +21,7 @@
         card_view:cardCornerRadius="5dp"
         >
         <LinearLayout
+            android:id="@+id/bkLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -41,6 +42,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textAlignment="viewEnd"
                 android:text="C.Srv"
                 android:fontFamily="@font/medium"
                 android:textSize="12dp"
@@ -50,6 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textAlignment="viewEnd"
                 android:text="C.Sls"
                 android:fontFamily="@font/medium"
                 android:textSize="12dp"
@@ -60,6 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Mov"
+                android:textAlignment="viewEnd"
                 android:fontFamily="@font/medium"
                 android:textSize="12dp"
                 />
@@ -69,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Gms"
+                android:textAlignment="viewEnd"
                 android:fontFamily="@font/medium"
                 android:textSize="12dp"
                 />
@@ -78,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Total"
+                android:textAlignment="viewEnd"
                 android:fontFamily="@font/medium"
                 android:textSize="12dp"
                 />

@@ -69,7 +69,6 @@ public class PoolHistActivity extends AppCompatActivity {
         dailyBtn.setOnClickListener(v -> {
             pDialog.show();
             displayRecords(records);
-
             dailyBtn.setBackgroundResource(R.color.colorPrimary);
             monthlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             yealyBtn.setBackgroundResource(R.color.gray_btn_bg_color);

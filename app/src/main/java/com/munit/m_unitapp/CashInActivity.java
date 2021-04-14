@@ -3,11 +3,17 @@ package com.munit.m_unitapp;
 import android.content.Intent;
 import android.graphics.Color;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.eftimoff.viewpagertransformers.CubeOutTransformer;
 import com.github.clans.fab.FloatingActionButton;
@@ -20,9 +26,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
@@ -30,10 +39,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.munit.m_unitapp.ADAPTERS.AllDailySalesAdapter;
 import com.munit.m_unitapp.ADAPTERS.DailySalesFragAdapter;
 import com.munit.m_unitapp.ADAPTERS.WeeklySalesFragAdapter;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.TOOLS.Constants;
+import com.munit.m_unitapp.TOOLS.GeneralMethods;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,14 +54,8 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class CashInActivity extends AppCompatActivity {
+public class CashInActivity extends AppCompatActivity implements AllDailySalesAdapter.ClickListener {
     private ImageView back_arrow;
-    private ViewPager viewPager;
-    private ViewPager dailyPagerAll;
-    private DailySalesFragAdapter dailySalesFragAdapter;
-    private WeeklySalesFragAdapter weeklySalesFragAdapter;
-    String jsonString = "";
-    JsonArray objArray;
     private Calendar calendar;
     private int year, month, day;
     String todate;
@@ -63,12 +69,26 @@ public class CashInActivity extends AppCompatActivity {
     List<User> users = new ArrayList<>();
     User userdb = new User();
 
-    List<DailySales> DailySales5 = new ArrayList<>();
     List<List<DailySales>> allUsersWeeklySales = new ArrayList<>();
     Gson gson;
     SweetAlertDialog pDialog;
     FirebaseFirestore firedb;
     List<DailySales> allSales;
+    Button summaryBtn;
+
+    RecyclerView weeklySummary;
+    AllDailySalesAdapter allDailySalesAdapter;
+    List<DailySales> userSales = new ArrayList<>();
+    TextView daysDate, compServTV, compSalesTV, GamesTV, moviesTV, mpesaTillTV, cashTV, totalPayTV, weeklyBtn, monthlyBtn, dailyBtn;
+    ;
+
+    DailySales dailySales;
+    int todaysWeekNo;
+    final int DAILY_DATA = 1;
+    final int WEEKLY_DATA = 2;
+    final int MONTHLY_DATA = 3;
+
+    int showingDataFor = DAILY_DATA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,21 +109,69 @@ public class CashInActivity extends AppCompatActivity {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH) + 1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        todate = day + "-" + month + "-" + year;
-        fetchUsers();
+        todate = day + "/" + month + "/" + year;
+
+        todaysWeekNo = new GeneralMethods().getWeekNumber(todate);
+        weeklySummary = findViewById(R.id.weeklySummary);
+        weeklySummary.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        weeklySummary.smoothScrollToPosition(0);
+
+        allDailySalesAdapter = new AllDailySalesAdapter(weeklySummary.getContext(), userSales);
+        allDailySalesAdapter.setListener(this);
+        allDailySalesAdapter.setSelectedUserName("Total");
+        weeklySummary.setAdapter(allDailySalesAdapter);
+
+        daysDate = findViewById(R.id.daysDate);
+        compServTV = findViewById(R.id.compServTV);
+        compSalesTV = findViewById(R.id.compSalesTV);
+        GamesTV = findViewById(R.id.GamesTV);
+        moviesTV = findViewById(R.id.moviesTV);
+        mpesaTillTV = findViewById(R.id.mpesaTillTV);
+        mpesaTillTV = findViewById(R.id.mpesaTillTV);
+        cashTV = findViewById(R.id.cashTV);
+        totalPayTV = findViewById(R.id.totalPayTV);
 
 
-        fetchData();
-//        generateSales();
+        weeklyBtn = findViewById(R.id.weeklyBtn);
+        monthlyBtn = findViewById(R.id.monthlyBtn);
+        dailyBtn = findViewById(R.id.dailyBtn);
 
+        dailyBtn.setBackgroundResource(R.color.colorPrimary);
+        weeklyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+        monthlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+
+        dailyBtn.setOnClickListener(v -> {
+            pDialog.show();
+            displayRecords(DAILY_DATA);
+            weeklyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            monthlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            dailyBtn.setBackgroundResource(R.color.colorPrimary);
+        });
+        weeklyBtn.setOnClickListener(v -> {
+            pDialog.show();
+            displayRecords(WEEKLY_DATA);
+            weeklyBtn.setBackgroundResource(R.color.colorPrimary);
+            monthlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            dailyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+        });
+        monthlyBtn.setOnClickListener(v -> {
+            pDialog.show();
+            displayRecords(MONTHLY_DATA);
+            weeklyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            monthlyBtn.setBackgroundResource(R.color.colorPrimary);
+            dailyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+        });
         back_arrow = findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener((view) -> {
             finish();
         });
 
+        summaryBtn = findViewById(R.id.summaryBtn);
+        summaryBtn.setOnClickListener((view) -> {
+            Intent intent = new Intent(CashInActivity.this, SummaryActivity.class);
+            startActivity(intent);
+        });
 
-//        viewPager = findViewById(R.id.dailyPager);
-        dailyPagerAll = findViewById(R.id.dailyPagerAll);
 
         fab = findViewById(R.id.fab);
         addSaleBtn = findViewById(R.id.addSaleBtn);
@@ -116,258 +184,162 @@ public class CashInActivity extends AppCompatActivity {
             startActivity(addSales);
         });
 
+        fetchUsers();
+
     }
 
-    public void generateSales() {
-//        Collections.reverse(DailySales5);
-//        if (DailySales5.size() > 0) {
-//            dailySalesFragAdapter = new DailySalesFragAdapter(getSupportFragmentManager(), DailySales5);
-//            viewPager.setAdapter(dailySalesFragAdapter);
-//            viewPager.setPageTransformer(true, new CubeOutTransformer());
-//            viewPager.setCurrentItem(DailySales5.size() - 1);
-//        }
-        weeklySalesFragAdapter = new WeeklySalesFragAdapter(getSupportFragmentManager(), allUsersWeeklySales);
-        dailyPagerAll.setAdapter(weeklySalesFragAdapter);
-        dailyPagerAll.setPageTransformer(true, new CubeOutTransformer());
-        dailyPagerAll.setCurrentItem(6);
+    private void displayRecords(int dataFor) {
+        showingDataFor = dataFor;
+        switch (showingDataFor) {
+            case DAILY_DATA:
+                fetchUserSales(USERID);
+                break;
+            case WEEKLY_DATA:
+                fetchUserSales(USERID);
+                break;
+            case MONTHLY_DATA:
+                fetchUserSales(USERID);
+                break;
+        }
+
+    }
+
+    public void getDailySale() {
+        pDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Loading");
+        pDialog.show();
+        daysDate.setText("Today Sales (" + todate + ")");
+        String docId = todate.replace("/", "-") + ":" + USERID;
+        DocumentReference docRef = firedb.collection(Constants.dailySalesPath).document(docId);
+        docRef.addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+//                    Log.w(TAG, "Listen failed.", e);
+                pDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                pDialog.setContentText(e.getMessage());
+                pDialog.setConfirmClickListener(sweetAlertDialog -> {
+                    pDialog.dismiss();
+                });
+                return;
+            }
+            if (snapshot != null && snapshot.exists()) {
+                dailySales = snapshot.toObject(DailySales.class);
+            } else {
+                dailySales = new DailySales();
+            }
+            compServTV.setText("Ksh. " + dailySales.getComputer_service());
+            compSalesTV.setText("Ksh. " + dailySales.getComputer_sales());
+            moviesTV.setText("Ksh. " + dailySales.getMovies());
+            GamesTV.setText("Ksh. " + dailySales.getGames());
+            totalPayTV.setText("Ksh. " + dailySales.getTotal());
+            mpesaTillTV.setText("Ksh. " + dailySales.getMpesaTill());
+            cashTV.setText("Ksh. " + dailySales.getCashPayment());
+            pDialog.dismiss();
+        });
+    }
+
+    public void fetchUserSales(String key) {
+        allDailySalesAdapter.setSelectedUserName("Total");
+        pDialog.show();
+        firedb.collection(Constants.dailySalesPath)
+                .whereEqualTo("userId", key)
+                .orderBy("sortValue", Query.Direction.DESCENDING)
+                .addSnapshotListener((value, e) -> {
+                    if (e != null) {
+//                            Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    if(value.isEmpty()){
+                        pDialog.dismiss();
+                    }
+
+                    List<DailySales> allweeklySales = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : value) {
+                        if (doc.get("date") != null) {
+                            DailySales dailySales = doc.toObject(DailySales.class);
+                            allweeklySales.add(dailySales);
+                        }
+                    }
+                    computeUserSales(allweeklySales);
+                });
         pDialog.dismiss();
     }
 
-    public void fetchData() {
-        pDialog.show();
-        firedb.collection("dailysales")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-//                            Log.w(TAG, "Listen failed.", e);
-                            return;
-                        }
-//                        jsonString = gson.toJson(value.getDocuments());
-//                        objArray = new JsonParser().parse(jsonString).getAsJsonArray();
-
-                        allSales = new ArrayList<>();
-                        for (QueryDocumentSnapshot doc : value) {
-                            if (doc.get("date") != null) {
-//                                cities.add(doc.getString("name"));
-                                DailySales dailySales = doc.toObject(DailySales.class);
-                                allSales.add(dailySales);
-                            }
-                        }
-//                        Log.d(TAG, "Current cites in CA: " + cities);
-
-                        getDailySalesForDays();
-                    }
-                });
-
-
-//        String path = "depts/sales/dailysales";
-//        myRef = database.getReference(path);
-//        // Read from the database
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // This method is called once with the initial value and again
-//                // whenever data at this location is updated.
-//                jsonString = gson.toJson(dataSnapshot.getValue());
-//                objArray = new JsonParser().parse(jsonString).getAsJsonArray();
-//
-//                getDailySalesForDays();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                int k = 2;
-//            }
-//        });
-
-    }
-
-    public void fetchDataOld() {
-        pDialog.show();
-        String path = "depts/sales/dailysales";
-        myRef = database.getReference(path);
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                jsonString = gson.toJson(dataSnapshot.getValue());
-                objArray = new JsonParser().parse(jsonString).getAsJsonArray();
-
-                getDailySalesForDays();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                int k = 2;
-            }
-        });
-
-    }
-
-    public void getDailySalesForDays() {
-        allUsersWeeklySales = new ArrayList<>();
-        Calendar cal;
-        for (int i = 0; i < 7; i++) {
-            DailySales dailySale = new DailySales();
-            cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, -i);
-            String Displayingdate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR);
-
-            allUsersWeeklySales.add(getDailySalesFromAll(Displayingdate));
-
-//            String Year = "" + cal.get(Calendar.YEAR);
-//            String Month = "" + (cal.get(Calendar.MONTH) + 1);
-//            String day = "" + cal.get(Calendar.DAY_OF_MONTH);
-//            String dayOftheWeek = "";
-//            int dow = cal.get(Calendar.DAY_OF_WEEK);
-//            switch (dow) {
-//                case 1:
-//                    dayOftheWeek = "SUNDAY";
-//                    break;
-//                case 2:
-//                    dayOftheWeek = "MONDAY";
-//                    break;
-//                case 3:
-//                    dayOftheWeek = "TUESDAY";
-//                    break;
-//                case 4:
-//                    dayOftheWeek = "WEDNESDAY";
-//                    break;
-//                case 5:
-//                    dayOftheWeek = "THURSDAY";
-//                    break;
-//                case 6:
-//                    dayOftheWeek = "FRIDAY";
-//                    break;
-//                case 7:
-//                    dayOftheWeek = "SATURDAY";
-//                    break;
-//                default:
-//                    System.out.println("GO To Hell....");
-//            }
-//
-//            if (Month.length() == 1) {
-//                Month = "0" + Month;
-//            }
-//            if (day.length() == 1) {
-//                day = "0" + day;
-//            }
-//
-//            String newDateFormt = Year + "-" + Month + "-" + day;
-//
-//
-//            dailySale = allSales.get(k);
-//            if (dailySale == null) {
-//                dailySale = new DailySales();
-////                dailySales.setDate(Displayingdate);
-//            }
-//            dailySale.setDate(dayOftheWeek + " (" + Displayingdate + ")");
-//            dailySale.setUserId(String.valueOf(k));
-//
-//            if (USERID.equals("" + k)) {
-//                DailySales5.add(dailySale);
-//            }
-//            DailySalesList.add(dailySale);
-        }
-Collections.reverse(allUsersWeeklySales);
-        generateSales();
-    }
-
-    public void getDailySalesForDaysold() {
-        allUsersWeeklySales = new ArrayList<>();
-        Calendar cal;
-        for (int k = 0; k < allSales.size(); k++) {
-            List<DailySales> DailySalesList = new ArrayList<>();
-            for (int i = 0; i < 7; i++) {
-                DailySales dailySale = new DailySales();
-                cal = Calendar.getInstance();
-                cal.add(Calendar.DATE, -i);
-                String Displayingdate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.YEAR);
-
-                String Year = "" + cal.get(Calendar.YEAR);
-                String Month = "" + (cal.get(Calendar.MONTH) + 1);
-                String day = "" + cal.get(Calendar.DAY_OF_MONTH);
-                String dayOftheWeek = "";
-                int dow = cal.get(Calendar.DAY_OF_WEEK);
-                switch (dow) {
-                    case 1:
-                        dayOftheWeek = "SUNDAY";
-                        break;
-                    case 2:
-                        dayOftheWeek = "MONDAY";
-                        break;
-                    case 3:
-                        dayOftheWeek = "TUESDAY";
-                        break;
-                    case 4:
-                        dayOftheWeek = "WEDNESDAY";
-                        break;
-                    case 5:
-                        dayOftheWeek = "THURSDAY";
-                        break;
-                    case 6:
-                        dayOftheWeek = "FRIDAY";
-                        break;
-                    case 7:
-                        dayOftheWeek = "SATURDAY";
-                        break;
-                    default:
-                        System.out.println("GO To Hell....");
+    private void computeUserSales(List<DailySales> allweeklySales) {
+        userSales.clear();
+        switch (showingDataFor) {
+            case DAILY_DATA:
+                for (DailySales sale : allweeklySales) {
+                    sale.setUserName(sale.getDate());
+                    userSales.add(sale);
                 }
-
-                if (Month.length() == 1) {
-                    Month = "0" + Month;
-                }
-                if (day.length() == 1) {
-                    day = "0" + day;
-                }
-
-                String newDateFormt = Year + "-" + Month + "-" + day;
-
-
-                dailySale = allSales.get(k);
-                if (dailySale == null) {
-                    dailySale = new DailySales();
-//                dailySales.setDate(Displayingdate);
-                }
-                dailySale.setDate(dayOftheWeek + " (" + Displayingdate + ")");
-                dailySale.setUserId(String.valueOf(k));
-
-                if (USERID.equals("" + k)) {
-                    DailySales5.add(dailySale);
-                }
-                DailySalesList.add(dailySale);
-            }
-            Collections.reverse(DailySalesList);
-            allUsersWeeklySales.add(DailySalesList);
-
-        }
-        generateSales();
-    }
-
-    public String getUserName(int id) {
-        String name = "unknown";
-        for (User user : users)
-            if (user.getId() == id) {
-                name = user.getName();
-
-//            UserFName = user.getEmail().substring(0, user.getEmail().indexOf("@"));
                 break;
-            }
-        return name;
+            case WEEKLY_DATA:
+                for (DailySales sale : allweeklySales) {
+                    boolean found = false;
+                    for(DailySales dailySales : userSales){
+                        if(dailySales.getYear_week().equalsIgnoreCase(sale.getYear_week())){//Exists
+                            dailySales.setComputer_service(dailySales.getComputer_service() + sale.getComputer_service());
+                            dailySales.setComputer_sales(dailySales.getComputer_sales() + sale.getComputer_sales());
+                            dailySales.setMovies(dailySales.getMovies() + sale.getMovies());
+                            dailySales.setGames(dailySales.getGames() + sale.getGames());
+                            dailySales.setMpesaTill(dailySales.getMpesaTill() + sale.getMpesaTill());
+                            dailySales.setCashPayment(dailySales.getCashPayment() + sale.getCashPayment());
+                            dailySales.setTotal(dailySales.getTotal() + sale.getTotal());
+                            found = true;
+                            break;
+                        }
+
+                    }
+                    if(!found){
+                        int theWeeksNo = new GeneralMethods().getWeekNumber(sale.getDate());
+                        String weekTitle = "";
+                        if(todaysWeekNo == theWeeksNo){
+                            weekTitle = "This Week";
+                        }else if (todaysWeekNo - theWeeksNo == 1) {
+                            weekTitle = "Last Week";
+                        } else {
+                            weekTitle = "Last Week but " + ((todaysWeekNo - theWeeksNo) - 1);
+                        }
+                        sale.setUserName(weekTitle);
+                        userSales.add(sale);
+                    }
+                }
+                break;
+            case MONTHLY_DATA:
+                for (DailySales sale : allweeklySales) {
+                    boolean found = false;
+                    for(DailySales dailySales : userSales){
+                        if(dailySales.getYear_month().equalsIgnoreCase(sale.getYear_month())){//Exists
+                            dailySales.setComputer_service(dailySales.getComputer_service() + sale.getComputer_service());
+                            dailySales.setComputer_sales(dailySales.getComputer_sales() + sale.getComputer_sales());
+                            dailySales.setMovies(dailySales.getMovies() + sale.getMovies());
+                            dailySales.setGames(dailySales.getGames() + sale.getGames());
+                            dailySales.setMpesaTill(dailySales.getMpesaTill() + sale.getMpesaTill());
+                            dailySales.setCashPayment(dailySales.getCashPayment() + sale.getCashPayment());
+                            dailySales.setTotal(dailySales.getTotal() + sale.getTotal());
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found){
+                        //Add new
+                        sale.setUserName(new GeneralMethods().getMonthName(Integer.parseInt(sale.getYear_month().substring(4))) +" "+ sale.getYear());
+                        userSales.add(sale);
+                    }
+
+                }
+                break;
+        }
+
+        allDailySalesAdapter.notifyDataSetChanged();
+        pDialog.dismiss();
     }
 
     public void fetchUsers() {
         SweetAlertDialog pDialog = new SweetAlertDialog(CashInActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         pDialog.setTitleText("Loading ...");
-        pDialog.setCancelable(true);
+        pDialog.setCancelable(false);
         pDialog.show();
 
         // Read from the database
@@ -385,7 +357,12 @@ Collections.reverse(allUsersWeeklySales);
                     }
                     users.add(u);
                 }
+                if(userdb.getLevel()>2){
+                    summaryBtn.setVisibility(View.GONE);
+                }
                 pDialog.dismiss();
+                fetchUserSales(USERID);
+                getDailySale();
             }
 
             @Override
@@ -404,15 +381,8 @@ Collections.reverse(allUsersWeeklySales);
 
     }
 
-    public List<DailySales> getDailySalesFromAll(String date) {
-        List<DailySales> daySales = new ArrayList<>();
-        for (DailySales sales : allSales) {
-            if (sales.getDate().equalsIgnoreCase(date)) {
-                daySales.add(sales);
-            }
-        }
-        Collections.reverse(daySales);
-        return daySales;
+    @Override
+    public void showCashBreakDown(DailySales dailySales, boolean refreshRV) {
 
     }
 }

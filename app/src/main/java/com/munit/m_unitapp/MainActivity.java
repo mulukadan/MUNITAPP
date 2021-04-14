@@ -125,17 +125,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         GreetingTv.setText(Greetings);
-
         setupDrawerContent(navigationView);
-
 
         adminSwitch = findViewById(R.id.adminSwitch);
         adminSwitch.setOnClickListener((view) -> {
             Intent intent = new Intent(MainActivity.this, HSMSActivationActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-
-
         });
 
         sales = findViewById(R.id.sales);
@@ -254,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
         pDialog.setTitleText("Loading ...");
         pDialog.setCancelable(false);
         pDialog.show();
-
         // Read from the database
 
         myRef = database.getReference("users");
@@ -276,7 +271,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 pDialog.dismiss();
-
             }
 
             @Override
@@ -292,7 +286,6 @@ public class MainActivity extends AppCompatActivity {
                         .show();
             }
         });
-
     }
 
 }

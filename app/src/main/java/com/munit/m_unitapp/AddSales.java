@@ -37,6 +37,8 @@ import com.munit.m_unitapp.DB.Firestore;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.TOOLS.Constants;
+import com.munit.m_unitapp.TOOLS.GeneralMethods;
 
 import java.util.Calendar;
 
@@ -60,7 +62,7 @@ public class AddSales extends AppCompatActivity {
     String DateDisplaying;
 
     private DailySales dailySales;
-    String dailysalesPath = "dailysales";
+    String dailysalesPath = Constants.dailySalesPath;
     String USERID;
 
     private TextView computerService;
@@ -129,9 +131,16 @@ public class AddSales extends AppCompatActivity {
         SaveBtn = newSalesDialog.findViewById(R.id.SaveBtn);
 
         SaveBtn.setOnClickListener(v -> {
-            int amount = Integer.parseInt(amt.getText().toString());
-            updateDailySale(amount);
-            newSalesDialog.dismiss();
+            try{
+                String amtStr = amt.getText().toString().trim();
+                int amount = Integer.parseInt(amtStr);
+                updateDailySale(amount);
+                newSalesDialog.dismiss();
+            }catch (Exception e){
+                amt.setError("Invalid");
+                amt.requestFocus();
+            }
+
         });
 
         daysDate = findViewById(R.id.daysDate);
@@ -141,7 +150,6 @@ public class AddSales extends AppCompatActivity {
         back_arrow.setOnClickListener((view) -> {
             finish();
         });
-
         computerService = findViewById(R.id.computerService);
         computerSales = findViewById(R.id.computerSales);
         movies = findViewById(R.id.movies);
@@ -310,14 +318,20 @@ public class AddSales extends AppCompatActivity {
                     });
                     return;
                 }
-
                 if (snapshot != null && snapshot.exists()) {
                     dailySales = snapshot.toObject(DailySales.class);
                 } else {
                     dailySales = new DailySales();
                     dailySales.setDate(DateDisplaying);
+                    dailySales.setYear_week(year +""+ new GeneralMethods().getWeekNumber(DateDisplaying));
+                    dailySales.setYear_month(new GeneralMethods().getDateParts(DateDisplaying,"yy")+new GeneralMethods().getDateParts(DateDisplaying, "MM"));
+                    dailySales.setYear(new GeneralMethods().getDateParts(DateDisplaying,"yy"));
                 }
                 dailySales.setUserId(USERID);
+                dailySales.setDate(DateDisplaying);
+                dailySales.setYear_week(year +""+ new GeneralMethods().getWeekNumber(DateDisplaying));
+                dailySales.setYear_month(new GeneralMethods().getDateParts(DateDisplaying,"yy")+new GeneralMethods().getDateParts(DateDisplaying, "MM"));
+                dailySales.setYear(new GeneralMethods().getDateParts(DateDisplaying,"yy"));
                 dailySales.setUserName(dbuser.getName());
                 computerService.setText("Ksh. " + dailySales.getComputer_service());
                 computerSales.setText("Ksh. " + dailySales.getComputer_sales());
@@ -326,7 +340,6 @@ public class AddSales extends AppCompatActivity {
                 totalTV.setText("Ksh. " + dailySales.getTotal());
                 TotaltillPay.setText("Ksh. " + dailySales.getMpesaTill());
                 totalCashPay.setText("Ksh. " + dailySales.getCashPayment());
-
                 pDialog.dismiss();
             }
         });
