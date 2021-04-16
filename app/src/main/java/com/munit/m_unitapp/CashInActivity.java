@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eftimoff.viewpagertransformers.CubeOutTransformer;
 import com.github.clans.fab.FloatingActionButton;
@@ -285,6 +286,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                             dailySales.setMpesaTill(dailySales.getMpesaTill() + sale.getMpesaTill());
                             dailySales.setCashPayment(dailySales.getCashPayment() + sale.getCashPayment());
                             dailySales.setTotal(dailySales.getTotal() + sale.getTotal());
+                            dailySales.setCount(dailySales.getCount() + sale.getCount());
                             found = true;
                             break;
                         }
@@ -384,5 +386,11 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     @Override
     public void showCashBreakDown(DailySales dailySales, boolean refreshRV) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchUsers();
     }
 }

@@ -333,6 +333,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
                     saleSummary.setMpesaTill(saleSummary.getMpesaTill() + sale.getMpesaTill());
                     saleSummary.setCashPayment(saleSummary.getCashPayment() + sale.getCashPayment());
                     saleSummary.setTotal(saleSummary.getTotal() + sale.getTotal());
+                    saleSummary.setCount(saleSummary.getCount() + sale.getCount());
                     found = true;
                     break;
                 }
@@ -381,7 +382,6 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
                 } else {
                     weeklyNextNav.setVisibility(View.VISIBLE);
                 }
-
                 weekRangeTV.setText(weekDates.get(0) + " - " + weekDates.get(weekDates.size() - 1));
                 break;
             case MONTHLY_DATA:

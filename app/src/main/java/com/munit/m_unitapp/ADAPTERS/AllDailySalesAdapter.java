@@ -54,9 +54,11 @@ public class AllDailySalesAdapter extends RecyclerView.Adapter<AllDailySalesAdap
     @Override
     public void onBindViewHolder(myViewHolder holder, int position) {
         DailySales current = data.get(position);
-        String username = "";
-
-        holder.name.setText(current.getUserName());
+        String username = current.getUserName();
+        holder.name.setText(current.getUserName()+"("+current.getCount()+")");
+        if(username.equalsIgnoreCase("Total") || current.getCount() == 1){
+            holder.name.setText(current.getUserName());
+        }
         holder.csrv.setText("" + current.getComputer_service());
         holder.csls.setText("" + current.getComputer_sales());
         holder.mov.setText("" + current.getMovies());
@@ -117,4 +119,5 @@ public class AllDailySalesAdapter extends RecyclerView.Adapter<AllDailySalesAdap
     public void setSelectedUserName(String selectedUserName) {
         this.selectedUserName = selectedUserName;
     }
+
 }

@@ -15,6 +15,7 @@ public class DailySales {
     int cashPayment =0;
     int total = 0;
     int sortValue = 0;
+    int count = 1;
 
     public DailySales() {
     }
@@ -129,5 +130,13 @@ public class DailySales {
 
     public void setSortValue(int sortValue) {
         this.sortValue = sortValue;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }
