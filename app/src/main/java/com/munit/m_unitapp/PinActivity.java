@@ -169,6 +169,7 @@ public class PinActivity extends AppCompatActivity implements EasyPermissions.Pe
                     .show();
         });
 
+
     }
 
     private void CheckLoginStage() {

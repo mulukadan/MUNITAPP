@@ -3,6 +3,7 @@ package com.munit.m_unitapp;
 import android.content.Intent;
 import android.graphics.Color;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -19,6 +20,8 @@ import android.widget.Toast;
 import com.eftimoff.viewpagertransformers.CubeOutTransformer;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -97,10 +100,10 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         setContentView(R.layout.activity_cash_in);
         getSupportActionBar().hide();
 
-        firedb = FirebaseFirestore.getInstance();
         gson = new Gson();
         database = FirebaseDatabase.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
+        firedb = FirebaseFirestore.getInstance();
 
         pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
@@ -131,8 +134,6 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         mpesaTillTV = findViewById(R.id.mpesaTillTV);
         cashTV = findViewById(R.id.cashTV);
         totalPayTV = findViewById(R.id.totalPayTV);
-
-
         weeklyBtn = findViewById(R.id.weeklyBtn);
         monthlyBtn = findViewById(R.id.monthlyBtn);
         dailyBtn = findViewById(R.id.dailyBtn);
@@ -140,7 +141,6 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         dailyBtn.setBackgroundResource(R.color.colorPrimary);
         weeklyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
         monthlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
-
         dailyBtn.setOnClickListener(v -> {
             pDialog.show();
             displayRecords(DAILY_DATA);
@@ -166,14 +166,11 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         back_arrow.setOnClickListener((view) -> {
             finish();
         });
-
         summaryBtn = findViewById(R.id.summaryBtn);
         summaryBtn.setOnClickListener((view) -> {
             Intent intent = new Intent(CashInActivity.this, SummaryActivity.class);
             startActivity(intent);
         });
-
-
         fab = findViewById(R.id.fab);
         addSaleBtn = findViewById(R.id.addSaleBtn);
         addSaleBtn.setOnClickListener(v -> {
@@ -184,9 +181,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
             addSales.putExtra("userJson", userJson);
             startActivity(addSales);
         });
-
         fetchUsers();
-
     }
 
     private void displayRecords(int dataFor) {
@@ -202,9 +197,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                 fetchUserSales(USERID);
                 break;
         }
-
     }
-
     public void getDailySale() {
         pDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Loading");
@@ -257,12 +250,36 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                     for (QueryDocumentSnapshot doc : value) {
                         if (doc.get("date") != null) {
                             DailySales dailySales = doc.toObject(DailySales.class);
+                            dailySales.setCount(1);
                             allweeklySales.add(dailySales);
                         }
                     }
                     computeUserSales(allweeklySales);
                 });
-        pDialog.dismiss();
+
+//        firedb.collection(Constants.dailySalesPath)
+//                .whereEqualTo("userId", key)
+//                .orderBy("sortValue", Query.Direction.DESCENDING)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    List<String> list = new ArrayList<>();
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        list.add(document.getId());
+//                    }
+//                    String k = list.toString();
+//                } else {
+////                    Log.d(TAG, "Error getting documents: ", task.getException());
+//                    String h =  task.getException().getMessage();
+//                    int i = 0;
+//
+//                }
+//            }
+//        });
+
+
     }
 
     private void computeUserSales(List<DailySales> allweeklySales) {
@@ -290,7 +307,6 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                             found = true;
                             break;
                         }
-
                     }
                     if(!found){
                         int theWeeksNo = new GeneralMethods().getWeekNumber(sale.getDate());
@@ -319,6 +335,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                             dailySales.setMpesaTill(dailySales.getMpesaTill() + sale.getMpesaTill());
                             dailySales.setCashPayment(dailySales.getCashPayment() + sale.getCashPayment());
                             dailySales.setTotal(dailySales.getTotal() + sale.getTotal());
+                            dailySales.setCount(dailySales.getCount() + sale.getCount());
                             found = true;
                             break;
                         }
@@ -363,8 +380,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                     summaryBtn.setVisibility(View.GONE);
                 }
                 pDialog.dismiss();
-                fetchUserSales(USERID);
                 getDailySale();
+                fetchUserSales(USERID);
             }
 
             @Override

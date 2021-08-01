@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         if (Username == null || Username.length() < 1) {
             Username = user.getEmail().substring(0, user.getEmail().indexOf("@"));
         }
-        UserName.setText(Username);
+        UserName.setText(Username.toUpperCase());
         GreetingTv = findViewById(R.id.greetings);
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
         String Greetings = "";
@@ -129,9 +129,11 @@ public class MainActivity extends AppCompatActivity {
 
         adminSwitch = findViewById(R.id.adminSwitch);
         adminSwitch.setOnClickListener((view) -> {
-            Intent intent = new Intent(MainActivity.this, HSMSActivationActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            if(user.getEmail().contains("admin")){
+                Intent intent = new Intent(MainActivity.this, HSMSActivationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
         });
 
         sales = findViewById(R.id.sales);

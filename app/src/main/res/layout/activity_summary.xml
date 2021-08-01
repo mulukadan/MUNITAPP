@@ -176,6 +176,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/medium"
                             android:text="C.Srv"
+                            android:textAlignment="viewEnd"
                             android:textColor="@color/white"
                             android:textSize="12dp" />
 
@@ -185,6 +186,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/medium"
                             android:text="C.Sls"
+                            android:textAlignment="viewEnd"
                             android:textColor="@color/white"
                             android:textSize="12dp" />
 
@@ -194,6 +196,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/medium"
                             android:text="Mov"
+                            android:textAlignment="viewEnd"
                             android:textColor="@color/white"
                             android:textSize="12dp" />
 
@@ -203,6 +206,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/medium"
                             android:text="Gms"
+                            android:textAlignment="viewEnd"
                             android:textColor="@color/white"
                             android:textSize="12dp" />
 
@@ -212,6 +216,7 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/medium"
                             android:text="Total"
+                            android:textAlignment="viewEnd"
                             android:textColor="@color/white"
                             android:textSize="12dp" />
 
