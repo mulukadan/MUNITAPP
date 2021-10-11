@@ -202,6 +202,10 @@ public class MainActivity extends AppCompatActivity {
                 Intent Settings = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(Settings);
                 break;
+            case R.id.payRoll:
+                Intent payroll = new Intent(getApplicationContext(), PayrollActivity.class);
+                startActivity(payroll);
+                break;
 
             case R.id.home:
                 finish();

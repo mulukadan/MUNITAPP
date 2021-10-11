@@ -33,7 +33,8 @@ public class WeeklySalesFragAdapter extends FragmentStatePagerAdapter {
         for (DailySales dailySales : allUsersWeeklySales.get(position)) {
             sales.add(dailySales);
             if (date.equals("")) {
-                date = dailySales.getDate();
+//                date = dailySales.getDate();
+                date = dailySales.getDateWithDay();
             }
         }
 

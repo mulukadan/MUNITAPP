@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/CloseBillDialog"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="7dp"
+        android:background="@drawable/ic_close_black_24dp"
+        android:elevation="5dp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="15dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/TopupTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:fontFamily="@font/bold"
+                    android:text="Employee"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="#F6F4F4"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    >
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:layout_marginTop="30dp"
+                        android:id="@+id/ProfilePic"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/user"
+                        app:civ_border_color="#EEEEEE"
+                        app:civ_border_width="2dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="2"
+                        app:civ_shadow_color="#8BC34A"/>
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignBottom="@+id/ProfilePic"
+                        android:layout_toRightOf="@+id/ProfilePic"
+                        android:layout_marginLeft="-30dp"
+                        android:id="@+id/ChangeProfilePic"
+                        android:src="@drawable/ic_camera_alt_black_24dp"
+                        app:civ_border_color="#EEEEEE"
+                        app:civ_border_width="0dp"
+                        app:civ_shadow="true"
+                        app:civ_shadow_radius="2"
+                        app:civ_border="true"
+                        app:civ_shadow_color="#8BC34A"/>
+
+                </RelativeLayout>
+
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="15dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/medium"
+                                android:hint="Full Name"
+                                android:paddingLeft="20dp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/PhoneNo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/medium"
+                                android:hint="PhoneNo"
+                                android:inputType="phone"
+                                android:paddingLeft="20dp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/jobDesc"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/medium"
+                                android:hint="Job Description"
+                                android:lines="2"
+                                android:paddingLeft="20dp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:orientation="horizontal"
+                            android:weightSum="10">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="10">
+
+                                <EditText
+                                    android:id="@+id/eSalary"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/medium"
+                                    android:hint="Salary"
+                                    android:inputType="number"
+                                    android:paddingLeft="20dp"
+                                    android:textAllCaps="false" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="4"
+                                android:text="Employed on"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:id="@+id/dateOfEmployment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:textSize="18dp"
+                                android:layout_marginLeft="5dp"
+                                android:text="12/12/2021" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginRight="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="4"
+                                android:text="Department"
+                                android:textSize="18dp" />
+
+                            <Spinner
+                                android:id="@+id/departmentSpiner"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="6"
+                                android:drawSelectorOnTop="true"
+                                android:entries="@array/departments"
+                                android:prompt="@string/workDepartment" />
+                        </LinearLayout>
+
+
+
+                        <Button
+                            android:id="@+id/SaveBtn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:background="@drawable/send_button_bk"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:text="Save"
+                            android:layout_marginBottom="10dp"
+                            android:textColor="@color/white" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

@@ -3,10 +3,7 @@
 
     <group android:checkableBehavior="single" android:id="@+id/grp1">
         <item android:id="@+id/home" android:title="Home" android:icon="@drawable/ic_home_black_24dp" />
-        <!--<item android:id="@+id/topupHist" android:title="TopUp History" android:icon="@drawable/ic_home_black_24dp"/>-->
-        <!--<item android:id="@+id/outboxHist" android:title="Outbox History" android:icon="@drawable/ic_home_black_24dp"/>-->
-        <!--<item android:id="@+id/reportsmenu" android:title="Reports" android:icon="@drawable/reports" />-->
-
+        <item android:id="@+id/payRoll" android:title="Payroll" android:icon="@drawable/ic_payroll" />
 
         <item android:id="@+id/Settingsmenu" android:title="Settings" android:icon="@drawable/setings_icon" />
         <!--<item android:id="@+id/Help" android:title="Help" android:icon="@drawable/chat" />-->

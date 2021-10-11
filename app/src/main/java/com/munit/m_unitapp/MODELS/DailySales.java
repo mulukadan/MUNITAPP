@@ -4,6 +4,7 @@ public class DailySales {
     String userId;
     String userName;
     String date;
+    String dateWithDay;
     String year_week;
     String year_month;
     String year;
@@ -138,5 +139,13 @@ public class DailySales {
 
     public void setCount(int count) {
         this.count = count;
+    }
+
+    public String getDateWithDay() {
+        return dateWithDay;
+    }
+
+    public void setDateWithDay(String dateWithDay) {
+        this.dateWithDay = dateWithDay;
     }
 }

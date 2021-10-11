@@ -72,6 +72,8 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
     private CardView cameraCard;
     private CardView galleryCard;
 
+    int getImageOption = 0; //From 0 Camera, 1 From Gallery
+
     List<User> users = new ArrayList<>();
 
     @Override
@@ -111,11 +113,14 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
         galleryCard = SelectImgDialog.findViewById(R.id.galleryCard);
 
         cameraCard.setOnClickListener((view) -> {
-            GetImage(0);
+            getImageOption = 0; // Camera
+            GetImage();
         });
         galleryCard.setOnClickListener((view) -> {
-            GetImage(1);
+            getImageOption = 1; // Gallery
+            GetImage();
         });
+
         CloseSelectImgDialog.setOnClickListener((view) -> {
             SelectImgDialog.dismiss();
         });
@@ -170,47 +175,41 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
                                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                                 // ...
 
-                                ProfilePicRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        Uri selectedImage = uri;
-                                        ProfilePicURL = selectedImage.toString();
-                                        Picasso.get().load(selectedImage).into(ProfilePic);
+                                ProfilePicRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    Uri selectedImage = uri;
+                                    ProfilePicURL = selectedImage.toString();
+                                    Picasso.get().load(selectedImage).into(ProfilePic);
 
 
-                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                                .setDisplayName(userName.getText().toString())
-                                                .setPhotoUri(Uri.parse(ProfilePicURL))
-                                                .build();
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(userName.getText().toString())
+                                            .setPhotoUri(Uri.parse(ProfilePicURL))
+                                            .build();
 
-                                        Fbuser.updateProfile(profileUpdates)
-                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<Void> task) {
-                                                        if (task.isSuccessful()) {
-                                                            scUser.setImgUrl(ProfilePicURL);
-                                                            scUser.setName(userName.getText().toString());
-                                                            updateFirebaseDb();
-                                                            pDialog.dismiss();
-                                                            sDialog
-                                                                    .setTitleText("SUCCESS!")
-                                                                    .setContentText("User profile updated Successfully!")
-                                                                    .showCancelButton(false)
-                                                                    .setConfirmText("OK")
-                                                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                                        @Override
-                                                                        public void onClick(SweetAlertDialog sDialog) {
+                                    Fbuser.updateProfile(profileUpdates)
+                                            .addOnCompleteListener(task -> {
+                                                if (task.isSuccessful()) {
+                                                    scUser.setImgUrl(ProfilePicURL);
+                                                    scUser.setName(userName.getText().toString());
+                                                    updateFirebaseDb();
+                                                    pDialog.dismiss();
+                                                    sDialog
+                                                            .setTitleText("SUCCESS!")
+                                                            .setContentText("User profile updated Successfully!")
+                                                            .showCancelButton(false)
+                                                            .setConfirmText("OK")
+                                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                                @Override
+                                                                public void onClick(SweetAlertDialog sDialog1) {
 
-                                                                            sDialog.dismissWithAnimation();
-                                                                            finish();
-                                                                        }
-                                                                    })
-                                                                    .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                                    sDialog1.dismissWithAnimation();
+                                                                    finish();
+                                                                }
+                                                            })
+                                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
 
-                                                        }
-                                                    }
-                                                });
-                                    }
+                                                }
+                                            });
                                 });
                             }
                         });
@@ -287,12 +286,12 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
 
 
     @AfterPermissionGranted(123)
-    private void GetImage(int option) {
+    private void GetImage() {
         SelectImgDialog.dismiss();
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (EasyPermissions.hasPermissions(this, perms)) {
             //Permission Granted, Load Gallery
-            if (option == 0) {
+            if (getImageOption == 0) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, 0);
             } else {
@@ -350,7 +349,7 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-
+        GetImage();
     }
 
     @Override

@@ -191,10 +191,7 @@ public class ViewUserActivity extends AppCompatActivity {
                             }
                         })
                         .show();
-
             }
-
-
         });
 
         sendPwdLayout = findViewById(R.id.sendPwdLayout);
@@ -282,7 +279,9 @@ public class ViewUserActivity extends AppCompatActivity {
                         if (userFname.contains(" ")) {
                             userFname = userFname.substring(0, userFname.indexOf(" "));
                         }
-                        String Msg = "Dear " + userFname + ", Your Login Details to M-Unit Messenger are: Username: " + user.getUsername() + " Password: " + user.getPassword();
+                        String uName = user.getUsername().substring(0, user.getUsername().lastIndexOf("@"));
+
+                        String Msg = "Dear " + userFname + ", Your Login Details to M-Unit App are: Username: " + uName + " and Password: " + user.getPassword();
                         SendSMS(Phone, Msg);
 
                     })

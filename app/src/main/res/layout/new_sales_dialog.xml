@@ -122,7 +122,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="60dp"
                                 android:layout_centerHorizontal="true"
-                                android:src="@drawable/blue_pool_table" />
+                                android:src="@drawable/green_pool_table" />
 
                             <TextView
                                 android:id="@+id/T1name"
@@ -130,7 +130,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/blueTable"
                                 android:fontFamily="@font/bold"
-                                android:text="Blue Table"
+                                android:text="Green Table"
                                 android:textAlignment="center"
                                 android:textColor="#0926C7" />
 
@@ -196,7 +196,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/redTable"
                                 android:fontFamily="@font/bold"
-                                android:text="Blue Table"
+                                android:text="Red Table"
                                 android:textAlignment="center"
                                 android:textColor="#C43227" />
 
@@ -263,7 +263,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="60dp"
                                 android:layout_centerHorizontal="true"
-                                android:src="@drawable/green_pool_table" />
+                                android:src="@drawable/blue_pool_table" />
 
                             <TextView
                                 android:id="@+id/T3name"
@@ -271,7 +271,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/green2Table"
                                 android:fontFamily="@font/bold"
-                                android:text="Green Table 2"
+                                android:text="Blue Table"
                                 android:textAlignment="center"
                                 android:textColor="#00813A" />
 

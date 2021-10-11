@@ -8,6 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.MODELS.Employee;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +79,10 @@ public class firebase {
     public void saveUsers(List<User> users) {
         myRef = database.getReference("users");
         myRef.setValue(users);
+    }
+    public void saveEmployees(List<Employee> employees) {
+        myRef = database.getReference("employees");
+        myRef.setValue(employees);
     }
 
     public List<DailySales> getDailySalesForDays(List<String> Dates, String userId){

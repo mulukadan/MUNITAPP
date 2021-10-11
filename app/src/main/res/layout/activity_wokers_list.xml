@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:fab="http://schemas.android.com/apk/res-auto"
+android:orientation="vertical"
+tools:context=".EmployeesListActivity">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        >
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/arrow_back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:id="@+id/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="EMPLOYEES"
+            android:textColor="@color/white"
+            android:fontFamily="@font/bold"
+            android:textSize="15dp"
+            />
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wokersRV"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+    </ScrollView>
+</LinearLayout>
+
+<com.github.clans.fab.FloatingActionMenu
+    android:id="@+id/fab"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom|right"
+    android:layout_marginBottom="8dp"
+    android:layout_marginRight="8dp"
+    fab:menu_fab_size="normal"
+    app:menu_backgroundColor="@android:color/transparent"
+    app:menu_fab_label=""
+    app:menu_openDirection="up"
+    app:menu_labels_textColor="@color/white"
+    app:menu_labels_colorNormal="@color/colorPrimary"
+    app:fab_colorNormal="#F11B1B"
+    app:menu_showShadow="true">
+
+    <com.github.clans.fab.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addUserBtn"
+        app:fab_label="Add Employee"
+        app:fab_colorNormal="#4CAF50"
+        android:src="@drawable/person_add_black_24dp"
+        app:fab_size="mini"/>
+
+
+</com.github.clans.fab.FloatingActionMenu>
+</FrameLayout>

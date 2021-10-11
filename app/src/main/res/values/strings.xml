@@ -10,7 +10,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="userLevel">User Level</string>
+    <string name="workDepartment">Work Department</string>
 
+    <string-array name="departments">
+        <item>M-Unit Cyber 1</item>
+        <item>M-Unit Cyber 2</item>
+        <item>M-Unit Pool Base</item>
+        <item>M-Unit Poultry Farm</item>
+        <item>Home</item>
+        <item>Others</item>
+    </string-array>
     <string-array name="userLevels">
         <item>Admin</item>
         <item>Owner</item>

@@ -27,7 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_toRightOf="@+id/profilePic"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -54,8 +53,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:fontFamily="@font/medium"
-                    android:textColor="@color/colorPrimary"
-                    android:text="BLUE TABLE" />
+                    android:textColor="#066E14"
+                    android:text="GREEN TABLE" />
                 <TextView
                     android:id="@+id/Table1"
                     android:layout_width="0dp"
@@ -137,8 +136,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="5"
                         android:fontFamily="@font/medium"
-                        android:textColor="#00813A"
-                        android:text="GREEN TABLE 2" />
+                        android:textColor="#053DC8"
+                        android:text="BLUE TABLE" />
                     <TextView
                         android:id="@+id/Table3"
                         android:layout_width="0dp"

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.munit.m_unitapp.ADAPTERS.AllDailySalesAdapter;
 import com.munit.m_unitapp.ADAPTERS.WeeklySalesFragAdapter;
+import com.munit.m_unitapp.DB.Firestore;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.TOOLS.Constants;
 import com.munit.m_unitapp.TOOLS.GeneralMethods;
@@ -49,6 +51,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
     ImageView weeklyPrevNav, weeklyNextNav;
     AllDailySalesAdapter allDailySalesAdapter;
     RecyclerView weeklySummary;
+    RelativeLayout refreshBtn;
 
     private WeeklySalesFragAdapter weeklySalesFragAdapter;
     List<List<DailySales>> allUsersWeeklySales = new ArrayList<>();
@@ -78,7 +81,10 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         back_arrow.setOnClickListener((view) -> {
             finish();
         });
-
+        refreshBtn = findViewById(R.id.refreshBtn);
+        refreshBtn.setOnClickListener(v -> {
+            RefreshUpdateSales();
+        });
         dailyPagerAll = findViewById(R.id.dailyPagerAll);
 
         weeklyBtn = findViewById(R.id.weeklyBtn);
@@ -148,6 +154,27 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         fetchAllWeeklyData();
         loadData(year+""+todaysWeekNo);
     }
+
+    private void RefreshUpdateSales() {
+        int count = 0;
+        sweetAlertDialog.setContentText("Updating");
+        sweetAlertDialog.show();
+        for (DailySales sales : allSales) {
+            String date = sales.getDate();
+            int weekNo = new GeneralMethods().getWeekNumber(date);
+            String year_week = date.substring(date.lastIndexOf("/") + 1) + weekNo;
+
+            if (!sales.getYear_week().equalsIgnoreCase(year_week)) {
+                //Update
+                sales.setYear_week(year_week);
+                new Firestore(SummaryActivity.this).addDailySale(sales);
+                count ++;
+            }
+        }
+        Toast.makeText(getApplicationContext(),"Done "+ count + " Updated!",Toast.LENGTH_SHORT).show();
+        sweetAlertDialog.dismiss();
+    }
+
     public void fetchAllWeeklyData() {
         sweetAlertDialog.show();
         firedb.collection(Constants.dailySalesPath)
@@ -220,7 +247,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         List<DailySales> daySales = new ArrayList<>();
         for (DailySales sales : allSales) {
             if (sales.getDate().equalsIgnoreCase(date)) {
-                sales.setDate(day + "(" + sales.getDate() + ")");
+                sales.setDateWithDay(day + "(" + sales.getDate() + ")");
                 daySales.add(sales);
             }
         }
