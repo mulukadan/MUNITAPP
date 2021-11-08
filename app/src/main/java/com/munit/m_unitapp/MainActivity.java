@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView GreetingTv;
 
     private TextView DrawerUsername;
+    private MenuItem payrollItem;
     Calendar c = Calendar.getInstance();
 
     private RelativeLayout sales,pool, logo, newsPapers, expense;
@@ -203,8 +204,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Settings);
                 break;
             case R.id.payRoll:
-                Intent payroll = new Intent(getApplicationContext(), PayrollActivity.class);
-                startActivity(payroll);
+                if(userdb.getLevel()<3){
+                    Intent payroll = new Intent(getApplicationContext(), PayrollActivity.class);
+                    startActivity(payroll);
+                }else {
+                    Toast.makeText(this, "Comming Soon!", Toast.LENGTH_SHORT).show();
+                }
                 break;
 
             case R.id.home:

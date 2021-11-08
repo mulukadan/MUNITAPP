@@ -1,5 +1,8 @@
 package com.munit.m_unitapp.MODELS;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Employee {
     String id;
     String name = "";
@@ -15,6 +18,7 @@ public class Employee {
     String idFrontImage ="";
     String idBackImage ="";
     String JobDescription = "";
+    List<EmployeePayment> payments = new ArrayList<>();
 
     public Employee() {
     }
@@ -129,5 +133,22 @@ public class Employee {
 
     public void setJobDescription(String jobDescription) {
         JobDescription = jobDescription;
+    }
+
+    public List<EmployeePayment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<EmployeePayment> payments) {
+        this.payments = payments;
+    }
+
+    public int getIdex(List<Employee> employees , String eID){
+        for (int i = 0; i<employees.size(); i++){
+            if(employees.get(i).getId().equals(eID)){
+                return i;
+            }
+        }
+        return -1;
     }
 }

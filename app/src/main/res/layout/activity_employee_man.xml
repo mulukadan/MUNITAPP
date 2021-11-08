@@ -31,6 +31,15 @@
             android:textColor="@color/white"
             android:textSize="15dp" />
 
+        <ImageView
+            android:id="@+id/editEmBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_twotone_edit" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -244,6 +253,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:paddingVertical="10dp"
                     android:layout_marginHorizontal="20dp"
                     >
                     <androidx.cardview.widget.CardView
@@ -253,9 +263,15 @@
                         app:cardCornerRadius="10dp"
                         >
                         <RelativeLayout
+                            android:id="@+id/advBtn"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:text="Advance"/>
 
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
@@ -272,10 +288,25 @@
                             android:layout_height="match_parent"
                             >
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:text="Pay"/>
+
                         </RelativeLayout>
                     </androidx.cardview.widget.CardView>
 
                 </RelativeLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp"
+                    >
+
+
+                </androidx.recyclerview.widget.RecyclerView>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
