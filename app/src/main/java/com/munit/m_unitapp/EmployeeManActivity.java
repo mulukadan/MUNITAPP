@@ -3,6 +3,8 @@ package com.munit.m_unitapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
@@ -35,6 +37,8 @@ import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.munit.m_unitapp.ADAPTERS.EmployeesAdapter;
+import com.munit.m_unitapp.ADAPTERS.PaymentsAdapter;
+import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.Employee;
 import com.munit.m_unitapp.MODELS.EmployeePayment;
@@ -58,6 +62,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
     private ImageView back_arrow, editEmBtn;
     private TextView nameTV, titleTV, GenderTV, ageTV, emplyDateTV, salaryTV, emplymentStatusTV;
     private CircularImageView ProfilePic, dProfilePic;
+    private RecyclerView paymentsRV;
 
     private Dialog EmployeeDialog, advanceDialog;
     private ImageView CloseBillDialog, CloseAdvDialog;
@@ -93,6 +98,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
     StorageReference ProfilePicRef;
 
     List<Employee> employees = new ArrayList<>();
+    PaymentsAdapter transactionsTypesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +117,11 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         ProfilePic = findViewById(R.id.ProfilePic);
         emplymentStatusTV = findViewById(R.id.emplymentStatusTV);
         advBtn = findViewById(R.id.advBtn);
+
+        paymentsRV = findViewById(R.id.paymentsRV);
+        paymentsRV.setLayoutManager(new LinearLayoutManager(this));
+        paymentsRV.smoothScrollToPosition(0);
+
 
         advanceDialog = new Dialog(this);
         advanceDialog.setCanceledOnTouchOutside(false);
@@ -214,17 +225,12 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                 int amount = amt;
                 String description = reason;
                 int initialAdvTotal = 0;
-                if(all> 0){
-                    try {
-                        initialAdvTotal = employee.getPayments().get(all - 1).getCurrent();
-                    }catch (Exception e){
-
-                    }
-                }
+                initialAdvTotal = employee.getAdvance();
                 int current = initialAdvTotal + amt;
                 String type = "A";
                 sdialog.changeAlertType(SweetAlertDialog.WARNING_TYPE);
-                int finalInitialAdvTotal = initialAdvTotal;
+                int finalInitialAdvTotal = current;
+                int InitialAdvTotal1 = initialAdvTotal;
                 sdialog.setTitleText("Give Advance?")
                         .setContentText("Are you sure you want to give advance of Ksh. " + amt +" to " + employee.getName()+ "?")
                         .setConfirmText("Give")
@@ -236,8 +242,9 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                         .setConfirmClickListener(sDialog -> {
                             int idex = employee.getIdex(employees, employee.getId());
                             employees.remove(idex);
-                            EmployeePayment payment = new EmployeePayment(id,amount, description, finalInitialAdvTotal, current , type);
+                            EmployeePayment payment = new EmployeePayment(id,amount, description, InitialAdvTotal1, finalInitialAdvTotal , type);
                             employee.getPayments().add(payment);
+                            employee.setAdvance(finalInitialAdvTotal);
                             employees.add(employee);
                             addWorkerToFirebase();
                             advanceDialog.dismiss();
@@ -337,6 +344,9 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                         .show();
             }
         });
+
+        transactionsTypesAdapter = new PaymentsAdapter(this, employee.getPayments());
+        paymentsRV.setAdapter(transactionsTypesAdapter);
         fetchData();
         updateUI();
 
@@ -358,6 +368,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         emplyDateTV.setText(employee.getEmploymentDate());
         salaryTV.setText("Ksh. " + employee.getSalary());
         emplymentStatusTV.setText("Employment Status: " + employee.getActive().toString());
+        transactionsTypesAdapter.notifyDataSetChanged();
 
     }
 

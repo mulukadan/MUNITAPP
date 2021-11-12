@@ -6,6 +6,7 @@ public class EmployeePayment {
     String description;
     int initialAdvTotal = 0;
     int current;
+    String date;
     String type;// Types A = Advance, S = Salary
 
     public EmployeePayment() {
@@ -66,5 +67,16 @@ public class EmployeePayment {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getDate() {
+        if(date == null){
+            return id.substring(id.indexOf("_") +1);
+        }
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

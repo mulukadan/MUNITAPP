@@ -15,6 +15,7 @@ public class Employee {
     String terminationDate;
     String department = "";
     int salary= 0;
+    int advance= 0;
     String idFrontImage ="";
     String idBackImage ="";
     String JobDescription = "";
@@ -141,6 +142,14 @@ public class Employee {
 
     public void setPayments(List<EmployeePayment> payments) {
         this.payments = payments;
+    }
+
+    public int getAdvance() {
+        return advance;
+    }
+
+    public void setAdvance(int advance) {
+        this.advance = advance;
     }
 
     public int getIdex(List<Employee> employees , String eID){
