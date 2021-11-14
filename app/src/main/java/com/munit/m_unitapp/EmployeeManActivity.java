@@ -226,7 +226,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         });
 
         advBtn.setOnClickListener((view) -> {
-            if (employee.getStatus().equalsIgnoreCase("true")) {
+            if (employee.getActive()) {
                 clearAdvDialog();
                 PaymentTitle.setText("Salary Advance");
                 totalAdvance.setText("Ksh. " + employee.getAdvance());
@@ -240,7 +240,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         });
 
         payBtn.setOnClickListener((view) -> {
-            if (employee.getStatus().equalsIgnoreCase("true")) {
+            if (employee.getActive()) {
                 clearAdvDialog();
                 PaymentTitle.setText("Salary Payment");
                 totalAdvance.setText("Ksh. " + employee.getAdvance());
