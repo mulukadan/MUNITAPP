@@ -28,7 +28,8 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.myView
         inflator = LayoutInflater.from(context);
         mContext = context;
         this.data = data;
-        Collections.reverse(data);
+//        Collections.reverse(data);
+        int y = 0;
     }
 
     @Override
@@ -41,10 +42,7 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.myView
 
     @Override
     public void onBindViewHolder(myViewHolder holder, int position) {
-
         EmployeePayment current = data.get(position);
-
-
         String payType = "Salary";
         if(current.getType().equals("A")){
             payType = "Advance";
@@ -54,6 +52,12 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.myView
         holder.initialAdvTotalTv.setText("Ksh. " + currencyFormatter(current.getInitialAdvTotal()));
         holder.currentAdvTV.setText("Ksh. " + currencyFormatter(current.getCurrent()));
         holder.descTV.setText(current.getDescription());
+        holder.paidBy.setText("Paid by: "+current.getPaidBy());
+        if(current.getType().equals("A")){
+            holder.payAmtTV.setBackgroundColor(Color.parseColor("#F44336"));
+        }else {
+            holder.payAmtTV.setBackgroundColor(Color.parseColor("#108307"));
+        }
     }
 
     @Override
@@ -66,6 +70,7 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.myView
         TextView payAmtTV;
         TextView initialAdvTotalTv;
         TextView currentAdvTV;
+        TextView paidBy;
         TextView descTV;
 
 //        ImageButton viewBtn, addBtn;
@@ -76,6 +81,7 @@ public class PaymentsAdapter extends RecyclerView.Adapter<PaymentsAdapter.myView
             payAmtTV = itemView.findViewById(R.id.payAmtTV);
             initialAdvTotalTv = itemView.findViewById(R.id.initialAdvTotalTv);
             currentAdvTV = itemView.findViewById(R.id.currentAdvTV);
+            paidBy = itemView.findViewById(R.id.paidBy);
             descTV = itemView.findViewById(R.id.descTV);
 
 //            addBtn.setOnClickListener((view) ->{

@@ -52,7 +52,7 @@
                     android:fontFamily="@font/bold"
                     android:textColor="@color/white"
                     android:textAlignment="center"
-                    android:background="#F44336"
+                    android:background="#108307"
                     android:layout_weight="4"
                     android:text="Salary" />
             </LinearLayout>
@@ -114,8 +114,18 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/regular"
                     android:layout_marginHorizontal="10dp"
-                    android:textColor="#575252"
+                    android:textColor="#000000"
+                    android:paddingHorizontal="10dp"
                     android:text="Reason" />
+                <TextView
+                    android:id="@+id/paidBy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:layout_marginHorizontal="10dp"
+                    android:textColor="#575252"
+                    android:textAlignment="viewEnd"
+                    android:text="Paid By:" />
 
             </LinearLayout>
 

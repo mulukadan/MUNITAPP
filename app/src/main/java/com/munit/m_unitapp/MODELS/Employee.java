@@ -1,6 +1,7 @@
 package com.munit.m_unitapp.MODELS;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Employee {
@@ -12,6 +13,7 @@ public class Employee {
     String phoneNo = "";
     Boolean active;
     String employmentDate = "";
+    String dob = "";
     String terminationDate;
     String department = "";
     int salary= 0;
@@ -139,6 +141,14 @@ public class Employee {
     public List<EmployeePayment> getPayments() {
         return payments;
     }
+    public List<EmployeePayment> getPaymentsReversed() {
+        List<EmployeePayment> reversrdPayments = new ArrayList<>();
+        reversrdPayments.addAll(payments);
+
+        Collections.reverse(reversrdPayments);
+
+        return reversrdPayments;
+    }
 
     public void setPayments(List<EmployeePayment> payments) {
         this.payments = payments;
@@ -150,6 +160,14 @@ public class Employee {
 
     public void setAdvance(int advance) {
         this.advance = advance;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 
     public int getIdex(List<Employee> employees , String eID){

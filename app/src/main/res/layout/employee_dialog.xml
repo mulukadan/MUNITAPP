@@ -54,200 +54,261 @@
                     android:textSize="20dp"
                     android:textStyle="bold" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="10dp"
-                    >
+                    android:orientation="horizontal">
+
                     <com.mikhaellopez.circularimageview.CircularImageView
-                        android:layout_marginTop="30dp"
                         android:id="@+id/ProfilePic"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginTop="0dp"
                         android:background="@drawable/user"
                         app:civ_border_color="#EEEEEE"
                         app:civ_border_width="2dp"
                         app:civ_shadow="true"
-                        app:civ_shadow_radius="2"
-                        app:civ_shadow_color="#8BC34A"/>
+                        app:civ_shadow_color="#8BC34A"
+                        app:civ_shadow_radius="2" />
 
                     <com.mikhaellopez.circularimageview.CircularImageView
 
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignBottom="@+id/ProfilePic"
-                        android:layout_toRightOf="@+id/ProfilePic"
-                        android:layout_marginLeft="-30dp"
                         android:id="@+id/ChangeProfilePic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="30dp"
                         android:src="@drawable/ic_camera_alt_black_24dp"
+                        app:civ_border="true"
                         app:civ_border_color="#EEEEEE"
                         app:civ_border_width="0dp"
                         app:civ_shadow="true"
-                        app:civ_shadow_radius="2"
-                        app:civ_border="true"
-                        app:civ_shadow_color="#8BC34A"/>
+                        app:civ_shadow_color="#8BC34A"
+                        app:civ_shadow_radius="2" />
 
-                </RelativeLayout>
-
+                </LinearLayout>
 
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="15dp"
-                    >
-                    <LinearLayout
+                    app:cardCornerRadius="15dp">
+
+                    <ScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        >
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_marginHorizontal="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_height="wrap_content">
-
-                            <EditText
-                                android:id="@+id/name"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/medium"
-                                android:hint="Full Name"
-                                android:paddingLeft="20dp" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_marginHorizontal="10dp"
-                            android:layout_height="wrap_content">
-
-                            <EditText
-                                android:id="@+id/PhoneNo"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/medium"
-                                android:hint="PhoneNo"
-                                android:inputType="phone"
-                                android:paddingLeft="20dp" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_marginHorizontal="10dp"
-                            android:layout_height="wrap_content">
-
-                            <EditText
-                                android:id="@+id/jobDesc"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/medium"
-                                android:hint="Job Description"
-                                android:lines="2"
-                                android:paddingLeft="20dp" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_height="match_parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:orientation="horizontal"
-                            android:weightSum="10">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
                             <com.google.android.material.textfield.TextInputLayout
-                                android:layout_width="0dp"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="10">
+                                android:layout_marginHorizontal="10dp"
+                                android:layout_marginTop="10dp">
 
                                 <EditText
-                                    android:id="@+id/eSalary"
+                                    android:id="@+id/name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/medium"
-                                    android:hint="Salary"
-                                    android:inputType="number"
-                                    android:paddingLeft="20dp"
-                                    android:textAllCaps="false" />
+                                    android:hint="Full Name"
+                                    android:paddingLeft="20dp" />
 
                             </com.google.android.material.textfield.TextInputLayout>
 
-                        </LinearLayout>
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp"
-                            android:orientation="horizontal">
+                                <EditText
+                                    android:id="@+id/PhoneNo"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/medium"
+                                    android:hint="PhoneNo"
+                                    android:inputType="phone"
+                                    android:paddingLeft="20dp" />
 
-                            <TextView
-                                android:layout_width="0dp"
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <RadioGroup
+                                android:id="@+id/myRadioGroup"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checkedButton="@+id/maleRB"
+                                android:layout_marginHorizontal="30dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="10dp"
+                                    android:textSize="18dp"
+                                    android:text="Gender" />
+
+                                <RadioButton
+                                    android:id="@+id/maleRB"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Male" />
+
+                                <RadioButton
+                                    android:id="@+id/femaleRB"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:text="Female" />
+
+
+                            </RadioGroup>
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:layout_weight="4"
-                                android:text="Employed on"
-                                android:textSize="18dp" />
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="10dp"
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/dateOfEmployment"
-                                android:layout_width="0dp"
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_weight="4"
+                                    android:text="Date of Birth"
+                                    android:textSize="18dp" />
+
+                                <TextView
+                                    android:id="@+id/dobTV"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_weight="6"
+                                    android:text="12/12/2021"
+                                    android:textSize="18dp" />
+                            </LinearLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="6"
-                                android:textSize="18dp"
-                                android:layout_marginLeft="5dp"
-                                android:text="12/12/2021" />
-                        </LinearLayout>
+                                android:layout_marginHorizontal="10dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginRight="10dp"
-                            android:orientation="horizontal">
+                                <EditText
+                                    android:id="@+id/jobDesc"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/medium"
+                                    android:hint="Job Description"
+                                    android:lines="2"
+                                    android:paddingLeft="20dp" />
 
-                            <TextView
-                                android:layout_width="0dp"
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="10dp"
+                                android:orientation="horizontal"
+                                android:weightSum="10">
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="10">
+
+                                    <EditText
+                                        android:id="@+id/eSalary"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/medium"
+                                        android:hint="Salary"
+                                        android:inputType="number"
+                                        android:paddingLeft="20dp"
+                                        android:textAllCaps="false" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
-                                android:layout_weight="4"
-                                android:text="Department"
-                                android:textSize="18dp" />
+                                android:layout_marginTop="10dp"
+                                android:layout_marginRight="10dp"
+                                android:orientation="horizontal">
 
-                            <Spinner
-                                android:id="@+id/departmentSpiner"
-                                android:layout_width="0dp"
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_weight="4"
+                                    android:text="Employed on"
+                                    android:textSize="18dp" />
+
+                                <TextView
+                                    android:id="@+id/dateOfEmployment"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_weight="6"
+                                    android:text="12/12/2021"
+                                    android:textSize="18dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="6"
-                                android:drawSelectorOnTop="true"
-                                android:entries="@array/departments"
-                                android:prompt="@string/workDepartment" />
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginRight="10dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="10dp"
+                                    android:layout_weight="4"
+                                    android:text="Department"
+                                    android:textSize="18dp" />
+
+                                <Spinner
+                                    android:id="@+id/departmentSpiner"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="6"
+                                    android:drawSelectorOnTop="true"
+                                    android:entries="@array/departments"
+                                    android:prompt="@string/workDepartment" />
+                            </LinearLayout>
+
+
+                            <Button
+                                android:id="@+id/SaveBtn"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:layout_marginHorizontal="20dp"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@drawable/send_button_bk"
+                                android:clickable="true"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:text="Save"
+                                android:textColor="@color/white" />
+
                         </LinearLayout>
+                    </ScrollView>
 
-
-
-                        <Button
-                            android:id="@+id/SaveBtn"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="end"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginHorizontal="20dp"
-                            android:background="@drawable/send_button_bk"
-                            android:clickable="true"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:text="Save"
-                            android:layout_marginBottom="10dp"
-                            android:textColor="@color/white" />
-
-                    </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
-
 
 
             </LinearLayout>

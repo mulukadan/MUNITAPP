@@ -16,15 +16,19 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,14 +64,15 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
     DatabaseReference myRef;
     firebase db = new firebase();
     private ImageView back_arrow, editEmBtn;
-    private TextView nameTV, titleTV, GenderTV, ageTV, emplyDateTV, salaryTV, emplymentStatusTV;
+    private TextView nameTV, titleTV, GenderTV, ageTV, emplyDateTV, salaryTV, emplymentStatusTV, totalAdvance, totalSalary, PaymentTitle;
     private CircularImageView ProfilePic, dProfilePic;
     private RecyclerView paymentsRV;
 
     private Dialog EmployeeDialog, advanceDialog;
     private ImageView CloseBillDialog, CloseAdvDialog;
+    private RadioButton maleRB, femaleRB;
     private Button AdvSaveBtn, SaveBtn;
-    private TextView name, dateOfEmployment, advDateTV;
+    private TextView name, dateOfEmployment, advDateTV, dobTV;
     private EditText PhoneNo,
             advAmtET, advReasonET, advDateEt;
     private EditText eSalary, jobDesc;
@@ -85,7 +90,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
     private CardView galleryCard;
     int getImageOption = 0; //From 0 Camera, 1 From Gallery
 
-    private RelativeLayout advBtn;
+    private RelativeLayout advBtn, payBtn;
     private Calendar calendar;
     private int year, month, day;
     private String todate;
@@ -98,13 +103,26 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
     StorageReference ProfilePicRef;
 
     List<Employee> employees = new ArrayList<>();
+    List<EmployeePayment> payments = new ArrayList<>();
     PaymentsAdapter transactionsTypesAdapter;
+    final int DOB_DATE = 0;
+    final int DOE_DATE = 1;
+    final int DOA_DATE = 2;
+    private int dateFor = 0;
+    FirebaseUser user;
+    private String Username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_man);
         getSupportActionBar().hide();
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        Username = user.getDisplayName();
+        if (Username == null || Username.length() < 1) {
+            Username = user.getEmail().substring(0, user.getEmail().indexOf("@"));
+        }
 
         back_arrow = findViewById(R.id.back_arrow);
         editEmBtn = findViewById(R.id.editEmBtn);
@@ -117,6 +135,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         ProfilePic = findViewById(R.id.ProfilePic);
         emplymentStatusTV = findViewById(R.id.emplymentStatusTV);
         advBtn = findViewById(R.id.advBtn);
+        payBtn = findViewById(R.id.payBtn);
 
         paymentsRV = findViewById(R.id.paymentsRV);
         paymentsRV.setLayoutManager(new LinearLayoutManager(this));
@@ -132,6 +151,10 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         advReasonET = advanceDialog.findViewById(R.id.advReasonET);
         advDateTV = advanceDialog.findViewById(R.id.advDateTV);
         AdvSaveBtn = advanceDialog.findViewById(R.id.SaveBtn);
+        PaymentTitle = advanceDialog.findViewById(R.id.PaymentTitle);
+
+        totalAdvance = advanceDialog.findViewById(R.id.totalAdvance);
+        totalSalary = advanceDialog.findViewById(R.id.totalSalary);
 
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
@@ -146,6 +169,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         });
 
         advDateTV.setOnClickListener(v -> {
+            dateFor = DOA_DATE;
             showDialog(999);
         });
 
@@ -159,10 +183,24 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         name = EmployeeDialog.findViewById(R.id.name);
         PhoneNo = EmployeeDialog.findViewById(R.id.PhoneNo);
         dateOfEmployment = EmployeeDialog.findViewById(R.id.dateOfEmployment);
+        dobTV = EmployeeDialog.findViewById(R.id.dobTV);
         departmentSpiner = EmployeeDialog.findViewById(R.id.departmentSpiner);
         jobDesc = EmployeeDialog.findViewById(R.id.jobDesc);
         eSalary = EmployeeDialog.findViewById(R.id.eSalary);
         SaveBtn = EmployeeDialog.findViewById(R.id.SaveBtn);
+        maleRB = EmployeeDialog.findViewById(R.id.maleRB);
+        femaleRB = EmployeeDialog.findViewById(R.id.femaleRB);
+        dateOfEmployment.setText(todate);
+        dobTV.setText(todate);
+
+        dobTV.setOnClickListener(v -> {
+            dateFor = DOB_DATE;
+            showDialog(999);
+        });
+        dateOfEmployment.setOnClickListener(v -> {
+            dateFor = DOE_DATE;
+            showDialog(999);
+        });
 
         sdialog = new SweetAlertDialog(EmployeeManActivity.this, SweetAlertDialog.WARNING_TYPE);
         sdialog.setCancelable(false);
@@ -188,52 +226,92 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         });
 
         advBtn.setOnClickListener((view) -> {
-            clearAdvDialog();
-            advanceDialog.show();
+            if (employee.getStatus().equalsIgnoreCase("true")) {
+                clearAdvDialog();
+                PaymentTitle.setText("Salary Advance");
+                totalAdvance.setText("Ksh. " + employee.getAdvance());
+                totalSalary.setText("Ksh. " + employee.getSalary());
+                advReasonET.setVisibility(View.VISIBLE);
+                advanceDialog.show();
+            } else {
+                Toast.makeText(this, "Employee Status not Active", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+        payBtn.setOnClickListener((view) -> {
+            if (employee.getStatus().equalsIgnoreCase("true")) {
+                clearAdvDialog();
+                PaymentTitle.setText("Salary Payment");
+                totalAdvance.setText("Ksh. " + employee.getAdvance());
+                totalSalary.setText("Ksh. " + employee.getSalary());
+                advAmtET.setText("" + (employee.getSalary() - employee.getAdvance()));
+                advAmtET.setSelection(advAmtET.getText().length());
+                advReasonET.setText("Salary Payment");
+                advReasonET.setVisibility(View.GONE);
+                advanceDialog.show();
+            } else {
+                Toast.makeText(this, "Employee Status not Active", Toast.LENGTH_SHORT).show();
+            }
         });
 
         AdvSaveBtn.setOnClickListener(v -> {
             int err = 0;
             String amtSt = advAmtET.getText().toString().trim();
-            int amt =0;
+            int amt = 0;
             String reason = advReasonET.getText().toString().trim();
             String date = advDateTV.getText().toString().trim();
 
-            if(amtSt.length()<1){
+            if (amtSt.length() < 1) {
                 err = 1;
                 advAmtET.setError("Enter Valid Amt");
                 advAmtET.requestFocus();
-            }else {
+            } else {
                 try {
                     amt = Integer.parseInt(amtSt);
-                }catch (Exception e){
+                } catch (Exception e) {
                     err = 1;
                     advAmtET.setError("Enter Valid Amt");
                     advAmtET.requestFocus();
                 }
             }
 
-            if(reason.length()<5){
+            if (reason.length() < 5) {
                 err = 1;
                 advReasonET.setError("Enter Valid Reason");
                 advReasonET.requestFocus();
             }
 
-            if(err == 0){
+            if (err == 0) {
                 int all = employee.getPayments().size();
-                String id =all+"_"+date;
+                String id = all + "_" + date;
                 int amount = amt;
                 String description = reason;
-                int initialAdvTotal = 0;
-                initialAdvTotal = employee.getAdvance();
-                int current = initialAdvTotal + amt;
-                String type = "A";
+                String type;
+                int currentAdv;
+                int initialAdvTotal = employee.getAdvance();
+                String dTitle, dQuestion;
+                if (PaymentTitle.getText().toString().contains("Advance")) {
+                    type = "A";
+                    currentAdv = initialAdvTotal + amt;
+                    dTitle = "Give Advance?";
+                    dQuestion = "Are you sure you want to give advance of Ksh. " + amt + " to " + employee.getName() + "?";
+                } else {
+                    type = "S";
+                    int sattledAdvance = employee.getSalary() - amt;
+                    currentAdv = initialAdvTotal - sattledAdvance;
+
+                    dTitle = "Pay Salary?";
+                    dQuestion = "Are you sure you want to PAY Ksh. " + amt + " to " + employee.getName() + "?";
+                }
+
+
                 sdialog.changeAlertType(SweetAlertDialog.WARNING_TYPE);
-                int finalInitialAdvTotal = current;
+                int finalcurrentAdv = currentAdv;
                 int InitialAdvTotal1 = initialAdvTotal;
-                sdialog.setTitleText("Give Advance?")
-                        .setContentText("Are you sure you want to give advance of Ksh. " + amt +" to " + employee.getName()+ "?")
-                        .setConfirmText("Give")
+                sdialog.setTitleText(dTitle)
+                        .setContentText(dQuestion)
+                        .setConfirmText("Proceed")
                         .showCancelButton(true)
                         .setCancelClickListener(sweetAlertDialog -> {
                             sdialog.dismiss();
@@ -241,11 +319,13 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                         .setCancelText("Cancel")
                         .setConfirmClickListener(sDialog -> {
                             int idex = employee.getIdex(employees, employee.getId());
-                            employees.remove(idex);
-                            EmployeePayment payment = new EmployeePayment(id,amount, description, InitialAdvTotal1, finalInitialAdvTotal , type);
+//                            employees.remove(idex);
+                            EmployeePayment payment = new EmployeePayment(id, amount, description, InitialAdvTotal1, finalcurrentAdv, type);
+                            payment.setPaidBy(Username);
                             employee.getPayments().add(payment);
-                            employee.setAdvance(finalInitialAdvTotal);
-                            employees.add(employee);
+                            employee.setAdvance(finalcurrentAdv);
+                            employees.set(idex, employee);
+//                            employees.add(employee);
                             addWorkerToFirebase();
                             advanceDialog.dismiss();
 
@@ -291,6 +371,11 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                 PhoneNo.setError("Enter Valid Number");
                 error = 1;
             }
+
+            String gender = "Male";
+            if (!maleRB.isChecked()) {
+                gender = "Female";
+            }
             int salary = 0;
             try {
                 salary = Integer.parseInt(salaryString);
@@ -300,6 +385,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
             }
 
             String employmentDate = dateOfEmployment.getText().toString();
+            String dob = dobTV.getText().toString();
             String department = departmentSpiner.getSelectedItem().toString();
             String JobDescription = jobDesc.getText().toString().trim();
 
@@ -311,9 +397,11 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
 
                 employee1.setName(uname);
                 employee1.setPhoneNo(uPhoneNo);
+                employee1.setGender(gender);
 //                employee1.setActive(true);
                 employee1.setDepartment(department);
                 employee1.setEmploymentDate(employmentDate);
+                employee1.setDob(dob);
                 employee1.setSalary(salary);
                 employee1.setJobDescription(JobDescription);
 
@@ -345,17 +433,20 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
             }
         });
 
-        transactionsTypesAdapter = new PaymentsAdapter(this, employee.getPayments());
+
+        transactionsTypesAdapter = new PaymentsAdapter(this, payments);
         paymentsRV.setAdapter(transactionsTypesAdapter);
         fetchData();
         updateUI();
 
     }
-    public void clearAdvDialog(){
+
+    public void clearAdvDialog() {
         advAmtET.setText("");
         advReasonET.setText("");
         advDateTV.setText(todate);
     }
+
     public void updateUI() {
         if (employee.getImgUrl().length() > 2) {
             Picasso.get().load(employee.getImgUrl()).into(ProfilePic);
@@ -368,6 +459,10 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         emplyDateTV.setText(employee.getEmploymentDate());
         salaryTV.setText("Ksh. " + employee.getSalary());
         emplymentStatusTV.setText("Employment Status: " + employee.getActive().toString());
+
+        //Update RV
+        payments.clear();
+        payments.addAll(employee.getPaymentsReversed());
         transactionsTypesAdapter.notifyDataSetChanged();
 
     }
@@ -401,9 +496,6 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
             // Handle unsuccessful uploads
             pDialog.dismiss();
         }).addOnSuccessListener(taskSnapshot -> {
-            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-            // ...
-
             ProfilePicRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 Uri selectedImage = uri;
                 ProfilePicURL = selectedImage.toString();
@@ -470,10 +562,16 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         if (employee.getImgUrl().length() > 2) {
             Picasso.get().load(employee.getImgUrl()).into(dProfilePic);
         }
+        if (employee.getGender() == null || employee.getGender().equals("Male")) {
+            maleRB.setChecked(true);
+        } else {
+            femaleRB.setChecked(true);
+        }
         name.setText(employee.getName());
         PhoneNo.setText(employee.getPhoneNo());
         eSalary.setText("" + employee.getSalary());
         dateOfEmployment.setText(employee.getEmploymentDate());
+        dobTV.setText(employee.getDob());
         jobDesc.setText(employee.getJobDescription());
         departmentSpiner.setSelection(((ArrayAdapter) departmentSpiner.getAdapter()).getPosition(employee.getDepartment()));
         EmployeeDialog.show();
@@ -574,8 +672,19 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                     // arg1 = year, arg2 = month, arg3 = day
 
                     String DateDisplaying = arg3 + "/" + (arg2 + 1) + "/" + arg1;
-                    dateOfEmployment.setText(DateDisplaying);
-                    advDateTV.setText(DateDisplaying);
+                    switch (dateFor) {
+                        case DOA_DATE:
+                            advDateTV.setText(DateDisplaying);
+                            break;
+                        case DOB_DATE:
+                            dobTV.setText(DateDisplaying);
+                            break;
+                        case DOE_DATE:
+                            dateOfEmployment.setText(DateDisplaying);
+                            break;
+                    }
+
+
                 }
             };
 

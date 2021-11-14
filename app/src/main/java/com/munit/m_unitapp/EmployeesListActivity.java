@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -68,7 +69,8 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
     private Dialog EmployeeDialog;
     private ImageView CloseBillDialog;
     private Button SaveBtn;
-    private TextView name, dateOfEmployment;
+    private TextView name, dateOfEmployment, dobTV;
+    private RadioButton maleRB, femaleRB;
     private EditText PhoneNo;
     private EditText eSalary, jobDesc;
     private String AdminEmail, AdminPassword;
@@ -93,7 +95,9 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
     private CardView cameraCard;
     private CardView galleryCard;
 
-
+    final int DOB_DATE = 0;
+    final int DOE_DATE = 1;
+    private int dateFor = 0;
 
     private Calendar calendar;
     private int year, month, day;
@@ -154,12 +158,23 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
         name = EmployeeDialog.findViewById(R.id.name);
         PhoneNo = EmployeeDialog.findViewById(R.id.PhoneNo);
         dateOfEmployment = EmployeeDialog.findViewById(R.id.dateOfEmployment);
+        maleRB = EmployeeDialog.findViewById(R.id.maleRB);
+        femaleRB = EmployeeDialog.findViewById(R.id.femaleRB);
+        dobTV = EmployeeDialog.findViewById(R.id.dobTV);
         departmentSpiner = EmployeeDialog.findViewById(R.id.departmentSpiner);
         jobDesc = EmployeeDialog.findViewById(R.id.jobDesc);
         eSalary = EmployeeDialog.findViewById(R.id.eSalary);
         SaveBtn = EmployeeDialog.findViewById(R.id.SaveBtn);
         dateOfEmployment.setText(todate);
+        dobTV.setText(todate);
+
+
+        dobTV.setOnClickListener(v -> {
+            dateFor = DOB_DATE;
+            showDialog(999);
+        });
         dateOfEmployment.setOnClickListener(v -> {
+            dateFor = DOE_DATE;
             showDialog(999);
         });
         CloseBillDialog.setOnClickListener((view) -> {
@@ -192,6 +207,10 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
             String uname = name.getText().toString();
             String uPhoneNo = PhoneNo.getText().toString().trim();
             String salaryString = eSalary.getText().toString().trim();
+            String gender = "Male";
+            if (!maleRB.isChecked()) {
+                gender = "Female";
+            }
             int error = 0;
             if (uname.trim().length() < 2) {
                 name.setError("Enter name");
@@ -211,6 +230,8 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
             }
 
             String employmentDate = dateOfEmployment.getText().toString();
+
+            String dob = dobTV.getText().toString();
             String department = departmentSpiner.getSelectedItem().toString();
             String JobDescription = jobDesc.getText().toString().trim();
 
@@ -219,6 +240,8 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
                 employee.setPhoneNo(uPhoneNo);
                 employee.setId(employees.size() + uname.substring(0, 2));
                 employee.setActive(true);
+                employee.setGender(gender);
+                employee.setDob(dob);
                 employee.setDepartment(department);
                 employee.setEmploymentDate(employmentDate);
                 employee.setSalary(salary);
@@ -258,7 +281,7 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
     }
 
     private void showEmployeeDialog() {
-        if(!employee.getImgUrl().equalsIgnoreCase("")){
+        if (!employee.getImgUrl().equalsIgnoreCase("")) {
             Picasso.get().load(employee.getImgUrl()).into(ProfilePic);
         }
 
@@ -267,7 +290,7 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
         dateOfEmployment.setText(employee.getEmploymentDate());
 //        departmentSpiner = EmployeeDialog.findViewById(R.id.departmentSpiner);
         jobDesc.setText(employee.getJobDescription());
-        eSalary.setText(""+employee.getSalary());
+        eSalary.setText("" + employee.getSalary());
 
 
         EmployeeDialog.show();
@@ -346,7 +369,14 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
                     // arg1 = year, arg2 = month, arg3 = day
 
                     String DateDisplaying = arg3 + "/" + (arg2 + 1) + "/" + arg1;
-                    dateOfEmployment.setText(DateDisplaying);
+                    switch (dateFor) {
+                        case DOB_DATE:
+                            dobTV.setText(DateDisplaying);
+                            break;
+                        case DOE_DATE:
+                            dateOfEmployment.setText(DateDisplaying);
+                            break;
+                    }
                 }
             };
 

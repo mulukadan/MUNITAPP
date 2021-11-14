@@ -8,6 +8,7 @@ public class EmployeePayment {
     int current;
     String date;
     String type;// Types A = Advance, S = Salary
+    String paidBy="";
 
     public EmployeePayment() {
     }
@@ -78,5 +79,13 @@ public class EmployeePayment {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getPaidBy() {
+        return paidBy;
+    }
+
+    public void setPaidBy(String paidBy) {
+        this.paidBy = paidBy;
     }
 }
