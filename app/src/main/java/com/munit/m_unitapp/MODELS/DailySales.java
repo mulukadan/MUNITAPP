@@ -1,5 +1,7 @@
 package com.munit.m_unitapp.MODELS;
 
+import java.util.Date;
+
 public class DailySales {
     String userId;
     String userName;
@@ -33,7 +35,8 @@ public class DailySales {
         this.date = date;
         //Set sortValue
         try{
-            this.sortValue = Integer.parseInt(date.substring(0,date.indexOf("/"))) + Integer.parseInt(date.substring(date.indexOf("/")+1, date.lastIndexOf("/"))) + Integer.parseInt(date.substring(date.lastIndexOf("/")+1));
+            this.sortValue = (int) (new Date(date).getTime()/1000);
+//            this.sortValue = Integer.parseInt(date.substring(0,date.indexOf("/"))) + Integer.parseInt(date.substring(date.indexOf("/")+1, date.lastIndexOf("/"))) + Integer.parseInt(date.substring(date.lastIndexOf("/")+1));
         }catch (Exception e){
 
         }
@@ -147,5 +150,10 @@ public class DailySales {
 
     public void setDateWithDay(String dateWithDay) {
         this.dateWithDay = dateWithDay;
+    }
+
+    public int compareTo(DailySales o)
+    {
+        return(sortValue - o.sortValue);
     }
 }

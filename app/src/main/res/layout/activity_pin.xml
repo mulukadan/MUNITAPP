@@ -114,10 +114,7 @@
                             android:clickable="false"
                             android:scaleX="1.5"
                             android:scaleY="1.5"/>
-
                     </LinearLayout>
-
-
                 </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -260,11 +257,21 @@
                     <RelativeLayout
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:gravity="center"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        >
-
+                        android:clickable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        android:gravity="center">
+                        <ImageView
+                            android:id="@+id/biometricLoginButton"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center"
+                            android:visibility="gone"
+                            android:src="@drawable/ic_baseline_fingerprint_24">
+                        </ImageView>
                     </RelativeLayout>
                     <TextView
                         android:id="@+id/zero"
@@ -296,9 +303,6 @@
                             android:textSize="10dp"
                             />
                     </RelativeLayout>
-
-
-
                 </LinearLayout>
                 <TextView
                     android:id="@+id/forgotPin"
@@ -311,13 +315,10 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:layout_marginBottom="5dp"
                     android:text="Forgot Pin?"/>
-
             </LinearLayout>
-
 
         </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
-
 
 </RelativeLayout>

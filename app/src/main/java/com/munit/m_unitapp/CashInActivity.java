@@ -2,26 +2,28 @@ package com.munit.m_unitapp;
 
 import android.content.Intent;
 import android.graphics.Color;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.eftimoff.viewpagertransformers.CubeOutTransformer;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,31 +31,24 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.Nullable;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.munit.m_unitapp.ADAPTERS.AllDailySalesAdapter;
-import com.munit.m_unitapp.ADAPTERS.DailySalesFragAdapter;
-import com.munit.m_unitapp.ADAPTERS.WeeklySalesFragAdapter;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.TOOLS.Constants;
 import com.munit.m_unitapp.TOOLS.GeneralMethods;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -63,6 +58,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     private Calendar calendar;
     private int year, month, day;
     String todate;
+    private BarChart chart;
+    private TextView listViewBtn, chartViewBtn;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -72,6 +69,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     String USERID;
     List<User> users = new ArrayList<>();
     User userdb = new User();
+    private LinearLayout chartViewLL, listViewLL;
 
     List<List<DailySales>> allUsersWeeklySales = new ArrayList<>();
     Gson gson;
@@ -84,7 +82,6 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     AllDailySalesAdapter allDailySalesAdapter;
     List<DailySales> userSales = new ArrayList<>();
     TextView daysDate, compServTV, compSalesTV, GamesTV, moviesTV, mpesaTillTV, cashTV, totalPayTV, weeklyBtn, monthlyBtn, dailyBtn;
-    ;
 
     DailySales dailySales;
     int todaysWeekNo;
@@ -125,6 +122,12 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         allDailySalesAdapter.setSelectedUserName("Total");
         weeklySummary.setAdapter(allDailySalesAdapter);
 
+        listViewBtn = findViewById(R.id.listViewBtn);
+        chartViewBtn = findViewById(R.id.chartViewBtn);
+        chartViewLL = findViewById(R.id.chartViewLL);
+        listViewLL = findViewById(R.id.listViewLL);
+        chartViewLL.setVisibility(View.GONE);
+        chart = findViewById(R.id.chart);
         daysDate = findViewById(R.id.daysDate);
         compServTV = findViewById(R.id.compServTV);
         compSalesTV = findViewById(R.id.compSalesTV);
@@ -181,9 +184,24 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
             addSales.putExtra("userJson", userJson);
             startActivity(addSales);
         });
+
+        chartViewBtn.setOnClickListener(v -> {
+            chartViewLL.setVisibility(View.VISIBLE);
+            listViewLL.setVisibility(View.GONE);
+            chartViewBtn.setBackgroundResource(R.color.colorPrimary);
+            listViewBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            populateChart(userSales);
+        });
+        listViewBtn.setOnClickListener(v -> {
+            chartViewLL.setVisibility(View.GONE);
+            listViewLL.setVisibility(View.VISIBLE);
+            chartViewBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            listViewBtn.setBackgroundResource(R.color.colorPrimary);
+        });
         fetchUsers();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void displayRecords(int dataFor) {
         showingDataFor = dataFor;
         switch (showingDataFor) {
@@ -197,7 +215,10 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                 fetchUserSales(USERID);
                 break;
         }
+
+
     }
+
     public void getDailySale() {
         pDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
         pDialog.setTitleText("Loading");
@@ -231,18 +252,19 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void fetchUserSales(String key) {
         allDailySalesAdapter.setSelectedUserName("Total");
         pDialog.show();
         firedb.collection(Constants.dailySalesPath)
                 .whereEqualTo("userId", key)
-                .orderBy("sortValue", Query.Direction.DESCENDING)
+                .orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, e) -> {
                     if (e != null) {
 //                            Log.w(TAG, "Listen failed.", e);
                         return;
                     }
-                    if(value.isEmpty()){
+                    if (value.isEmpty()) {
                         pDialog.dismiss();
                     }
 
@@ -251,10 +273,20 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                         if (doc.get("date") != null) {
                             DailySales dailySales = doc.toObject(DailySales.class);
                             dailySales.setCount(1);
+                            Date date1 = null;
+                            try {
+                                date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dailySales.getDate());
+                            } catch (ParseException parseException) {
+                                parseException.printStackTrace();
+                            }
+                            int dateInt = (int) (date1.getTime() / 1000);
+                            dailySales.setSortValue(dateInt);
                             allweeklySales.add(dailySales);
                         }
                     }
+                    allweeklySales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
                     computeUserSales(allweeklySales);
+
                 });
 
 //        firedb.collection(Constants.dailySalesPath)
@@ -294,8 +326,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
             case WEEKLY_DATA:
                 for (DailySales sale : allweeklySales) {
                     boolean found = false;
-                    for(DailySales dailySales : userSales){
-                        if(dailySales.getYear_week().equalsIgnoreCase(sale.getYear_week())){//Exists
+                    for (DailySales dailySales : userSales) {
+                        if (dailySales.getYear_week().equalsIgnoreCase(sale.getYear_week())) {//Exists
                             dailySales.setComputer_service(dailySales.getComputer_service() + sale.getComputer_service());
                             dailySales.setComputer_sales(dailySales.getComputer_sales() + sale.getComputer_sales());
                             dailySales.setMovies(dailySales.getMovies() + sale.getMovies());
@@ -308,12 +340,12 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                             break;
                         }
                     }
-                    if(!found){
+                    if (!found) {
                         int theWeeksNo = new GeneralMethods().getWeekNumber(sale.getDate());
                         String weekTitle = "";
-                        if(todaysWeekNo == theWeeksNo){
+                        if (todaysWeekNo == theWeeksNo) {
                             weekTitle = "This Week";
-                        }else if (todaysWeekNo - theWeeksNo == 1) {
+                        } else if (todaysWeekNo - theWeeksNo == 1) {
                             weekTitle = "Last Week";
                         } else {
                             weekTitle = "Last Week but " + ((todaysWeekNo - theWeeksNo) - 1);
@@ -326,8 +358,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
             case MONTHLY_DATA:
                 for (DailySales sale : allweeklySales) {
                     boolean found = false;
-                    for(DailySales dailySales : userSales){
-                        if(dailySales.getYear_month().equalsIgnoreCase(sale.getYear_month())){//Exists
+                    for (DailySales dailySales : userSales) {
+                        if (dailySales.getYear_month().equalsIgnoreCase(sale.getYear_month())) {//Exists
                             dailySales.setComputer_service(dailySales.getComputer_service() + sale.getComputer_service());
                             dailySales.setComputer_sales(dailySales.getComputer_sales() + sale.getComputer_sales());
                             dailySales.setMovies(dailySales.getMovies() + sale.getMovies());
@@ -340,9 +372,9 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                             break;
                         }
                     }
-                    if(!found){
+                    if (!found) {
                         //Add new
-                        sale.setUserName(new GeneralMethods().getMonthName(Integer.parseInt(sale.getYear_month().substring(4))) +" "+ sale.getYear());
+                        sale.setUserName(new GeneralMethods().getMonthName(Integer.parseInt(sale.getYear_month().substring(4))) + " " + sale.getYear());
                         userSales.add(sale);
                     }
 
@@ -351,6 +383,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         }
 
         allDailySalesAdapter.notifyDataSetChanged();
+        populateChart(userSales);
         pDialog.dismiss();
     }
 
@@ -376,7 +409,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                     }
                     users.add(u);
                 }
-                if(userdb.getLevel()>2){
+                if (userdb.getLevel() > 2) {
                     summaryBtn.setVisibility(View.GONE);
                 }
                 pDialog.dismiss();
@@ -398,6 +431,93 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
             }
         });
 
+    }
+
+    public void populateChart(List<DailySales> sales) {
+        Collections.reverse(sales);
+        ArrayList<BarEntry> yVals1 = new ArrayList<>();
+        final ArrayList<String> xAxisLabel = new ArrayList<>();
+        for (DailySales dailySales : sales) {
+            yVals1.add(new BarEntry(sales.indexOf(dailySales), dailySales.getTotal()));
+            xAxisLabel.add(shortenForChart(dailySales.getUserName()));
+        }
+
+        BarDataSet set1;
+        String desc="";
+        switch (showingDataFor) {
+            case DAILY_DATA:
+                desc="Daily sales";
+                break;
+            case WEEKLY_DATA:
+                desc="Weekly Sales";
+                break;
+            case MONTHLY_DATA:
+                desc="Monthly Sales";
+                break;
+        }
+
+        set1 = new BarDataSet(yVals1, desc);
+        set1.setColors(ColorTemplate.MATERIAL_COLORS);
+
+        ArrayList<IBarDataSet> dataSets = new ArrayList<IBarDataSet>();
+        dataSets.add(set1);
+
+        BarData data = new BarData(dataSets);
+
+        data.setValueTextSize(10f);
+        data.setBarWidth(0.9f);
+        chart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xAxisLabel));
+        chart.setTouchEnabled(true);
+        chart.setHorizontalScrollBarEnabled(true);
+        chart.setData(data);
+        chart.animateXY(2000, 2000);
+        chart.invalidate();
+
+    }
+
+    public String shortenForChart(String title) {
+        if (title.contains("Jan")) {
+            return "Jan";
+        }
+        if (title.contains("Feb")) {
+            return "Feb";
+        }
+        if (title.contains("Mar")) {
+            return "Mar";
+        }
+        if (title.contains("Apr")) {
+            return "Apr";
+        }
+        if (title.contains("May")) {
+            return "May";
+        }
+        if (title.contains("Jun")) {
+            return "Jun";
+        }
+        if (title.contains("Jul")) {
+            return "Jul";
+        }
+        if (title.contains("Aug")) {
+            return "Aug";
+        }
+        if (title.contains("Sep")) {
+            return "Sep";
+        }
+        if (title.contains("Oct")) {
+            return "Oct";
+        }
+        if (title.contains("Nov")) {
+            return "Nov";
+        }
+        if (title.contains("Dec")) {
+            return "Dec";
+        }
+
+        title = title.replace("Week", "wk");
+        title = title.replace("Last", "L.");
+        title = title.replace("but", "bt");
+
+        return title;
     }
 
     @Override

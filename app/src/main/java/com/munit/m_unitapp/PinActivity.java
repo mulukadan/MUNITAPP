@@ -7,11 +7,18 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
+
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,6 +30,7 @@ import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import pub.devrel.easypermissions.AppSettingsDialog;
@@ -56,8 +64,12 @@ public class PinActivity extends AppCompatActivity implements EasyPermissions.Pe
     private CircularImageView ProfilePic;
     private String ProfilePicURL;
     private Bitmap bitmap;
-    // Database Helper
-//    DbHelper db;
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
+    ImageView biometricLoginButton;
+    String fingerPrintActive = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +96,9 @@ public class PinActivity extends AppCompatActivity implements EasyPermissions.Pe
                 }
             }
         }
+
         usernameTv = findViewById(R.id.username);
+        biometricLoginButton = findViewById(R.id.biometricLoginButton);
 
         usernameTv.setText("Welcome back, "+Username+"!");
 
@@ -106,7 +120,7 @@ public class PinActivity extends AppCompatActivity implements EasyPermissions.Pe
         zero = findViewById(R.id.zero);
         forgotPassword = findViewById(R.id.forgotPin);
         Delete = findViewById(R.id.Delete);
-
+        CheckFingerPrintStatus();
         CheckLoginStage();
 
         zero.setOnClickListener((View v) -> {
@@ -176,6 +190,11 @@ public class PinActivity extends AppCompatActivity implements EasyPermissions.Pe
         if(UserPin.length()<4){
             enterPinTxt.setText("Set PIN");
             forgotPassword.setVisibility(View.GONE);
+            biometricLoginButton.setVisibility(View.GONE);
+        } else {
+            if (fingerPrintActive.equals("YES")) {
+                biometricPrompt.authenticate(promptInfo);
+            }
         }
     }
 
@@ -303,7 +322,90 @@ public class PinActivity extends AppCompatActivity implements EasyPermissions.Pe
         }
 
     }
+    public void initializeFingerprint() {
+        executor = ContextCompat.getMainExecutor(this);
+        biometricPrompt = new BiometricPrompt(PinActivity.this,
+                executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode,
+                                              @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                if (errString.toString().contains("PIN")) {
 
+                } else {
+
+                    Toast.makeText(getApplicationContext(),
+                            "Authentication error: " + errString, Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(
+                    @NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+
+                inputPin = UserPin;
+                CheckPin();
+                SignInUser();
+//                Toast.makeText(getApplicationContext(),
+//                        "Authentication succeeded!", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+                Toast.makeText(getApplicationContext(), "Authentication failed",
+                        Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("M-Unit Computers")
+//                .setSubtitle("Log in using your biometric credential")
+                .setNegativeButtonText("Use PIN")
+                .build();
+
+        biometricLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                biometricPrompt.authenticate(promptInfo);
+            }
+        });
+    }
+
+    public void CheckFingerPrintStatus() {
+        BiometricManager biometricManager = BiometricManager.from(this);
+        String status = "";
+        biometricLoginButton.setVisibility(View.GONE);
+        switch (biometricManager.canAuthenticate()) {
+            case BiometricManager.BIOMETRIC_SUCCESS:
+                status = "App can authenticate using biometricexecutors.";
+                biometricLoginButton.setVisibility(View.VISIBLE);
+                fingerPrintActive = "YES";
+
+                initializeFingerprint();
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE:
+                status = "No biometric features available on this device.";
+                fingerPrintActive = "NO";
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE:
+                status = "Biometric features are currently unavailable.";
+                fingerPrintActive = "NO";
+                break;
+            case BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED:
+                status = "The user hasn't associated " +
+                        "any biometric credentials with their account.";
+                fingerPrintActive = "NO";
+                break;
+        }
+
+        SaveInfo("fingerPrintActive", fingerPrintActive);
+
+    }
     private void SignInUser() {
         mAuth.signInWithEmailAndPassword(uEmail, uPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -395,6 +497,13 @@ public class PinActivity extends AppCompatActivity implements EasyPermissions.Pe
         // recreate the new Bitmap
         Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
         return resizedBitmap;
+    }
+
+    public void SaveInfo(String Key, String Value) {
+        SharedPreferences sharedPref = getSharedPreferences("User", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(Key, Value);
+        editor.apply();
     }
 
     public void GetUserInfo() {
