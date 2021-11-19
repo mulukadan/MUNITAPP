@@ -434,11 +434,13 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     }
 
     public void populateChart(List<DailySales> sales) {
-        Collections.reverse(sales);
+        List<DailySales> salesRev = new ArrayList<>();
+        salesRev.addAll(sales);
+        Collections.reverse(salesRev);
         ArrayList<BarEntry> yVals1 = new ArrayList<>();
         final ArrayList<String> xAxisLabel = new ArrayList<>();
-        for (DailySales dailySales : sales) {
-            yVals1.add(new BarEntry(sales.indexOf(dailySales), dailySales.getTotal()));
+        for (DailySales dailySales : salesRev) {
+            yVals1.add(new BarEntry(salesRev.indexOf(dailySales), dailySales.getTotal()));
             xAxisLabel.add(shortenForChart(dailySales.getUserName()));
         }
 
