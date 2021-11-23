@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +38,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.gson.Gson;
 import com.munit.m_unitapp.ADAPTERS.AllDailySalesAdapter;
+import com.munit.m_unitapp.ADAPTERS.UsersAdapter;
+import com.munit.m_unitapp.ADAPTERS.UsersNamesAdapter;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.TOOLS.Constants;
@@ -53,13 +56,14 @@ import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class CashInActivity extends AppCompatActivity implements AllDailySalesAdapter.ClickListener {
+public class CashInActivity extends AppCompatActivity implements AllDailySalesAdapter.ClickListener, UsersNamesAdapter.SelectUserListener {
     private ImageView back_arrow;
     private Calendar calendar;
     private int year, month, day;
     String todate;
     private BarChart chart;
     private TextView listViewBtn, chartViewBtn;
+    private RecyclerView allUsersRV;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -80,6 +84,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
 
     RecyclerView weeklySummary;
     AllDailySalesAdapter allDailySalesAdapter;
+    UsersNamesAdapter usersNamesAdapter;
     List<DailySales> userSales = new ArrayList<>();
     TextView daysDate, compServTV, compSalesTV, GamesTV, moviesTV, mpesaTillTV, cashTV, totalPayTV, weeklyBtn, monthlyBtn, dailyBtn;
 
@@ -90,6 +95,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     final int MONTHLY_DATA = 3;
 
     int showingDataFor = DAILY_DATA;
+    int pos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +127,15 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         allDailySalesAdapter.setListener(this);
         allDailySalesAdapter.setSelectedUserName("Total");
         weeklySummary.setAdapter(allDailySalesAdapter);
+
+        allUsersRV = findViewById(R.id.allUsersRV);
+        LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        allUsersRV.setLayoutManager(horizontalLayoutManagaer);
+//        allUsersRV.smoothScrollToPosition(pos);
+//
+//        usersNamesAdapter = new UsersNamesAdapter(CashInActivity.this, users, userdb);
+//        usersNamesAdapter.setListener(this);
+//        allUsersRV.setAdapter(usersNamesAdapter);
 
         listViewBtn = findViewById(R.id.listViewBtn);
         chartViewBtn = findViewById(R.id.chartViewBtn);
@@ -254,6 +269,11 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void fetchUserSales(String key) {
+        usersNamesAdapter = new UsersNamesAdapter(CashInActivity.this, users, userdb);
+        usersNamesAdapter.setListener(this);
+        pos = users.indexOf(userdb);
+
+        allUsersRV.setAdapter(usersNamesAdapter);
         allDailySalesAdapter.setSelectedUserName("Total");
         pDialog.show();
         firedb.collection(Constants.dailySalesPath)
@@ -262,6 +282,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                 .addSnapshotListener((value, e) -> {
                     if (e != null) {
 //                            Log.w(TAG, "Listen failed.", e);
+//                        Toast.makeText(this, "Error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        pDialog.dismiss();
                         return;
                     }
                     if (value.isEmpty()) {
@@ -287,30 +309,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                     allweeklySales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
                     computeUserSales(allweeklySales);
 
+                    usersNamesAdapter.notifyDataSetChanged();
                 });
-
-//        firedb.collection(Constants.dailySalesPath)
-//                .whereEqualTo("userId", key)
-//                .orderBy("sortValue", Query.Direction.DESCENDING)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    List<String> list = new ArrayList<>();
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        list.add(document.getId());
-//                    }
-//                    String k = list.toString();
-//                } else {
-////                    Log.d(TAG, "Error getting documents: ", task.getException());
-//                    String h =  task.getException().getMessage();
-//                    int i = 0;
-//
-//                }
-//            }
-//        });
-
 
     }
 
@@ -383,6 +383,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         }
 
         allDailySalesAdapter.notifyDataSetChanged();
+        usersNamesAdapter.notifyDataSetChanged();
         populateChart(userSales);
         pDialog.dismiss();
     }
@@ -411,10 +412,13 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                 }
                 if (userdb.getLevel() > 2) {
                     summaryBtn.setVisibility(View.GONE);
+                    allUsersRV.setVisibility(View.GONE);
                 }
                 pDialog.dismiss();
                 getDailySale();
+
                 fetchUserSales(USERID);
+
             }
 
             @Override
@@ -531,5 +535,18 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     protected void onResume() {
         super.onResume();
         fetchUsers();
+    }
+
+    @Override
+    public void getSelectedUser(User user) {
+        userdb = user;
+        USERID = "" + userdb.getId();
+        USERID = "" + user.getId();
+        fetchUserSales(USERID);
+        if (userdb.getLevel() > 2) {
+            summaryBtn.setVisibility(View.GONE);
+        }else {
+            summaryBtn.setVisibility(View.VISIBLE);
+        }
     }
 }

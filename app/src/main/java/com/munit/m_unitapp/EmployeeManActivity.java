@@ -123,6 +123,8 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         if (Username == null || Username.length() < 1) {
             Username = user.getEmail().substring(0, user.getEmail().indexOf("@"));
         }
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
 
         back_arrow = findViewById(R.id.back_arrow);
         editEmBtn = findViewById(R.id.editEmBtn);
@@ -288,8 +290,9 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                 int amount = amt;
                 String description = reason;
                 String type;
-                int currentAdv;
+
                 int initialAdvTotal = employee.getAdvance();
+                int currentAdv = initialAdvTotal;
                 String dTitle, dQuestion;
                 if (PaymentTitle.getText().toString().contains("Advance")) {
                     type = "A";
@@ -298,8 +301,11 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                     dQuestion = "Are you sure you want to give advance of Ksh. " + amt + " to " + employee.getName() + "?";
                 } else {
                     type = "S";
-                    int sattledAdvance = employee.getSalary() - amt;
-                    currentAdv = initialAdvTotal - sattledAdvance;
+                    if(amt + initialAdvTotal < employee.getSalary()){
+                        currentAdv = 0;
+                    }else {
+                        currentAdv = amt + initialAdvTotal - employee.getSalary();
+                    }
 
                     dTitle = "Pay Salary?";
                     dQuestion = "Are you sure you want to PAY Ksh. " + amt + " to " + employee.getName() + "?";
@@ -318,15 +324,15 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                         })
                         .setCancelText("Cancel")
                         .setConfirmClickListener(sDialog -> {
-                            int idex = employee.getIdex(employees, employee.getId());
+                            int index = employee.getIdex(employees, employee.getId());
 //                            employees.remove(idex);
                             EmployeePayment payment = new EmployeePayment(id, amount, description, InitialAdvTotal1, finalcurrentAdv, type);
                             payment.setPaidBy(Username);
                             employee.getPayments().add(payment);
                             employee.setAdvance(finalcurrentAdv);
-                            employees.set(idex, employee);
+//                            employees.set(index, employee);
 //                            employees.add(employee);
-                            addWorkerToFirebase();
+                            addWorkerToFirebase(index);
                             advanceDialog.dismiss();
 
                             updateUI();
@@ -415,17 +421,18 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                         })
                         .setCancelText("Cancel")
                         .setConfirmClickListener(sDialog -> {
-                            int idex = employee.getIdex(employees, employee.getId());
-                            employees.remove(idex);
+                            int index = employee.getIdex(employees, employee.getId());
+//                            employees.remove(idex);
+
 //                Copy Updated Employee Obj to old one
                             String tmp2 = gson.toJson(employee1);
                             employee = gson.fromJson(tmp2, Employee.class);
                             if (profilePicBitmap == null) {
                                 //No Profile Image
-                                employees.add(employee);
-                                addWorkerToFirebase();
+//                                employees.add(employee);
+                                addWorkerToFirebase(index);
                             } else {
-                                SaveWithImage();
+                                SaveWithImage(index);
                             }
                             updateUI();
                         })
@@ -455,7 +462,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         nameTV.setText(employee.getName());
         titleTV.setText(employee.getJobDescription() + "\n" + employee.getDepartment());
         GenderTV.setText(employee.getGender());
-        ageTV.setText(employee.getEmploymentDate());
+        ageTV.setText(employee.getDob());
         emplyDateTV.setText(employee.getEmploymentDate());
         salaryTV.setText("Ksh. " + employee.getSalary());
         emplymentStatusTV.setText("Employment Status: " + employee.getActive().toString());
@@ -467,18 +474,19 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
 
     }
 
-    private void addWorkerToFirebase() {
+    private void addWorkerToFirebase(int index) {
         sdialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
         sdialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         sdialog.setTitleText("Saving...")
                 .setContentText("Saving new Employee Details!");
         sdialog.showCancelButton(false);
+        employees.set(index, employee);
         db.saveEmployees(employees);
         EmployeeDialog.dismiss();
         sdialog.dismiss();
     }
 
-    private void SaveWithImage() {
+    private void SaveWithImage(int index) {
         SweetAlertDialog pDialog = new SweetAlertDialog(EmployeeManActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#48A5F1"));
         pDialog.setTitleText("Updating...");
@@ -502,8 +510,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                 Picasso.get().load(selectedImage).into(ProfilePic);
 
                 employee.setImgUrl(ProfilePicURL);
-                employees.add(employee);
-                addWorkerToFirebase();
+                addWorkerToFirebase(index);
                 pDialog.dismiss();
                 sdialog
                         .setTitleText("SUCCESS!")

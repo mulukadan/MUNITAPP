@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:layout_marginBottom="5dp"
+    android:clickable="true"
+    card_view:cardCornerRadius="10dp"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    app:ignore="NamespaceTypo"
+    card_view:cardElevation="6dp">
+
+    <RelativeLayout
+        android:id="@+id/UserView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+       >
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/profilePic"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/user"
+            app:civ_border_color="#EEEEEE"
+            app:civ_border_width="0dp"
+            app:civ_shadow="true"
+            app:civ_shadow_color="#8BC34A"
+            app:civ_shadow_radius="0" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/profilePic"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:foregroundGravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/medium"
+                android:text="Full Name"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:textAllCaps="true"
+                android:textColor="#000" />
+
+
+        </LinearLayout>
+
+
+
+
+        <!--<View-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginLeft="0dp"-->
+        <!--android:layout_marginRight="0dp"-->
+        <!--android:layout_marginBottom="2dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:background="@color/Grey"/>-->
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
