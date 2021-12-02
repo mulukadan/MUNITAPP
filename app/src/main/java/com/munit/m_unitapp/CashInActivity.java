@@ -131,7 +131,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         allUsersRV = findViewById(R.id.allUsersRV);
         LinearLayoutManager horizontalLayoutManagaer = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         allUsersRV.setLayoutManager(horizontalLayoutManagaer);
-//        allUsersRV.smoothScrollToPosition(pos);
+        allUsersRV.smoothScrollToPosition(pos);
 //
 //        usersNamesAdapter = new UsersNamesAdapter(CashInActivity.this, users, userdb);
 //        usersNamesAdapter.setListener(this);
@@ -548,5 +548,6 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         }else {
             summaryBtn.setVisibility(View.VISIBLE);
         }
+        allUsersRV.smoothScrollToPosition(users.indexOf(user));
     }
 }

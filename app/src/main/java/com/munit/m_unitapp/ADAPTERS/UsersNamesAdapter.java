@@ -54,7 +54,7 @@ public class UsersNamesAdapter extends RecyclerView.Adapter<UsersNamesAdapter.my
         } else {
             Picasso.get().load((Uri) null).memoryPolicy(MemoryPolicy.NO_STORE).centerCrop().fit().into(holder.profilePic);
         }
-        if (current.getId() == selectedUser.getId()) {
+        if (current.getUsername().equals(selectedUser.getUsername())) {
             holder.UserView.setBackgroundColor(mContext.getResources().getColor(R.color.main_green_color));
         }else{
             holder.UserView.setBackgroundColor(mContext.getResources().getColor(R.color.gray_btn_bg_color));
