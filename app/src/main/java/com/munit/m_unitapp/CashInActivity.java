@@ -284,30 +284,33 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
 //                            Log.w(TAG, "Listen failed.", e);
 //                        Toast.makeText(this, "Error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         pDialog.dismiss();
+                        computeUserSales(new ArrayList<>());
                         return;
-                    }
-                    if (value.isEmpty()) {
+                    }else if (value.isEmpty()) {
+                        computeUserSales(new ArrayList<>());
                         pDialog.dismiss();
+                    }else {
+                        List<DailySales> allweeklySales = new ArrayList<>();
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("date") != null) {
+                                DailySales dailySales = doc.toObject(DailySales.class);
+                                dailySales.setCount(1);
+                                Date date1 = null;
+                                try {
+                                    date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dailySales.getDate());
+                                } catch (ParseException parseException) {
+                                    parseException.printStackTrace();
+                                }
+                                int dateInt = (int) (date1.getTime() / 1000);
+                                dailySales.setSortValue(dateInt);
+                                allweeklySales.add(dailySales);
+                            }
+                        }
+                        allweeklySales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
+                        computeUserSales(allweeklySales);
                     }
 
-                    List<DailySales> allweeklySales = new ArrayList<>();
-                    for (QueryDocumentSnapshot doc : value) {
-                        if (doc.get("date") != null) {
-                            DailySales dailySales = doc.toObject(DailySales.class);
-                            dailySales.setCount(1);
-                            Date date1 = null;
-                            try {
-                                date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dailySales.getDate());
-                            } catch (ParseException parseException) {
-                                parseException.printStackTrace();
-                            }
-                            int dateInt = (int) (date1.getTime() / 1000);
-                            dailySales.setSortValue(dateInt);
-                            allweeklySales.add(dailySales);
-                        }
-                    }
-                    allweeklySales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
-                    computeUserSales(allweeklySales);
+
 
                     usersNamesAdapter.notifyDataSetChanged();
                 });
@@ -548,6 +551,10 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         }else {
             summaryBtn.setVisibility(View.VISIBLE);
         }
-        allUsersRV.smoothScrollToPosition(users.indexOf(user));
+        int ScrlTo =users.indexOf(user);
+        if(ScrlTo<users.size()-1){
+            ScrlTo = ScrlTo + 1;
+        }
+        allUsersRV.smoothScrollToPosition(ScrlTo);
     }
 }

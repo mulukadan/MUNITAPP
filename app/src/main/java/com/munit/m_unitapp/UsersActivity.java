@@ -160,7 +160,7 @@ public class UsersActivity extends AppCompatActivity {
                 String email = uUserName + "@munit.com";
                 user.setUsername(email);
                 user.setPassword(upassword);
-                user.setId(users.size());
+                user.setId(Integer.parseInt(users.size()+uPhoneNo.substring(5,7)));
                 user.setActive(true);
                 user.setLevel( userLevelSpiner.getSelectedItemPosition()+1);
 
