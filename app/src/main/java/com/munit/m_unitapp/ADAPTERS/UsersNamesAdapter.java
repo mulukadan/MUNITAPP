@@ -1,7 +1,6 @@
 package com.munit.m_unitapp.ADAPTERS;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.R;
-import com.munit.m_unitapp.ViewUserActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 

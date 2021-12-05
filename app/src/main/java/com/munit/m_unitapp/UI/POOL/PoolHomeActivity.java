@@ -1,4 +1,4 @@
-package com.munit.m_unitapp;
+package com.munit.m_unitapp.UI.POOL;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -26,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.R;
 
 import java.util.Calendar;
 

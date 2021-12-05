@@ -1,4 +1,4 @@
-package com.munit.m_unitapp;
+package com.munit.m_unitapp.UI.SYSUSERS;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -34,6 +34,7 @@ import com.munit.m_unitapp.API.Client;
 import com.munit.m_unitapp.API.Service;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.R;
 
 import java.util.ArrayList;
 import java.util.List;

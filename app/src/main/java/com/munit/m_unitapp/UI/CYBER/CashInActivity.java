@@ -1,4 +1,4 @@
-package com.munit.m_unitapp;
+package com.munit.m_unitapp.UI.CYBER;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,10 +37,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.gson.Gson;
 import com.munit.m_unitapp.ADAPTERS.AllDailySalesAdapter;
-import com.munit.m_unitapp.ADAPTERS.UsersAdapter;
 import com.munit.m_unitapp.ADAPTERS.UsersNamesAdapter;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.R;
 import com.munit.m_unitapp.TOOLS.Constants;
 import com.munit.m_unitapp.TOOLS.GeneralMethods;
 

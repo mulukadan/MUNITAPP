@@ -6,7 +6,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 xmlns:fab="http://schemas.android.com/apk/res-auto"
 android:orientation="vertical"
-tools:context=".HSMSActivationActivity">
+tools:context=".UI.HSMS.HSMSActivationActivity">
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"

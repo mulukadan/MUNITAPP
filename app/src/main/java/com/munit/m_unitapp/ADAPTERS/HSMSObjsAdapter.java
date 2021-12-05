@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.munit.m_unitapp.DB.firebase;
-import com.munit.m_unitapp.HSMSObjViewActivity;
+import com.munit.m_unitapp.UI.HSMS.HSMSObjViewActivity;
 import com.munit.m_unitapp.MODELS.HSMSObject;
 import com.munit.m_unitapp.R;
 

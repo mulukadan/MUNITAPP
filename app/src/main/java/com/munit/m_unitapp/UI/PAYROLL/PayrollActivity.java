@@ -1,12 +1,14 @@
-package com.munit.m_unitapp;
+package com.munit.m_unitapp.UI.PAYROLL;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.munit.m_unitapp.R;
+import com.munit.m_unitapp.UI.PAYROLL.EmployeesListActivity;
 
 public class PayrollActivity extends AppCompatActivity {
 private RelativeLayout employeesCV;

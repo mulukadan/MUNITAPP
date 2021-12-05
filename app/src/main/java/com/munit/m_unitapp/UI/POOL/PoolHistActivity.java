@@ -1,4 +1,4 @@
-package com.munit.m_unitapp;
+package com.munit.m_unitapp.UI.POOL;
 
 import android.graphics.Color;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter;
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
+import com.munit.m_unitapp.R;
 
 import java.util.ArrayList;
 import java.util.List;

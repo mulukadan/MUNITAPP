@@ -1,4 +1,4 @@
-package com.munit.m_unitapp;
+package com.munit.m_unitapp.UI.PAYROLL;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +16,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -27,11 +26,8 @@ import android.widget.TextView;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +40,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.munit.m_unitapp.ADAPTERS.EmployeesAdapter;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.Employee;
-import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;

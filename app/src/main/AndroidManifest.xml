@@ -25,18 +25,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EmployeeManActivity"></activity>
-        <activity android:name=".EmployeesListActivity" />
-        <activity android:name=".PayrollActivity" />
-        <activity android:name=".SummaryActivity" />
-        <activity android:name=".HSMSObjViewActivity" />
-        <activity android:name=".HSMSActivationActivity" />
-        <activity android:name=".PoolHistActivity" />
-        <activity android:name=".PoolHomeActivity" />
-        <activity android:name=".UserProfileActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".ViewUserActivity" />
-        <activity android:name=".UsersActivity" />
+        <activity android:name=".UI.PAYROLL.EmployeeManActivity"></activity>
+        <activity android:name=".UI.PAYROLL.EmployeesListActivity" />
+        <activity android:name=".UI.PAYROLL.PayrollActivity" />
+        <activity android:name=".UI.CYBER.SummaryActivity" />
+        <activity android:name=".UI.HSMS.HSMSObjViewActivity" />
+        <activity android:name=".UI.HSMS.HSMSActivationActivity" />
+        <activity android:name=".UI.POOL.PoolHistActivity" />
+        <activity android:name=".UI.POOL.PoolHomeActivity" />
+        <activity android:name=".UI.SYSUSERS.UserProfileActivity" />
+        <activity android:name=".UI.SYSUSERS.SettingsActivity" />
+        <activity android:name=".UI.SYSUSERS.ViewUserActivity" />
+        <activity android:name=".UI.SYSUSERS.UsersActivity" />
         <activity android:name=".SignIn" />
         <activity
             android:name=".PinActivity"
@@ -50,8 +50,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddSales" />
-        <activity android:name=".CashInActivity" />
+        <activity android:name=".UI.CYBER.AddSales" />
+        <activity android:name=".UI.CYBER.CashInActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Themenotitle">

@@ -1,10 +1,12 @@
-package com.munit.m_unitapp;
+package com.munit.m_unitapp.UI.SYSUSERS;
 
 import android.content.Intent;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.munit.m_unitapp.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

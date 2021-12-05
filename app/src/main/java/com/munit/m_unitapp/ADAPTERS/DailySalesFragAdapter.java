@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.munit.m_unitapp.DailySalesFragment;
+import com.munit.m_unitapp.UI.CYBER.DailySalesFragment;
 import com.munit.m_unitapp.MODELS.DailySales;
 
 import java.util.ArrayList;

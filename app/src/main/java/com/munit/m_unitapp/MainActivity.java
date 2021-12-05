@@ -3,13 +3,8 @@ package com.munit.m_unitapp;
 import android.content.Intent;
 import android.graphics.Color;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.annotation.NonNull;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,20 +23,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.UI.CYBER.CashInActivity;
+import com.munit.m_unitapp.UI.HSMS.HSMSActivationActivity;
+import com.munit.m_unitapp.UI.PAYROLL.PayrollActivity;
+import com.munit.m_unitapp.UI.POOL.PoolHomeActivity;
+import com.munit.m_unitapp.UI.SYSUSERS.SettingsActivity;
+import com.munit.m_unitapp.UI.SYSUSERS.UsersActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;

@@ -14,7 +14,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.R;
-import com.munit.m_unitapp.ViewUserActivity;
+import com.munit.m_unitapp.UI.SYSUSERS.ViewUserActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 

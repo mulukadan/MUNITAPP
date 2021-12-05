@@ -1,4 +1,4 @@
-package com.munit.m_unitapp;
+package com.munit.m_unitapp.UI.PAYROLL;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,13 +40,11 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.munit.m_unitapp.ADAPTERS.EmployeesAdapter;
 import com.munit.m_unitapp.ADAPTERS.PaymentsAdapter;
-import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.Employee;
 import com.munit.m_unitapp.MODELS.EmployeePayment;
-import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;

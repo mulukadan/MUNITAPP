@@ -13,11 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.munit.m_unitapp.DB.firebase;
-import com.munit.m_unitapp.EmployeeManActivity;
+import com.munit.m_unitapp.UI.PAYROLL.EmployeeManActivity;
 import com.munit.m_unitapp.MODELS.Employee;
 import com.munit.m_unitapp.R;
-import com.munit.m_unitapp.ViewUserActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 

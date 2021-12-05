@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.google.gson.Gson;
 import com.munit.m_unitapp.MODELS.DailySales;
-import com.munit.m_unitapp.WeeklySalesFragment;
+import com.munit.m_unitapp.UI.CYBER.WeeklySalesFragment;
 
 import java.util.ArrayList;
 import java.util.List;
