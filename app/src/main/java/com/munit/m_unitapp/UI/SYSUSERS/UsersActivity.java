@@ -173,12 +173,9 @@ public class UsersActivity extends AppCompatActivity {
                             sdialog.dismiss();
                         })
                         .setCancelText("Cancel")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                users.add(user);
-                                addUserToFirebase(user);
-                            }
+                        .setConfirmClickListener(sDialog -> {
+                            users.add(user);
+                            addUserToFirebase(user);
                         })
                         .show();
 
@@ -207,35 +204,32 @@ public class UsersActivity extends AppCompatActivity {
 
         sdialog.showCancelButton(false);
         mAuth.createUserWithEmailAndPassword(user.getUsername(), user.getPassword())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
 //                            Sign out the new User and Re-SignIn the Admin
 
-                            db.saveUsers(users);
-                            int Index7 = user.getPhoneNo().indexOf("7");
-                            String Phone = "254" + user.getPhoneNo().substring(Index7);
-                            String userFname = user.getName();
-                            if(userFname.contains(" ")){
-                                userFname = userFname.substring(0, userFname.indexOf(" "));
-                            }
-
-                            String Msg = "Dear " + userFname + ", Your Login Details to M-Unit Messenger are: Username: " + user.getUsername() + " Password: " + user.getPassword();
-                            SendSMS(Phone, Msg);
-                            FirebaseAuth.getInstance().signOut();
-                            ReSignInAdmin();
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            sdialog.setTitleText("Oops..Account Creation Failed!")
-                                    .setContentText(" " + task.getException())
-                                    .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                        db.saveUsers(users);
+                        int Index7 = user.getPhoneNo().indexOf("7");
+                        String Phone = "254" + user.getPhoneNo().substring(Index7);
+                        String userFname = user.getName();
+                        if(userFname.contains(" ")){
+                            userFname = userFname.substring(0, userFname.indexOf(" "));
                         }
 
-                        // ...
+                        String Msg = "Dear " + userFname + ", Your Login Details to M-Unit Messenger are: Username: " + user.getUsername() + " Password: " + user.getPassword();
+                        SendSMS(Phone, Msg);
+                        FirebaseAuth.getInstance().signOut();
+                        ReSignInAdmin();
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        sdialog.setTitleText("Oops..Account Creation Failed!")
+                                .setContentText(" " + task.getException())
+                                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
                     }
+
+                    // ...
                 });
     }
 

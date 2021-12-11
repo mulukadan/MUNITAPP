@@ -41,7 +41,7 @@ public class PoolHomeActivity extends AppCompatActivity {
     private Button SaveBtn;
 
     private RelativeLayout newSales;
-    private RelativeLayout History;
+    private RelativeLayout History, allPools;
 
     FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -224,6 +224,13 @@ public class PoolHomeActivity extends AppCompatActivity {
         History = findViewById(R.id.History);
         History.setOnClickListener(v -> {
             Intent intent = new Intent(this, PoolHistActivity.class);
+            startActivity(intent);
+        });
+
+
+        allPools = findViewById(R.id.allPools);
+        allPools.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PoolsListActivity.class);
             startActivity(intent);
         });
     }

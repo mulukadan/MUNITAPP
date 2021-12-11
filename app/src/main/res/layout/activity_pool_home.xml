@@ -47,9 +47,10 @@
         android:layout_marginTop="150dp"
         >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:gravity="center">
 
             <LinearLayout
@@ -154,8 +155,8 @@
 
                 <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/reportscard"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_below="@+id/topcard"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
@@ -175,8 +176,8 @@
 
                         <ImageView
                             android:id="@+id/rept"
-                            android:layout_width="80dp"
-                            android:layout_height="100dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:layout_centerHorizontal="true"
                             android:src="@drawable/history" />
 
@@ -198,8 +199,8 @@
 
                 <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/Manage"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_alignParentRight="true"
 
                     android:layout_marginLeft="10dp"
@@ -220,8 +221,8 @@
 
                         <ImageView
                             android:id="@+id/set"
-                            android:layout_width="80dp"
-                            android:layout_height="100dp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:layout_centerHorizontal="true"
                             android:src="@drawable/setings_icon" />
 
@@ -232,6 +233,97 @@
                             android:layout_below="@+id/set"
                             android:fontFamily="@font/bold"
                             android:text="Setting"
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18dp" />
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/Rooms"
+                android:orientation="horizontal">
+
+                <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/Pools"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_below="@+id/topcard"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="50"
+                    android:background="?android:attr/selectableItemBackground"
+                    card_view:cardCornerRadius="5dp"
+                    card_view:cardElevation="5dp">
+
+                    <RelativeLayout
+                        android:id="@+id/allPools"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/alp"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/add" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/alp"
+                            android:fontFamily="@font/bold"
+                            android:text="Pools"
+                            android:textAlignment="center"
+                            android:textColor="@color/Red"
+                            android:textSize="18dp" />
+
+                    </RelativeLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/Manage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_alignParentRight="true"
+
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="50"
+                    card_view:cardCornerRadius="5dp"
+                    card_view:cardElevation="5dp">
+
+                    <RelativeLayout
+                        android:id="@+id/BuySmsRl"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/hist"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/history" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/hist"
+                            android:fontFamily="@font/bold"
+                            android:text="Records"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
                             android:textSize="18dp" />
@@ -263,7 +355,7 @@
             </androidx.cardview.widget.CardView>
 
 
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 </RelativeLayout>

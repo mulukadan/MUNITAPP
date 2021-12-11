@@ -42,7 +42,7 @@ tools:context=".UI.POOL.PoolsListActivity">
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/usersRV"
+            android:id="@+id/poolsRV"
             android:layout_marginTop="10dp"
             android:paddingBottom="10dp"
             android:layout_width="match_parent"
@@ -75,8 +75,8 @@ tools:context=".UI.POOL.PoolsListActivity">
     <com.github.clans.fab.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/addUserBtn"
-        app:fab_label="Add User"
+        android:id="@+id/addPoolBtn"
+        app:fab_label="Add Pool"
         app:fab_colorNormal="#4CAF50"
         android:src="@drawable/person_add_black_24dp"
         app:fab_size="mini"/>

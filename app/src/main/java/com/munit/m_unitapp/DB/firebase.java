@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.munit.m_unitapp.MODELS.DailySales;
+import com.munit.m_unitapp.MODELS.PoolTable;
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.MODELS.Employee;
@@ -79,6 +80,10 @@ public class firebase {
     public void saveUsers(List<User> users) {
         myRef = database.getReference("users");
         myRef.setValue(users);
+    }
+    public void savePoolTables(List<PoolTable> poolTables) {
+        myRef = database.getReference("depts/pool/pooltables");
+        myRef.setValue(poolTables);
     }
     public void saveEmployees(List<Employee> employees) {
         myRef = database.getReference("employees");
