@@ -9,7 +9,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="userLevel">User Level</string>
     <string name="workDepartment">Work Department</string>
 
     <string-array name="departments">
@@ -21,6 +20,24 @@
         <item>Home</item>
         <item>Others</item>
     </string-array>
+
+
+    <string name="poolLocations">Location</string>
+    <string-array name="locations">
+        <item>Ekalakala</item>
+        <item>Kivingoni</item>
+    </string-array>
+
+
+    <string name="poolColors">Location</string>
+    <string-array name="poolColors">
+        <item>Blue</item>
+        <item>Green</item>
+        <item>Red</item>
+    </string-array>
+
+
+    <string name="userLevel">User Level</string>
     <string-array name="userLevels">
         <item>Admin</item>
         <item>Owner</item>

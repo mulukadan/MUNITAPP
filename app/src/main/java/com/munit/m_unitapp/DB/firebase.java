@@ -85,6 +85,10 @@ public class firebase {
         myRef = database.getReference("depts/pool/pooltables");
         myRef.setValue(poolTables);
     }
+    public void savePoolTable(PoolTable poolTables) {
+        myRef = database.getReference("depts/pool/pooltables");
+        myRef.child(String.valueOf(poolTables.getId())).setValue(poolTables);
+    }
     public void saveEmployees(List<Employee> employees) {
         myRef = database.getReference("employees");
         myRef.setValue(employees);

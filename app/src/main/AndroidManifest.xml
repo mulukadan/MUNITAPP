@@ -25,7 +25,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.POOL.PoolsListActivity"></activity>
+        <activity android:name=".UI.POOL.PoolTableActivity"></activity>
+        <activity android:name=".UI.POOL.PoolsListActivity" />
         <activity android:name=".UI.PAYROLL.EmployeeManActivity" />
         <activity android:name=".UI.PAYROLL.EmployeesListActivity" />
         <activity android:name=".UI.PAYROLL.PayrollActivity" />

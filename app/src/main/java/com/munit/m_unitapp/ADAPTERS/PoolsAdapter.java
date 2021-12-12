@@ -16,6 +16,7 @@ import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.PoolTable;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.R;
+import com.munit.m_unitapp.UI.POOL.PoolTableActivity;
 import com.munit.m_unitapp.UI.SYSUSERS.ViewUserActivity;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -91,14 +92,13 @@ public class PoolsAdapter extends RecyclerView.Adapter<PoolsAdapter.myViewHolder
             UserView.setOnClickListener((view) -> {
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
-                    PoolTable user = data.get(pos);
+                    PoolTable poolTable = data.get(pos);
                     Gson gson = new Gson();
-                    String UserJson = gson.toJson(user);
+                    String poolTableJson = gson.toJson(poolTable);
 //
-//                    Intent viewR = new Intent(mContext, ViewUserActivity.class);
-//                    viewR.putExtra("userJson", UserJson);
-//                    viewR.putExtra("SchoolId", SchoolId);
-//                    mContext.startActivity(viewR);
+                    Intent viewR = new Intent(mContext, PoolTableActivity.class);
+                    viewR.putExtra("poolTableJson", poolTableJson);
+                    mContext.startActivity(viewR);
                 }
             });
         }
