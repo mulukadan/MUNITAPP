@@ -3,6 +3,7 @@ package com.munit.m_unitapp.TOOLS;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class GeneralMethods {
     //Decrepting & Encripting
@@ -133,5 +134,13 @@ public class GeneralMethods {
         }
 
         return monthName;
+    }
+
+    public int getDifferenceDays(Date d1, Date d2) {
+        int daysdiff = 0;
+        long diff = d2.getTime() - d1.getTime();
+        long diffDays = diff / (24 * 60 * 60 * 1000) + 1;
+        daysdiff = (int) diffDays;
+        return daysdiff;
     }
 }

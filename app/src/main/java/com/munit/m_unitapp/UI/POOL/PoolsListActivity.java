@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -32,6 +34,7 @@ import com.munit.m_unitapp.R;
 import com.munit.m_unitapp.UI.SYSUSERS.UsersActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +48,10 @@ public class PoolsListActivity extends AppCompatActivity {
 
     private PoolTable poolTable = new PoolTable();
     PoolsAdapter poolsAdapter;
+
+    private Calendar calendar;
+    private int year, month, day;
+    String todate, DateDisplaying;
 
     private FloatingActionMenu fab;
     private FloatingActionButton addPoolBtn;
@@ -94,6 +101,9 @@ public class PoolsListActivity extends AppCompatActivity {
         calenderIcon = newPoolDialog.findViewById(R.id.calenderIcon);
         SaveBtn = newPoolDialog.findViewById(R.id.SaveBtn);
 
+        calenderIcon.setOnClickListener((view) -> {
+            setDate();
+        });
         CloseDialog.setOnClickListener(v -> {
             newPoolDialog.dismiss();
         });
@@ -113,9 +123,15 @@ public class PoolsListActivity extends AppCompatActivity {
             newPoolDialog.show();
         });
 
+        calendar = Calendar.getInstance();
+
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH) + 1;
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        todate = day + "/" + month + "/" + year;
+        DateDisplaying = todate;
+        purchaseDate.setText(DateDisplaying);
         fetchData();
-
-
     }
 
     private void savePool() {
@@ -197,4 +213,33 @@ public class PoolsListActivity extends AppCompatActivity {
         });
 
     }
+
+
+    public void setDate() {
+        showDialog(999);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        // TODO Auto-generated method stub
+        if (id == 999) {
+            return new DatePickerDialog(this,
+                    myDateListener, year, calendar.get(Calendar.MONTH), day);
+        }
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener myDateListener = new
+            DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker arg0,
+                                      int arg1, int arg2, int arg3) {
+                    // TODO Auto-generated method stub
+                    // arg1 = year
+                    // arg2 = month
+                    // arg3 = day
+                    DateDisplaying = arg3 + "/" + (arg2 + 1) + "/" + arg1;
+                    purchaseDate.setText(DateDisplaying);
+                }
+            };
 }

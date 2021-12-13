@@ -49,13 +49,7 @@
                     android:textColor="#000000"
                     android:text="Ksh. 2000" />
             </LinearLayout>
-
-
         </LinearLayout>
-
-
-
-
 
     </RelativeLayout>
 

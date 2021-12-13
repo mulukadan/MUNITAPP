@@ -8,7 +8,7 @@ public class PoolTable {
     String dateOfPurchase;
     String status;
     String location;
-    int age;
+    String age;
     int returns;
 
     public PoolTable() {
@@ -70,11 +70,11 @@ public class PoolTable {
         this.location = location;
     }
 
-    public int getAge() {
+    public String getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(String age) {
         this.age = age;
     }
 

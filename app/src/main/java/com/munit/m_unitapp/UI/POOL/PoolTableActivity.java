@@ -79,7 +79,10 @@ public class PoolTableActivity extends AppCompatActivity {
     private int year, month, day;
     String todate, DateDisplaying;
 
+    private Date todateDate;
+
     List <PoolRecordNew> records = new ArrayList<>();
+    int poolReturns = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +109,14 @@ public class PoolTableActivity extends AppCompatActivity {
         pDialog.setCancelable(false);
 
         calendar = Calendar.getInstance();
+
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH) + 1;
         day = calendar.get(Calendar.DAY_OF_MONTH);
         todate = day + "/" + month + "/" + year;
         DateDisplaying = todate;
+
+        todateDate = calendar.getTime();
 
         editPLBtn = findViewById(R.id.editPLBtn);
         dateOfPurchaseTV = findViewById(R.id.dateOfPurchaseTV);
@@ -214,12 +220,10 @@ public class PoolTableActivity extends AppCompatActivity {
     public void fetchPoolRecords(int key) {
         pDialog.show();
         firedb.collection(Constants.poolRecordsPath)
-//                .whereEqualTo("poolId", key)
+                .whereEqualTo("poolId", String.valueOf(key))
                 .orderBy("id", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, e) -> {
                     if (e != null) {
-//                            Log.w(TAG, "Listen failed.", e);
-//                        Toast.makeText(this, "Error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         pDialog.dismiss();
 //                        computeUserSales(new ArrayList<>());
                         return;
@@ -228,17 +232,11 @@ public class PoolTableActivity extends AppCompatActivity {
                         pDialog.dismiss();
                     }else {
                         records.clear();
+                        poolReturns = 0;
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get("date") != null) {
                                 PoolRecordNew record = doc.toObject(PoolRecordNew.class);
-//                                Date date1 = null;
-//                                try {
-//                                    date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dailySales.getDate());
-//                                } catch (ParseException parseException) {
-//                                    parseException.printStackTrace();
-//                                }
-//                                int dateInt = (int) (date1.getTime() / 1000);
-//                                dailySales.setSortValue(dateInt);
+                                poolReturns += record.getAmount();
                                 records.add(record);
                             }
                         }
@@ -246,6 +244,10 @@ public class PoolTableActivity extends AppCompatActivity {
 //                        computeUserSales(allweeklySales);
                     }
                     adapter.notifyDataSetChanged();
+                    returnsTV.setText("Ksh. " + String.format("%,.2f", (double) poolReturns));
+                    poolTable.setReturns(poolReturns);
+                    poolTable.setAge(ageTV.getText().toString());
+                    db.savePoolTable(poolTable);
                     pDialog.dismiss();
                 });
 
@@ -277,8 +279,33 @@ public class PoolTableActivity extends AppCompatActivity {
     }
 
     private void updateUi() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date pd = null;
+        try {
+            pd =  format.parse(poolTable.getDateOfPurchase());
+        }catch (Exception e){
+
+        }
+
+        int days = new GeneralMethods().getDifferenceDays(pd,todateDate);
+        int years = days/365;
+        int remDays = days%365;
+        int months = remDays/30;
+        days = remDays%30;
+
+        String age = "";
+        if(years>0){
+            age = age + years + " Yrs ";
+        }
+        if(months>0){
+            age = age + months + " Months ";
+        }
+        age = age + days + " days";
+
+
+
         dateOfPurchaseTV.setText(poolTable.getDateOfPurchase());
-        ageTV.setText(poolTable.getAge() + " Years");
+        ageTV.setText(age);
         costTV.setText("Ksh. " + String.format("%,.2f", (double) poolTable.getCost()));
         returnsTV.setText("Ksh. " + String.format("%,.2f", (double) poolTable.getReturns()));
         dateOfPurchaseTV.setText(poolTable.getDateOfPurchase());
@@ -287,10 +314,13 @@ public class PoolTableActivity extends AppCompatActivity {
 
         if (poolTable.getColor().equalsIgnoreCase("blue")) {
             ProfilePic.setBackgroundResource(R.drawable.blue_pool_table);
+            poolIcon.setBackgroundResource(R.drawable.blue_pool_table);
         } else if (poolTable.getColor().equalsIgnoreCase("red")) {
             ProfilePic.setBackgroundResource(R.drawable.red_pool_table);
+            poolIcon.setBackgroundResource(R.drawable.red_pool_table);
         } else {
             ProfilePic.setBackgroundResource(R.drawable.green_pool_table);
+            poolIcon.setBackgroundResource(R.drawable.green_pool_table);
         }
     }
 

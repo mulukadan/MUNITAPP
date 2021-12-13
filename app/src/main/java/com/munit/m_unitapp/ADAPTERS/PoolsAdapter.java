@@ -55,7 +55,9 @@ public class PoolsAdapter extends RecyclerView.Adapter<PoolsAdapter.myViewHolder
 
         holder.name.setText(current.getName());
         holder.location.setText(current.getLocation());
-        holder.id.setText(current.getId()+ "");
+        holder.ageTV.setText("Age " + current.getAge());
+        holder.costTV.setText("BP: Ksh. " + String.format("%,.2f", (double) current.getCost()));
+        holder.returnsTV.setText("Returns: Ksh. " + String.format("%,.2f", (double) current.getReturns()));
         if (current.getColor().equalsIgnoreCase("blue")) {
             holder.imageIV.setBackgroundResource(R.drawable.blue_pool_table);
         }else if(current.getColor().equalsIgnoreCase("red")){
@@ -76,7 +78,9 @@ public class PoolsAdapter extends RecyclerView.Adapter<PoolsAdapter.myViewHolder
     class myViewHolder extends RecyclerView.ViewHolder {
         TextView name;
         TextView location;
-        TextView id;
+        TextView ageTV;
+        TextView costTV;
+        TextView returnsTV;
         CircularImageView imageIV;
         RelativeLayout UserView;
 
@@ -84,8 +88,10 @@ public class PoolsAdapter extends RecyclerView.Adapter<PoolsAdapter.myViewHolder
             super(itemView);
             name = itemView.findViewById(R.id.name);
             location = itemView.findViewById(R.id.location);
-            id = itemView.findViewById(R.id.id);
+            ageTV = itemView.findViewById(R.id.ageTV);
             imageIV = itemView.findViewById(R.id.imageIV);
+            costTV = itemView.findViewById(R.id.costTV);
+            returnsTV = itemView.findViewById(R.id.returnsTV);
 
             UserView = itemView.findViewById(R.id.UserView);
 
