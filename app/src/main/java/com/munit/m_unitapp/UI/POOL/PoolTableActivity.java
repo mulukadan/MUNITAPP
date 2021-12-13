@@ -1,6 +1,8 @@
 package com.munit.m_unitapp.UI.POOL;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -12,41 +14,81 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.gson.Gson;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.munit.m_unitapp.ADAPTERS.AllDailySalesAdapter;
+import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter_New;
+import com.munit.m_unitapp.ADAPTERS.UsersNamesAdapter;
+import com.munit.m_unitapp.DB.Firestore;
 import com.munit.m_unitapp.DB.firebase;
+import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.Employee;
+import com.munit.m_unitapp.MODELS.PoolRecordNew;
 import com.munit.m_unitapp.MODELS.PoolTable;
+import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.R;
+import com.munit.m_unitapp.TOOLS.Constants;
+import com.munit.m_unitapp.TOOLS.GeneralMethods;
+import com.munit.m_unitapp.UI.CYBER.AddSales;
+import com.munit.m_unitapp.UI.CYBER.CashInActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class PoolTableActivity extends AppCompatActivity {
-    private ImageView back_arrow, editPLBtn, CloseDialog, calenderIcon;
-    private EditText nameEt, costEt;
+    private ImageView back_arrow, editPLBtn, CloseDialog, CloseRDialog, poolIcon, calenderIcon, rcalenderIcon;
+    private EditText nameEt, costEt, rAmt;
     private Spinner colorSpiner, locationSpiner;
-    private TextView purchaseDate, dateOfPurchaseTV, ageTV, costTV, returnsTV, locationTV, nameTV;
-    private Button SaveBtn;
+    private TextView purchaseDate, dateOfPurchaseTV, ageTV, costTV, returnsTV, locationTV, nameTV, rDate, rInitialAmtTV;
+    private Button SaveBtn, rSaveBtn;
     private CircularImageView ProfilePic;
-
+    private RelativeLayout newRcdBtn;
+    private RecyclerView recordsRV;
+    private User dbuser;
     firebase db = new firebase();
-    private Dialog newPoolDialog;
+    private Dialog newPoolDialog, poolRecordDialog;
     PoolTable poolTable = new PoolTable();
+    private PoolRecordsAdapter_New adapter;
+
+    SweetAlertDialog pDialog;
+    FirebaseFirestore firedb;
+
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    FirebaseUser user;
 
     private Calendar calendar;
     private int year, month, day;
-    String todate,DateDisplaying;
+    String todate, DateDisplaying;
+
+    List <PoolRecordNew> records = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pool_table);
+
+        database = FirebaseDatabase.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        firedb = FirebaseFirestore.getInstance();
 
         getSupportActionBar().hide();
 
@@ -54,11 +96,15 @@ public class PoolTableActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             poolTable = gson.fromJson(getIntent().getStringExtra("poolTableJson"), PoolTable.class);
-
-
         } else {
             finish();
         }
+
+        pDialog = new SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Fetching Data....");
+        pDialog.setCancelable(false);
+
         calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH) + 1;
@@ -74,9 +120,42 @@ public class PoolTableActivity extends AppCompatActivity {
         ProfilePic = findViewById(R.id.ProfilePic);
         locationTV = findViewById(R.id.locationTV);
         nameTV = findViewById(R.id.nameTV);
+        newRcdBtn = findViewById(R.id.newRcdBtn);
 
         back_arrow = findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener(v -> finish());
+
+        poolRecordDialog = new Dialog(this);
+        poolRecordDialog.setCanceledOnTouchOutside(false);
+        poolRecordDialog.setContentView(R.layout.new_pool_record_dialog);
+        poolRecordDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        CloseRDialog = poolRecordDialog.findViewById(R.id.CloseRDialog);
+        poolIcon = poolRecordDialog.findViewById(R.id.poolIcon);
+        rDate = poolRecordDialog.findViewById(R.id.rDate);
+        rcalenderIcon = poolRecordDialog.findViewById(R.id.rcalenderIcon);
+        rInitialAmtTV = poolRecordDialog.findViewById(R.id.rInitialAmtTV);
+        rAmt = poolRecordDialog.findViewById(R.id.rAmt);
+        rSaveBtn = poolRecordDialog.findViewById(R.id.rSaveBtn);
+
+        CloseRDialog.setOnClickListener(v -> {
+            poolRecordDialog.dismiss();
+        });
+
+
+        rcalenderIcon.setOnClickListener((view) -> {
+            setDate();
+        });
+        rSaveBtn.setOnClickListener(v -> {
+            String amtS =rAmt.getText().toString().trim();
+            if(amtS.length()<1){
+                rAmt.setError("Enter valid amount");
+            }else {
+                int amt = Integer.parseInt(amtS);
+                saveRecord(amt);
+            }
+
+        });
+
 
         newPoolDialog = new Dialog(this);
         newPoolDialog.setCanceledOnTouchOutside(false);
@@ -102,6 +181,7 @@ public class PoolTableActivity extends AppCompatActivity {
         SaveBtn.setOnClickListener(v -> {
             savePool();
         });
+
         editPLBtn.setOnClickListener(v -> {
             nameEt.setText(poolTable.getName());
             costEt.setText(String.valueOf(poolTable.getCost()));
@@ -111,7 +191,89 @@ public class PoolTableActivity extends AppCompatActivity {
             nameEt.setSelection(nameEt.getText().length());
             newPoolDialog.show();
         });
+
+        newRcdBtn.setOnClickListener(v -> {
+            rDate.setText(DateDisplaying);
+            rAmt.setText("");
+            poolRecordDialog.show();
+        });
+
+
+        recordsRV = findViewById(R.id.recordsRV);
+        recordsRV.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recordsRV.smoothScrollToPosition(0);
+
+        adapter = new PoolRecordsAdapter_New(getApplicationContext(), records);
+        recordsRV.setAdapter(adapter);
+
+
         updateUi();
+        fetchPoolRecords(poolTable.getId());
+    }
+
+    public void fetchPoolRecords(int key) {
+        pDialog.show();
+        firedb.collection(Constants.poolRecordsPath)
+//                .whereEqualTo("poolId", key)
+                .orderBy("id", Query.Direction.DESCENDING)
+                .addSnapshotListener((value, e) -> {
+                    if (e != null) {
+//                            Log.w(TAG, "Listen failed.", e);
+//                        Toast.makeText(this, "Error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        pDialog.dismiss();
+//                        computeUserSales(new ArrayList<>());
+                        return;
+                    }else if (value.isEmpty()) {
+//                        computeUserSales(new ArrayList<>());
+                        pDialog.dismiss();
+                    }else {
+                        records.clear();
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("date") != null) {
+                                PoolRecordNew record = doc.toObject(PoolRecordNew.class);
+//                                Date date1 = null;
+//                                try {
+//                                    date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dailySales.getDate());
+//                                } catch (ParseException parseException) {
+//                                    parseException.printStackTrace();
+//                                }
+//                                int dateInt = (int) (date1.getTime() / 1000);
+//                                dailySales.setSortValue(dateInt);
+                                records.add(record);
+                            }
+                        }
+//                        allweeklySales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
+//                        computeUserSales(allweeklySales);
+                    }
+                    adapter.notifyDataSetChanged();
+                    pDialog.dismiss();
+                });
+
+    }
+    private void saveRecord(int amt) {
+        PoolRecordNew recordNew = new PoolRecordNew();
+        recordNew.setAmount(amt);
+        recordNew.setPoolId(String.valueOf(poolTable.getId()));
+        recordNew.setPoolName(poolTable.getName());
+
+        String dateV = rDate.getText().toString().trim();
+
+        Date date1 = null;
+        try {
+            date1 = new SimpleDateFormat("dd/MM/yyyy").parse(dateV);
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
+        }
+        int dateInt = (int) (date1.getTime() / 1000);
+        recordNew.setId(dateInt);
+        recordNew.setDate(dateV);
+        recordNew.setYear_week(new GeneralMethods().getDateParts(DateDisplaying,"yy") +""+ new GeneralMethods().getWeekNumber(DateDisplaying));
+        recordNew.setYear_month(new GeneralMethods().getDateParts(DateDisplaying,"yy")+new GeneralMethods().getDateParts(DateDisplaying, "MM"));
+        recordNew.setYear(new GeneralMethods().getDateParts(DateDisplaying,"yy"));
+
+        new Firestore(this).addPoolRecord(recordNew);
+
+        poolRecordDialog.dismiss();
     }
 
     private void updateUi() {
@@ -180,11 +342,7 @@ public class PoolTableActivity extends AppCompatActivity {
                                 .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                     })
                     .show();
-
-
         }
-
-
     }
 
     public void setDate() {
@@ -210,8 +368,9 @@ public class PoolTableActivity extends AppCompatActivity {
                     // arg1 = year
                     // arg2 = month
                     // arg3 = day
-                    DateDisplaying = arg3 +"/" + (arg2+1) +"/" + arg1;
+                    DateDisplaying = arg3 + "/" + (arg2 + 1) + "/" + arg1;
                     purchaseDate.setText(DateDisplaying);
+                    rDate.setText(DateDisplaying);
                 }
             };
 }

@@ -270,7 +270,7 @@ tools:context=".UI.POOL.PoolTableActivity">
                     app:cardCornerRadius="10dp"
                     >
                     <RelativeLayout
-                        android:id="@+id/advBtn"
+                        android:id="@+id/newRcdBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         >
