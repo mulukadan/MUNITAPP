@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter;
+import com.munit.m_unitapp.MODELS.PoolRecordNew;
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
 import com.munit.m_unitapp.R;
 
@@ -204,4 +205,36 @@ public class PoolHistActivity extends AppCompatActivity {
         }
 
     }
+
+    public void copyData(){
+        for (PoolTableRecord r: records) {
+            int id;
+            String poolId;
+            String poolName;
+            String date;
+            int amount;
+            String user;
+            String employee;
+            String year_week;
+            String year_month;
+            String year;
+            int sortValue = 0;
+
+
+            double tableOneTotal = r.getTableOneTotal();
+            double tableTwoTotal = r.getTableTwoTotal();
+            double tableThreeTotal = r.getTableThreeTotal();
+            String rDate =  r.getDate();
+            String ruser = r.getUser();
+            String remployee = r.getEmployee();
+
+            PoolRecordNew t1 = new PoolRecordNew();
+            t1.setPoolName("");
+
+
+
+
+        }
+    }
+
 }

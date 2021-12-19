@@ -54,7 +54,7 @@ public class PoolsAdapter extends RecyclerView.Adapter<PoolsAdapter.myViewHolder
         PoolTable current = data.get(position);
 
         holder.name.setText(current.getName());
-        holder.location.setText(current.getLocation());
+        holder.location.setText("Location: "+current.getLocation());
         holder.ageTV.setText("Age " + current.getAge());
         holder.costTV.setText("BP: Ksh. " + String.format("%,.2f", (double) current.getCost()));
         holder.returnsTV.setText("Returns: Ksh. " + String.format("%,.2f", (double) current.getReturns()));
