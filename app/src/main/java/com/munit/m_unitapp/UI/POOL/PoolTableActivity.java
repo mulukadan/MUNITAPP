@@ -124,7 +124,6 @@ public class PoolTableActivity extends AppCompatActivity {
         ageTV = findViewById(R.id.ageTV);
         returnsTV = findViewById(R.id.returnsTV);
         ProfilePic = findViewById(R.id.ProfilePic);
-        locationTV = findViewById(R.id.locationTV);
         nameTV = findViewById(R.id.nameTV);
         newRcdBtn = findViewById(R.id.newRcdBtn);
 
@@ -309,8 +308,8 @@ public class PoolTableActivity extends AppCompatActivity {
         costTV.setText("Ksh. " + String.format("%,.2f", (double) poolTable.getCost()));
         returnsTV.setText("Ksh. " + String.format("%,.2f", (double) poolTable.getReturns()));
         dateOfPurchaseTV.setText(poolTable.getDateOfPurchase());
-        locationTV.setText(poolTable.getLocation());
-        nameTV.setText(poolTable.getName());
+
+        nameTV.setText(poolTable.getName() + ", " + poolTable.getLocation());
 
         if (poolTable.getColor().equalsIgnoreCase("blue")) {
             ProfilePic.setBackgroundResource(R.drawable.blue_pool_table);

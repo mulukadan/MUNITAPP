@@ -39,6 +39,8 @@
                     android:layout_weight="5"
                     android:fontFamily="@font/medium"
                     android:textColor="#000000"
+                    android:textAlignment="viewEnd"
+                    android:layout_marginRight="20dp"
                     android:text="Date" />
                 <TextView
                     android:id="@+id/Total"
@@ -47,6 +49,8 @@
                     android:fontFamily="@font/bold"
                     android:layout_weight="5"
                     android:textColor="#000000"
+                    android:textAlignment="viewEnd"
+                    android:layout_marginRight="20dp"
                     android:text="Ksh. 2000" />
             </LinearLayout>
         </LinearLayout>

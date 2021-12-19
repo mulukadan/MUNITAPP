@@ -1,12 +1,17 @@
 package com.munit.m_unitapp.UI.POOL;
 
 import android.graphics.Color;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -15,11 +20,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter;
+import com.munit.m_unitapp.DB.Firestore;
 import com.munit.m_unitapp.MODELS.PoolRecordNew;
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
 import com.munit.m_unitapp.R;
+import com.munit.m_unitapp.TOOLS.GeneralMethods;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -41,6 +51,8 @@ public class PoolHistActivity extends AppCompatActivity {
     List<PoolTableRecord> monthlyRecords = new ArrayList<>();
     List<PoolTableRecord> yealyRecords = new ArrayList<>();
 
+    private ImageView copyBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +63,12 @@ public class PoolHistActivity extends AppCompatActivity {
         pDialog = new SweetAlertDialog(PoolHistActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         pDialog.setTitleText("Loading ...");
-        pDialog.setCancelable(true);
+        pDialog.setCancelable(false);
 
         sdialog = new SweetAlertDialog(PoolHistActivity.this, SweetAlertDialog.WARNING_TYPE);
         sdialog.setCancelable(false);
 
+        copyBtn = findViewById(R.id.copyBtn);
         back_arrow = findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener((view) -> {
             finish();
@@ -92,7 +105,9 @@ public class PoolHistActivity extends AppCompatActivity {
             monthlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             yealyBtn.setBackgroundResource(R.color.colorPrimary);
         });
-
+        copyBtn.setOnClickListener(view -> {
+            copyData();
+        });
         fetchData();
     }
 
@@ -138,14 +153,14 @@ public class PoolHistActivity extends AppCompatActivity {
 
     }
 
-    public void displayRecords( List<PoolTableRecord> recordsToDisplay) {
+    public void displayRecords(List<PoolTableRecord> recordsToDisplay) {
         poolRecordsRV.setAdapter(null);
         PoolRecordsAdapter transactionsTypesAdapter = new PoolRecordsAdapter(PoolHistActivity.this, recordsToDisplay);
         poolRecordsRV.setAdapter(transactionsTypesAdapter);
         pDialog.dismiss();
     }
 
-    public void groupRecords(){
+    public void groupRecords() {
         for (PoolTableRecord rec : records) {
             addOrCreateRec(rec);
         }
@@ -153,7 +168,7 @@ public class PoolHistActivity extends AppCompatActivity {
 
     public void addOrCreateRec(PoolTableRecord rec) {
         //Group Monthly
-        String monthYr = rec.getDate().substring(rec.getDate().indexOf("/") +1);
+        String monthYr = rec.getDate().substring(rec.getDate().indexOf("/") + 1);
         boolean found = false;
         for (PoolTableRecord mrec : monthlyRecords) {
             if (mrec.getDate().equals(monthYr)) {
@@ -162,12 +177,12 @@ public class PoolHistActivity extends AppCompatActivity {
                 mrec.setTableTwoTotal(mrec.getTableTwoTotal() + rec.getTableTwoTotal());
                 mrec.setTableThreeTotal(mrec.getTableThreeTotal() + rec.getTableThreeTotal());
                 mrec.setTotal(mrec.getTotal() + rec.getTotal());
-                found= true;
+                found = true;
                 break;
             }
 
         }
-        if(!found) {
+        if (!found) {
             PoolTableRecord newMrec = new PoolTableRecord();
             newMrec.setBiz1Total(rec.getBiz1Total());
             newMrec.setTableOneTotal(rec.getTableOneTotal());
@@ -179,7 +194,7 @@ public class PoolHistActivity extends AppCompatActivity {
         }
 
         // Group Yealy
-        String Yr = monthYr.substring(monthYr.indexOf("/") +1);
+        String Yr = monthYr.substring(monthYr.indexOf("/") + 1);
         found = false;
         for (PoolTableRecord mrec : yealyRecords) {
             if (mrec.getDate().equals(Yr)) {
@@ -188,12 +203,12 @@ public class PoolHistActivity extends AppCompatActivity {
                 mrec.setTableTwoTotal(mrec.getTableTwoTotal() + rec.getTableTwoTotal());
                 mrec.setTableThreeTotal(mrec.getTableThreeTotal() + rec.getTableThreeTotal());
                 mrec.setTotal(mrec.getTotal() + rec.getTotal());
-                found= true;
+                found = true;
                 break;
             }
 
         }
-        if(!found) {
+        if (!found) {
             PoolTableRecord newMrec = new PoolTableRecord();
             newMrec.setBiz1Total(rec.getBiz1Total());
             newMrec.setTableOneTotal(rec.getTableOneTotal());
@@ -206,35 +221,74 @@ public class PoolHistActivity extends AppCompatActivity {
 
     }
 
-    public void copyData(){
-        for (PoolTableRecord r: records) {
-            int id;
-            String poolId;
-            String poolName;
-            String date;
-            int amount;
-            String user;
-            String employee;
-            String year_week;
-            String year_month;
-            String year;
-            int sortValue = 0;
-
-
+    public void copyData() {
+        Toast.makeText(this, "Total Records: " + records.size(), Toast.LENGTH_SHORT).show();
+        pDialog.changeAlertType(SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.setTitleText("Copying data");
+        pDialog.show();
+        for (PoolTableRecord r : records) {
             double tableOneTotal = r.getTableOneTotal();
             double tableTwoTotal = r.getTableTwoTotal();
             double tableThreeTotal = r.getTableThreeTotal();
-            String rDate =  r.getDate();
+            String rDate = r.getDate();
+            Date date1 = null;
+            try {
+                date1 = new SimpleDateFormat("dd/MM/yyyy").parse(rDate);
+            } catch (ParseException parseException) {
+                parseException.printStackTrace();
+            }
+            int dateInt = (int) (date1.getTime() / 1000);
             String ruser = r.getUser();
             String remployee = r.getEmployee();
 
             PoolRecordNew t1 = new PoolRecordNew();
-            t1.setPoolName("");
+            t1.setPoolName("EK-1.1");
+            t1.setAmount((int) tableOneTotal);
+            t1.setPoolId("1639401074");
+            t1.setId(dateInt);
+            t1.setDate(rDate);
+            t1.setEmployee(remployee);
+            t1.setUser(ruser);
+            t1.setYear_week(new GeneralMethods().getDateParts(rDate, "yy") + "" + new GeneralMethods().getWeekNumber(rDate));
+            t1.setYear_month(new GeneralMethods().getDateParts(rDate, "yy") + new GeneralMethods().getDateParts(rDate, "MM"));
+            t1.setYear(new GeneralMethods().getDateParts(rDate, "yy"));
+
+            new Firestore(this).addPoolRecord(t1);
 
 
+            PoolRecordNew t2 = new PoolRecordNew();
+            t2.setPoolName("EK-1.2");
+            t2.setAmount((int) tableTwoTotal);
+            t2.setPoolId("1639401106");
+            t2.setId(dateInt);
+            t2.setDate(rDate);
+            t2.setEmployee(remployee);
+            t2.setUser(ruser);
+            t2.setYear_week(new GeneralMethods().getDateParts(rDate, "yy") + "" + new GeneralMethods().getWeekNumber(rDate));
+            t2.setYear_month(new GeneralMethods().getDateParts(rDate, "yy") + new GeneralMethods().getDateParts(rDate, "MM"));
+            t2.setYear(new GeneralMethods().getDateParts(rDate, "yy"));
 
+            new Firestore(this).addPoolRecord(t2);
+
+            PoolRecordNew t3 = new PoolRecordNew();
+            t3.setPoolName("EK-1.3");
+            t3.setAmount((int) tableThreeTotal);
+            t3.setPoolId("1639401406");
+            t3.setId(dateInt);
+            t3.setDate(rDate);
+            t3.setEmployee(remployee);
+            t3.setUser(ruser);
+            t3.setYear_week(new GeneralMethods().getDateParts(rDate, "yy") + "" + new GeneralMethods().getWeekNumber(rDate));
+            t3.setYear_month(new GeneralMethods().getDateParts(rDate, "yy") + new GeneralMethods().getDateParts(rDate, "MM"));
+            t3.setYear(new GeneralMethods().getDateParts(rDate, "yy"));
+
+            new Firestore(this).addPoolRecord(t3);
+
+            Toast.makeText(this, "Record done: " + records.indexOf(r), Toast.LENGTH_SHORT).show();
+            pDialog.setTitleText("Record " + records.indexOf(r) + "/ " + records.size() + " done!");
 
         }
+        pDialog.dismiss();
     }
 
 }

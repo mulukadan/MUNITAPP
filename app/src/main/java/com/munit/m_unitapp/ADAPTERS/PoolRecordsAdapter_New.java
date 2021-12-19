@@ -44,7 +44,7 @@ public class PoolRecordsAdapter_New extends RecyclerView.Adapter<PoolRecordsAdap
 
         PoolRecordNew current = data.get(position);
         holder.Date.setText(current.getDate());
-        holder.Total.setText("Ksh. " + currencyFormatter(current.getAmount()));
+        holder.Total.setText(currencyFormatter(current.getAmount()));
     }
 
     @Override
