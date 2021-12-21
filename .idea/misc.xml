@@ -8,9 +8,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_cash_in.xml" value="0.22" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_hist.xml" value="0.20516304347826086" />
-        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_table.xml" value="0.15104166666666666" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_home.xml" value="0.1859375" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_summary.xml" value="0.24895833333333334" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_table.xml" value="0.22" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pools_list.xml" value="0.2740036231884058" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_record_new.xml" value="0.15104166666666666" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/menu/add_pool.xml" value="0.24895833333333334" />
       </map>
     </option>
   </component>

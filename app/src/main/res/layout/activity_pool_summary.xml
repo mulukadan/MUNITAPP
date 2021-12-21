@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".UI.POOL.PoolSummaryActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/back_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/arrow_back" />
+
+        <TextView
+            android:id="@+id/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/bold"
+            android:text="Pool Table Summary"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:id="@+id/editPLBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_twotone_edit" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="9">
+
+                    <TextView
+                        android:id="@+id/ek1Btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="Ekalakala"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/kv1Btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="Kivingoni"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/allBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="All"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="9">
+
+                    <TextView
+                        android:id="@+id/dailyBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="Daily"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/monthlyBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="Monthly"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/yearlyBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="Yearly"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="2dp"
+                android:orientation="horizontal"
+                android:padding="3dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="View:" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="3dp"
+                    android:layout_weight="6"
+                    android:padding="3dp"
+                    app:cardCornerRadius="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/listViewBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@color/colorPrimary"
+                            android:text="List"
+                            android:textAlignment="center" />
+
+                        <TextView
+                            android:id="@+id/chartViewBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@color/gray_btn_bg_color"
+                            android:text="Chart"
+                            android:textAlignment="center" />
+
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/listViewLL"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="5"
+                        android:fontFamily="@font/medium"
+                        android:text="Date"
+                        android:textAlignment="viewEnd"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/Total"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="5"
+                        android:fontFamily="@font/bold"
+                        android:text="Ksh."
+                        android:textAlignment="viewEnd"
+                        android:textColor="#000000" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recordsRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginBottom="20dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/chartViewLL"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

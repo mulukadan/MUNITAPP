@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/one"
+        android:title="Add new Pool" />
+    <item
+        android:id="@+id/two"
+        android:title="New Business"/>
+    <item
+        android:id="@+id/three"
+        android:title="New Market"/>
+</menu>

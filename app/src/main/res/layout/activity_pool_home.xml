@@ -303,7 +303,7 @@
                     card_view:cardElevation="5dp">
 
                     <RelativeLayout
-                        android:id="@+id/BuySmsRl"
+                        android:id="@+id/poolsSummaryBtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="?android:attr/selectableItemBackground"

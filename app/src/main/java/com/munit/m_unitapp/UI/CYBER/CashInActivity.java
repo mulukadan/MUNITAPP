@@ -218,19 +218,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void displayRecords(int dataFor) {
         showingDataFor = dataFor;
-        switch (showingDataFor) {
-            case DAILY_DATA:
-                fetchUserSales(USERID);
-                break;
-            case WEEKLY_DATA:
-                fetchUserSales(USERID);
-                break;
-            case MONTHLY_DATA:
-                fetchUserSales(USERID);
-                break;
-        }
-
-
+        fetchUserSales(USERID);
     }
 
     public void getDailySale() {
@@ -436,7 +424,6 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                         .show();
             }
         });
-
     }
 
     public void populateChart(List<DailySales> sales) {

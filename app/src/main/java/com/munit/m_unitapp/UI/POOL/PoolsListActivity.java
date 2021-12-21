@@ -10,12 +10,15 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -53,8 +56,7 @@ public class PoolsListActivity extends AppCompatActivity {
     private int year, month, day;
     String todate, DateDisplaying;
 
-    private FloatingActionMenu fab;
-    private FloatingActionButton addPoolBtn;
+    private ImageView addPoolMenuBtn;
     private ImageView back_arrow, CloseDialog, calenderIcon;
     private EditText nameEt, costEt;
     private Spinner colorSpiner, locationSpiner;
@@ -111,18 +113,30 @@ public class PoolsListActivity extends AppCompatActivity {
             savePool();
         });
 
-        fab = findViewById(R.id.fab);
-        fab.setClosedOnTouchOutside(true);
+        addPoolMenuBtn = findViewById(R.id.addPoolMenuBtn);
+        addPoolMenuBtn.setOnClickListener(v -> {
+            //Creating the instance of PopupMenu
+            PopupMenu popup = new PopupMenu(PoolsListActivity.this, addPoolMenuBtn);
+            //Inflating the Popup using xml file
+            popup.getMenuInflater().inflate(R.menu.add_pool, popup.getMenu());
 
-        addPoolBtn = findViewById(R.id.addPoolBtn);
-        addPoolBtn.setOnClickListener(v -> {
-            fab.close(true);
-            nameEt.setText("");
-            costEt.setText("");
+            //registering popup with OnMenuItemClickListener
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    if(item.getItemId() == R.id.one){
+                        nameEt.setText("");
+                        costEt.setText("");
+                        newPoolDialog.show();
+                    }else {
+                        Toast.makeText(PoolsListActivity.this,"Coming soon: " + item.getTitle(), Toast.LENGTH_SHORT).show();
 
-            newPoolDialog.show();
+                    }
+                    return true;
+                }
+            });
+
+            popup.show();//showing popup menu
         });
-
         calendar = Calendar.getInstance();
 
         year = calendar.get(Calendar.YEAR);
