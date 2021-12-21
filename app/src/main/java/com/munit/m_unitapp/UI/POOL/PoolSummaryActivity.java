@@ -1,10 +1,12 @@
 package com.munit.m_unitapp.UI.POOL;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +30,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter_New;
 import com.munit.m_unitapp.DB.firebase;
+import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.PoolRecordNew;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.R;
@@ -37,6 +40,7 @@ import com.munit.m_unitapp.TOOLS.GeneralMethods;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -73,10 +77,14 @@ public class PoolSummaryActivity extends AppCompatActivity {
     int poolReturns = 0;
 
 
+    final int EK_DATA = 0;
+    final int KV_DATA = 1;
+    final int All_DATA = 2;
+    int locDataFor = EK_DATA;
+
     final int DAILY_DATA = 0;
     final int MONTHLY_DATA = 1;
     final int YEARLY_DATA = 2;
-
     int showingDataFor = DAILY_DATA;
 
     @Override
@@ -98,6 +106,37 @@ public class PoolSummaryActivity extends AppCompatActivity {
         ek1Btn = findViewById(R.id.ek1Btn);
         kv1Btn = findViewById(R.id.kv1Btn);
         allBtn = findViewById(R.id.allBtn);
+
+        ek1Btn.setBackgroundResource(R.color.colorPrimary);
+        kv1Btn.setBackgroundResource(R.color.gray_btn_bg_color);
+        allBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+
+        ek1Btn.setOnClickListener(v -> {
+            pDialog.show();
+            locDataFor = EK_DATA;
+            fetchPoolRecords();
+            ek1Btn.setBackgroundResource(R.color.colorPrimary);
+            kv1Btn.setBackgroundResource(R.color.gray_btn_bg_color);
+            allBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+        });
+        kv1Btn.setOnClickListener(v -> {
+            pDialog.show();
+            locDataFor = KV_DATA;
+            fetchPoolRecords();
+            ek1Btn.setBackgroundResource(R.color.gray_btn_bg_color);
+            kv1Btn.setBackgroundResource(R.color.colorPrimary);
+            allBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+        });
+        allBtn.setOnClickListener(v -> {
+            pDialog.show();
+            locDataFor = All_DATA;
+            fetchPoolRecords();
+            ek1Btn.setBackgroundResource(R.color.gray_btn_bg_color);
+            kv1Btn.setBackgroundResource(R.color.gray_btn_bg_color);
+            allBtn.setBackgroundResource(R.color.colorPrimary);
+        });
+
+
         chartViewLL = findViewById(R.id.chartViewLL);
         listViewLL = findViewById(R.id.listViewLL);
         chart = findViewById(R.id.chart);
@@ -105,8 +144,6 @@ public class PoolSummaryActivity extends AppCompatActivity {
         chartViewBtn = findViewById(R.id.chartViewBtn);
         chartViewLL.setVisibility(View.GONE);
         scroll = findViewById(R.id.scroll);
-
-
 
 
         back_arrow.setOnClickListener(view -> finish());
@@ -157,9 +194,9 @@ public class PoolSummaryActivity extends AppCompatActivity {
             chartViewBtn.setBackgroundResource(R.color.colorPrimary);
             listViewBtn.setBackgroundResource(R.color.gray_btn_bg_color);
 //            scroll.fullScroll(View.FOCUS_DOWN);
-            try{
+            try {
                 scroll.post(() -> scroll.fullScroll(ScrollView.FOCUS_DOWN));
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
@@ -176,18 +213,31 @@ public class PoolSummaryActivity extends AppCompatActivity {
     }
 
     public void fetchPoolRecords() {
+        switch (locDataFor) {
+            case EK_DATA:
+                fetchFilteredPoolRecords("EK");
+                break;
+            case KV_DATA:
+                fetchFilteredPoolRecords("KV");
+                break;
+            case All_DATA:
+                fetchAllPoolRecords();
+                break;
+        }
+
+
+    }
+
+    public void fetchAllPoolRecords() {
         pDialog.show();
-        int key = 0;
         firedb.collection(Constants.poolRecordsPath)
 //                .whereEqualTo("poolId", String.valueOf(key))
                 .orderBy("id", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, e) -> {
                     if (e != null) {
                         pDialog.dismiss();
-//                        computeUserSales(new ArrayList<>());
                         return;
                     } else if (value.isEmpty()) {
-//                        computeUserSales(new ArrayList<>());
                         pDialog.dismiss();
                     } else {
                         records.clear();
@@ -202,18 +252,48 @@ public class PoolSummaryActivity extends AppCompatActivity {
                                 DisplayingRecords.add(record);
                             }
                         }
-//                        allweeklySales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
-//                        computeUserSales(allweeklySales);
                     }
                     computePoolRecords();
-
-//                    returnsTV.setText("Ksh. " + String.format("%,.2f", (double) poolReturns));
-//                    poolTable.setReturns(poolReturns);
-//                    poolTable.setAge(ageTV.getText().toString());
-//                    db.savePoolTable(poolTable);
                     pDialog.dismiss();
                 });
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void fetchFilteredPoolRecords(String key) {
+        pDialog.show();
+        firedb.collection(Constants.poolRecordsPath)
+//                .whereEqualTo("poolId", String.valueOf(key))
+                .whereGreaterThanOrEqualTo("poolName", key)
+                .whereLessThanOrEqualTo("poolName", key + "\uF7FF")
+                .orderBy("poolName", Query.Direction.DESCENDING)
+                .orderBy("id", Query.Direction.DESCENDING)
+                .addSnapshotListener((value, e) -> {
+                    if (e != null) {
+                        pDialog.dismiss();
+                        return;
+                    } else if (value.isEmpty()) {
+                        pDialog.dismiss();
+                    } else {
+                        records.clear();
+                        DisplayingRecords.clear();
+
+                        poolReturns = 0;
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("date") != null) {
+                                PoolRecordNew record = doc.toObject(PoolRecordNew.class);
+                                poolReturns += record.getAmount();
+                                records.add(record);
+                                DisplayingRecords.add(record);
+                            }
+                        }
+                    }
+//                    DisplayingRecords.sort(Comparator.comparing(PoolRecordNew::getId));
+
+                    computePoolRecords();
+                    pDialog.dismiss();
+                });
+    }
+
 
     private void computePoolRecords() {
         DisplayingRecords.clear();
@@ -285,16 +365,16 @@ public class PoolSummaryActivity extends AppCompatActivity {
         }
 
         BarDataSet set1;
-        String desc="";
+        String desc = "";
         switch (showingDataFor) {
             case DAILY_DATA:
-                desc="Daily sales";
+                desc = "Daily sales";
                 break;
             case YEARLY_DATA:
-                desc="Yearly Sales";
+                desc = "Yearly Sales";
                 break;
             case MONTHLY_DATA:
-                desc="Monthly Sales";
+                desc = "Monthly Sales";
                 break;
         }
 

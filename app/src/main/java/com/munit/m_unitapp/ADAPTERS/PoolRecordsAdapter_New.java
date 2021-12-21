@@ -43,8 +43,15 @@ public class PoolRecordsAdapter_New extends RecyclerView.Adapter<PoolRecordsAdap
     public void onBindViewHolder(myViewHolder holder, int position) {
 
         PoolRecordNew current = data.get(position);
+        holder.nameTV.setText(current.getPoolName());
         holder.Date.setText(current.getDate());
         holder.Total.setText(currencyFormatter(current.getAmount()));
+
+        if(!current.getDate().contains("/")){
+            holder.nameTV.setVisibility(View.GONE);
+        }else {
+            holder.nameTV.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -53,6 +60,7 @@ public class PoolRecordsAdapter_New extends RecyclerView.Adapter<PoolRecordsAdap
     }
 
     class myViewHolder extends RecyclerView.ViewHolder {
+        TextView nameTV;
         TextView Date;
         TextView Total;
         LinearLayout biz2Layout;
@@ -62,6 +70,7 @@ public class PoolRecordsAdapter_New extends RecyclerView.Adapter<PoolRecordsAdap
         public myViewHolder(final View itemView) {
             super(itemView);
             Date = itemView.findViewById(R.id.date);
+            nameTV = itemView.findViewById(R.id.nameTV);
             Total = itemView.findViewById(R.id.Total);
             biz2Layout = itemView.findViewById(R.id.biz2Layout);
 
