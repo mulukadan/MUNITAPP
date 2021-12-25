@@ -243,6 +243,7 @@ public class PoolHistActivity extends AppCompatActivity {
 
             PoolRecordNew t1 = new PoolRecordNew();
             t1.setPoolName("EK-1.1");
+            t1.setLocation("EK-1");
             t1.setAmount((int) tableOneTotal);
             t1.setPoolId("1639401074");
             t1.setId(dateInt);
@@ -261,6 +262,7 @@ public class PoolHistActivity extends AppCompatActivity {
             t2.setAmount((int) tableTwoTotal);
             t2.setPoolId("1639401106");
             t2.setId(dateInt);
+            t2.setLocation("EK-1");
             t2.setDate(rDate);
             t2.setEmployee(remployee);
             t2.setUser(ruser);
@@ -275,6 +277,7 @@ public class PoolHistActivity extends AppCompatActivity {
             t3.setAmount((int) tableThreeTotal);
             t3.setPoolId("1639401406");
             t3.setId(dateInt);
+            t3.setLocation("EK-1");
             t3.setDate(rDate);
             t3.setEmployee(remployee);
             t3.setUser(ruser);

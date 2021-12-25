@@ -215,10 +215,10 @@ public class PoolSummaryActivity extends AppCompatActivity {
     public void fetchPoolRecords() {
         switch (locDataFor) {
             case EK_DATA:
-                fetchFilteredPoolRecords("EK");
+                fetchFilteredPoolRecords("EK-1");
                 break;
             case KV_DATA:
-                fetchFilteredPoolRecords("KV");
+                fetchFilteredPoolRecords("KV-1");
                 break;
             case All_DATA:
                 fetchAllPoolRecords();
@@ -262,22 +262,24 @@ public class PoolSummaryActivity extends AppCompatActivity {
     public void fetchFilteredPoolRecords(String key) {
         pDialog.show();
         firedb.collection(Constants.poolRecordsPath)
-//                .whereEqualTo("poolId", String.valueOf(key))
-                .whereGreaterThanOrEqualTo("poolName", key)
-                .whereLessThanOrEqualTo("poolName", key + "\uF7FF")
-                .orderBy("poolName", Query.Direction.DESCENDING)
+                .whereEqualTo("location", String.valueOf(key))
+//                .whereGreaterThanOrEqualTo("poolName", key)
+//                .whereLessThanOrEqualTo("poolName", key + "\uF7FF")
+//                .orderBy("poolName", Query.Direction.DESCENDING)
                 .orderBy("id", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, e) -> {
+                    records.clear();
+                    DisplayingRecords.clear();
+                    poolReturns = 0;
+
                     if (e != null) {
                         pDialog.dismiss();
                         return;
                     } else if (value.isEmpty()) {
+
                         pDialog.dismiss();
                     } else {
-                        records.clear();
-                        DisplayingRecords.clear();
 
-                        poolReturns = 0;
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get("date") != null) {
                                 PoolRecordNew record = doc.toObject(PoolRecordNew.class);

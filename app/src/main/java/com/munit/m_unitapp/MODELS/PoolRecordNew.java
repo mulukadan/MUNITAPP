@@ -4,6 +4,7 @@ public class PoolRecordNew {
     int id;
     String poolId;
     String poolName;
+    String location;
     String date;
     int amount;
     String user;
@@ -99,5 +100,13 @@ public class PoolRecordNew {
 
     public void setSortValue(int sortValue) {
         this.sortValue = sortValue;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

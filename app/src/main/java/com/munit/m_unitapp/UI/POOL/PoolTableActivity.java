@@ -488,6 +488,7 @@ public class PoolTableActivity extends AppCompatActivity {
         recordNew.setAmount(amt);
         recordNew.setPoolId(String.valueOf(poolTable.getId()));
         recordNew.setPoolName(poolTable.getName());
+        recordNew.setLocation(poolTable.getName().substring(0, poolTable.getName().indexOf(".")));
 
         String dateV = rDate.getText().toString().trim();
 
