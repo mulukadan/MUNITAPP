@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -29,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter_New;
+import com.munit.m_unitapp.DB.Firestore;
 import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.PoolRecordNew;
@@ -218,6 +220,7 @@ public class PoolSummaryActivity extends AppCompatActivity {
                 fetchFilteredPoolRecords("EK-1");
                 break;
             case KV_DATA:
+//                UpdateKiv("KV-1");
                 fetchFilteredPoolRecords("KV-1");
                 break;
             case All_DATA:
@@ -258,14 +261,10 @@ public class PoolSummaryActivity extends AppCompatActivity {
                 });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     public void fetchFilteredPoolRecords(String key) {
         pDialog.show();
         firedb.collection(Constants.poolRecordsPath)
                 .whereEqualTo("location", String.valueOf(key))
-//                .whereGreaterThanOrEqualTo("poolName", key)
-//                .whereLessThanOrEqualTo("poolName", key + "\uF7FF")
-//                .orderBy("poolName", Query.Direction.DESCENDING)
                 .orderBy("id", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, e) -> {
                     records.clear();
@@ -289,8 +288,41 @@ public class PoolSummaryActivity extends AppCompatActivity {
                             }
                         }
                     }
-//                    DisplayingRecords.sort(Comparator.comparing(PoolRecordNew::getId));
+                    computePoolRecords();
+                    pDialog.dismiss();
+                });
+    }
 
+ public void UpdateKiv(String key) {
+        pDialog.show();
+        firedb.collection(Constants.poolRecordsPath)
+                .whereEqualTo("poolId", "1639402083")
+                .orderBy("id", Query.Direction.DESCENDING)
+                .addSnapshotListener((value, e) -> {
+                    records.clear();
+                    DisplayingRecords.clear();
+                    poolReturns = 0;
+
+                    if (e != null) {
+                        pDialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Error: "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                        return;
+                    } else if (value.isEmpty()) {
+
+                        pDialog.dismiss();
+                    } else {
+
+                        for (QueryDocumentSnapshot doc : value) {
+                            if (doc.get("date") != null) {
+                                PoolRecordNew record = doc.toObject(PoolRecordNew.class);
+                                record.setLocation("KV-1");
+                                new Firestore(this).addPoolRecord(record);
+                                poolReturns += record.getAmount();
+                                records.add(record);
+                                DisplayingRecords.add(record);
+                            }
+                        }
+                    }
                     computePoolRecords();
                     pDialog.dismiss();
                 });

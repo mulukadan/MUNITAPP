@@ -1,5 +1,7 @@
 package com.munit.m_unitapp.UI.POOL;
 
+import static com.munit.m_unitapp.TOOLS.Constants.poolRecordsJson;
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,12 +26,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.munit.m_unitapp.DB.Firestore;
 import com.munit.m_unitapp.DB.firebase;
+import com.munit.m_unitapp.MODELS.PoolRecordNew;
 import com.munit.m_unitapp.MODELS.PoolTableRecord;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.R;
+import com.munit.m_unitapp.TOOLS.GeneralMethods;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -41,7 +54,7 @@ public class PoolHomeActivity extends AppCompatActivity {
     private Button SaveBtn;
 
     private RelativeLayout newSales;
-    private RelativeLayout History, allPools, poolsSummaryBtn;
+    private RelativeLayout History, allPools, poolsSummaryBtn, BuySmsRl;
 
     FirebaseDatabase database;
     private DatabaseReference myRef;
@@ -239,7 +252,72 @@ public class PoolHomeActivity extends AppCompatActivity {
             Intent intent = new Intent(this, PoolSummaryActivity.class);
             startActivity(intent);
         });
+
+        BuySmsRl = findViewById(R.id.BuySmsRl);
+        BuySmsRl.setOnClickListener(v -> {
+//            getRecords();// From Exel
+        });
+
     }
+
+    private void getRecords() {
+        JsonParser parser = new JsonParser();
+        JsonObject jsonObject = parser.parse(poolRecordsJson).getAsJsonObject();
+        JsonArray jsonArray = jsonObject.get("Sheet1").getAsJsonArray();
+        Toast.makeText(this, "Total : "+ jsonArray.size(), Toast.LENGTH_SHORT).show();
+        int count =0;
+        for (JsonElement element: jsonArray
+             ) {
+            JsonObject object = element.getAsJsonObject();
+            String d = object.get("D").getAsString();
+            String amt = object.get("amt").getAsString();
+            String date = object.get("date").getAsString();
+            date = date.replace("m", "");
+            date = date.replace("y", "");
+            date = date.replace(" ", "/");
+            date = d + "/"+date;
+
+            amt = amt.replace(",", "");
+            int pAmt = Integer.parseInt(amt)/2;
+            java.util.Date date1 = null;
+            try {
+                date1 = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+            } catch (ParseException parseException) {
+                parseException.printStackTrace();
+            }
+            int dateInt = (int) (date1.getTime() / 1000);
+
+            PoolRecordNew t1 = new PoolRecordNew();
+            t1.setPoolName("EK-1.1");
+            t1.setLocation("EK-1");
+            t1.setAmount(pAmt);
+            t1.setPoolId("1639401074");
+            t1.setId(dateInt);
+            t1.setDate(date);
+            t1.setYear_week(new GeneralMethods().getDateParts(date, "yy") + "" + new GeneralMethods().getWeekNumber(date));
+            t1.setYear_month(new GeneralMethods().getDateParts(date, "yy") + new GeneralMethods().getDateParts(date, "MM"));
+            t1.setYear(new GeneralMethods().getDateParts(date, "yy"));
+
+            new Firestore(this).addPoolRecord(t1);
+
+            PoolRecordNew t2 = new PoolRecordNew();
+            t2.setPoolName("EK-1.2");
+            t2.setAmount(pAmt);
+            t2.setPoolId("1639401106");
+            t2.setId(dateInt);
+            t2.setLocation("EK-1");
+            t2.setDate(date);
+            t2.setYear_week(new GeneralMethods().getDateParts(date, "yy") + "" + new GeneralMethods().getWeekNumber(date));
+            t2.setYear_month(new GeneralMethods().getDateParts(date, "yy") + new GeneralMethods().getDateParts(date, "MM"));
+            t2.setYear(new GeneralMethods().getDateParts(date, "yy"));
+
+            new Firestore(this).addPoolRecord(t2);
+
+            count ++;
+            Toast.makeText(this, "Number : "+ count, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     @SuppressWarnings("deprecation")
     public void setDate() {
         showDialog(999);
