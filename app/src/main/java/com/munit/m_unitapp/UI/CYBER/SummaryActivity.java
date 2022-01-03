@@ -27,6 +27,7 @@ import com.munit.m_unitapp.TOOLS.GeneralMethods;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -96,6 +97,9 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
 
         weeklyBtn.setOnClickListener(v -> {
             sweetAlertDialog.show();
+            currentDisplayedYear = year;
+            currentDisplayedWeek = new GeneralMethods().getWeekNumber(todate);
+            currentDisplayedMonth = month;
             displayRecords(WEEKLY_DATA);
             weeklyBtn.setBackgroundResource(R.color.colorPrimary);
             monthlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
@@ -103,6 +107,9 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         });
         monthlyBtn.setOnClickListener(v -> {
             sweetAlertDialog.show();
+            currentDisplayedYear = year;
+            currentDisplayedWeek = new GeneralMethods().getWeekNumber(todate);
+            currentDisplayedMonth = month;
             displayRecords(MONTHLY_DATA);
             weeklyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             monthlyBtn.setBackgroundResource(R.color.colorPrimary);
@@ -110,6 +117,9 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         });
         yealyBtn.setOnClickListener(v -> {
             sweetAlertDialog.show();
+            currentDisplayedYear = year;
+            currentDisplayedWeek = new GeneralMethods().getWeekNumber(todate);
+            currentDisplayedMonth = month;
             displayRecords(YEARLY_DATA);
 
             weeklyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
@@ -308,7 +318,18 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         if (showingDataFor == WEEKLY_DATA) {
             fetchDatesInWeek(currentDisplayedWeek);
         }
-        fetchWeeklyData(key);
+        if(weekDates.size()>1){
+            String startYr = new GeneralMethods().getDateParts(weekDates.get(0), "yy");
+            String endYr = new GeneralMethods().getDateParts(weekDates.get(weekDates.size()-1), "yy");
+            if(startYr.equals(endYr)){
+                fetchWeeklyData(key);
+            }else {
+                fetchWeeklyDataWeekBtnTwoYears(startYr+"52", endYr+"1");
+            }
+        }else {
+            fetchWeeklyData(key);
+        }
+
     }
 
     private void displayRecords(int dataFor) {
@@ -317,7 +338,6 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
             case WEEKLY_DATA:
                 queryfield = "year_week";
                 weekRangeTV.setVisibility(View.VISIBLE);
-
                 weekTitleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
                 loadData(currentDisplayedYear + "" + currentDisplayedWeek);
                 break;
@@ -345,6 +365,29 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
                 .whereEqualTo(queryfield, key)
 //                .whereArrayContains(queryfield, key)
 
+                .addSnapshotListener((value, e) -> {
+                    if (e != null) {
+//                            Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    List<DailySales> allweeklySales = new ArrayList<>();
+                    for (QueryDocumentSnapshot doc : value) {
+                        if (doc.get("date") != null) {
+                            DailySales dailySales = doc.toObject(DailySales.class);
+                            allweeklySales.add(dailySales);
+                        }
+                    }
+                    computeWeeklySales(allweeklySales);
+                });
+    }
+
+    public void fetchWeeklyDataWeekBtnTwoYears(String startKey, String endKey) {
+        totalSummary = new DailySales();
+        allDailySalesAdapter.setSelectedUserName("Total");
+        sweetAlertDialog.show();
+        firedb.collection(Constants.dailySalesPath)
+        .whereIn("year_week", Arrays.asList(startKey, endKey))
                 .addSnapshotListener((value, e) -> {
                     if (e != null) {
 //                            Log.w(TAG, "Listen failed.", e);
