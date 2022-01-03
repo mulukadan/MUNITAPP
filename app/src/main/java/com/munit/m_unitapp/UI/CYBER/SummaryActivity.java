@@ -147,11 +147,12 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         day = calendar.get(Calendar.DAY_OF_MONTH);
         todate = day + "/" + month + "/" + year;
         DateDisplaying = todate;
-        todaysWeekNo = currentDisplayedWeek = new GeneralMethods().getWeekNumber(todate);
+        currentDisplayedWeek = new GeneralMethods().getWeekNumber(todate);
+        todaysWeekNo = 0;
         currentDisplayedMonth = month;
         currentDisplayedYear = year;
         fetchAllWeeklyData();
-        loadData(year+""+todaysWeekNo);
+        loadData(currentDisplayedYear + "" + currentDisplayedWeek);
     }
 
     private void RefreshUpdateSales() {
@@ -167,10 +168,10 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
                 //Update
                 sales.setYear_week(year_week);
                 new Firestore(SummaryActivity.this).addDailySale(sales);
-                count ++;
+                count++;
             }
         }
-        Toast.makeText(getApplicationContext(),"Done "+ count + " Updated!",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Done " + count + " Updated!", Toast.LENGTH_SHORT).show();
         sweetAlertDialog.dismiss();
     }
 
@@ -193,6 +194,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
                     getDailySalesForDays();
                 });
     }
+
     public void generateSales() {
         weeklySalesFragAdapter = new WeeklySalesFragAdapter(getSupportFragmentManager(), allUsersWeeklySales);
         dailyPagerAll.setAdapter(weeklySalesFragAdapter);
@@ -200,6 +202,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         dailyPagerAll.setCurrentItem(6);
         sweetAlertDialog.dismiss();
     }
+
     public void getDailySalesForDays() {
         allUsersWeeklySales = new ArrayList<>();
         Calendar cal;
@@ -253,36 +256,49 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         Collections.reverse(daySales);
         return daySales;
     }
+
     private void fetchPreviousData() {
+        todaysWeekNo--;
         switch (showingDataFor) {
             case WEEKLY_DATA:
                 currentDisplayedWeek = currentDisplayedWeek - 1;
+                if (currentDisplayedWeek == 0) {
+                    currentDisplayedYear--;
+                    currentDisplayedWeek = 52;
+                }
+
                 fetchDatesInWeek(currentDisplayedWeek);
-                loadData(year+""+currentDisplayedWeek);
+                loadData(currentDisplayedYear + "" + currentDisplayedWeek);
                 break;
             case MONTHLY_DATA:
                 loadData(getPrevMonthYearKey());
                 break;
             case YEARLY_DATA:
-                currentDisplayedYear = currentDisplayedYear -1;
-                loadData(""+currentDisplayedYear);
+                currentDisplayedYear = currentDisplayedYear - 1;
+                loadData("" + currentDisplayedYear);
                 break;
         }
     }
 
     private void fetchNextData() {
+        todaysWeekNo++;
         switch (showingDataFor) {
             case WEEKLY_DATA:
                 currentDisplayedWeek = currentDisplayedWeek + 1;
-                fetchDatesInWeek(currentDisplayedWeek);
-                loadData(year+""+currentDisplayedWeek);
+                if (currentDisplayedWeek == 53) {
+                    currentDisplayedWeek = 1;
+                    currentDisplayedYear++;
+                }
+
+//                fetchDatesInWeek(currentDisplayedWeek);
+                loadData(currentDisplayedYear + "" + currentDisplayedWeek);
                 break;
             case MONTHLY_DATA:
                 loadData(getNextMonthYearKey());
                 break;
             case YEARLY_DATA:
-                currentDisplayedYear = currentDisplayedYear +1;
-                loadData(""+currentDisplayedYear);
+                currentDisplayedYear = currentDisplayedYear + 1;
+                loadData("" + currentDisplayedYear);
                 break;
         }
 
@@ -303,19 +319,19 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
                 weekRangeTV.setVisibility(View.VISIBLE);
 
                 weekTitleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f);
-                loadData(year+""+todaysWeekNo);
+                loadData(currentDisplayedYear + "" + currentDisplayedWeek);
                 break;
             case MONTHLY_DATA:
                 weekRangeTV.setVisibility(View.GONE);
                 weekTitleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24f);
                 queryfield = "year_month";
-                loadData(year+""+month);
+                loadData(currentDisplayedYear + "" + month);
                 break;
             case YEARLY_DATA:
                 weekRangeTV.setVisibility(View.GONE);
                 weekTitleTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25f);
                 queryfield = "year";
-                loadData(year+"");
+                loadData(currentDisplayedYear + "");
                 break;
         }
 
@@ -394,16 +410,17 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
 
         //Set Dates Display
         String weekTitle = "";
-        switch (showingDataFor){
+        switch (showingDataFor) {
             case WEEKLY_DATA:
-                if (currentDisplayedWeek == todaysWeekNo) {
+                if (todaysWeekNo == 0) {
                     weekTitle = "This Week";
-                } else if (todaysWeekNo - currentDisplayedWeek == 1) {
+                } else if (todaysWeekNo == -1) {
                     weekTitle = "Last Week";
                 } else {
-                    weekTitle = "Last Week but " + ((todaysWeekNo - currentDisplayedWeek) - 1);
+                    int disp = todaysWeekNo * -1;
+                    weekTitle = "Last Week but " + (disp - 1);
                 }
-                if (currentDisplayedWeek == todaysWeekNo && currentDisplayedYear == year) {
+                if (todaysWeekNo == 0 && currentDisplayedYear == year) {
                     weeklyNextNav.setVisibility(View.GONE);
                 } else {
                     weeklyNextNav.setVisibility(View.VISIBLE);
@@ -411,7 +428,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
                 weekRangeTV.setText(weekDates.get(0) + " - " + weekDates.get(weekDates.size() - 1));
                 break;
             case MONTHLY_DATA:
-                weekTitle =new GeneralMethods().getMonthName(currentDisplayedMonth) + ", "+ currentDisplayedYear;
+                weekTitle = new GeneralMethods().getMonthName(currentDisplayedMonth) + ", " + currentDisplayedYear;
 
                 if (currentDisplayedMonth == month && currentDisplayedYear == year) {
                     weeklyNextNav.setVisibility(View.GONE);
@@ -420,7 +437,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
                 }
                 break;
             case YEARLY_DATA:
-                weekTitle =""+ currentDisplayedYear;
+                weekTitle = "" + currentDisplayedYear;
                 if (currentDisplayedYear == year) {
                     weeklyNextNav.setVisibility(View.GONE);
                 } else {
@@ -436,6 +453,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         weekDates = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
+        cal.set(Calendar.YEAR, currentDisplayedYear);
         cal.set(Calendar.WEEK_OF_YEAR, weekNo);
         for (int i = 2; i < 8; i++) {
             cal.set(Calendar.DAY_OF_WEEK, i);
@@ -468,23 +486,22 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
             currentDisplayedYear = currentDisplayedYear - 1;
             currentDisplayedMonth = 12;
 
-        } else{
+        } else {
             currentDisplayedMonth = currentDisplayedMonth - 1;
         }
 
-        return (currentDisplayedYear) + ""+ currentDisplayedMonth;
+        return (currentDisplayedYear) + "" + currentDisplayedMonth;
     }
 
     public String getNextMonthYearKey() {
         if (currentDisplayedMonth == 12) {
             currentDisplayedYear = currentDisplayedYear + 1;
             currentDisplayedMonth = 1;
-        } else{
-            currentDisplayedMonth= currentDisplayedMonth + 1;
+        } else {
+            currentDisplayedMonth = currentDisplayedMonth + 1;
         }
-        return (currentDisplayedYear) + ""+ currentDisplayedMonth;
+        return (currentDisplayedYear) + "" + currentDisplayedMonth;
     }
-
 
 
 }

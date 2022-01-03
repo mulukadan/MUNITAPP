@@ -228,7 +228,6 @@ public class PoolSummaryActivity extends AppCompatActivity {
                 break;
         }
 
-
     }
 
     public void fetchAllPoolRecords() {
