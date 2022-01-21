@@ -22,6 +22,7 @@ public class Employee {
     String idBackImage ="";
     String JobDescription = "";
     List<EmployeePayment> payments = new ArrayList<>();
+    String statusReason ="";
 
     public Employee() {
     }
@@ -168,6 +169,14 @@ public class Employee {
 
     public void setDob(String dob) {
         this.dob = dob;
+    }
+
+    public String getStatusReason() {
+        return statusReason;
+    }
+
+    public void setStatusReason(String statusReason) {
+        this.statusReason = statusReason;
     }
 
     public int getIdex(List<Employee> employees , String eID){

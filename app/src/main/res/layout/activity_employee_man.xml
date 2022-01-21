@@ -32,12 +32,22 @@
 
         <ImageView
             android:id="@+id/editEmBtn"
-            android:layout_width="30dp"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
             android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/menuBtn"
             android:src="@drawable/ic_twotone_edit" />
+
+        <ImageView
+            android:id="@+id/menuBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="0dp"
+            android:src="@drawable/three_dots_vert_24" />
+
 
     </RelativeLayout>
 

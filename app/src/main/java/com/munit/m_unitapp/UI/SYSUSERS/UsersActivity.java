@@ -175,6 +175,7 @@ public class UsersActivity extends AppCompatActivity {
                         .setCancelText("Cancel")
                         .setConfirmClickListener(sDialog -> {
                             users.add(user);
+//                            db.saveUsers(users);
                             addUserToFirebase(user);
                         })
                         .show();

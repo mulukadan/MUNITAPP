@@ -16,12 +16,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -45,6 +47,7 @@ import com.munit.m_unitapp.DB.firebase;
 import com.munit.m_unitapp.MODELS.Employee;
 import com.munit.m_unitapp.MODELS.EmployeePayment;
 import com.munit.m_unitapp.R;
+import com.munit.m_unitapp.UI.POOL.PoolsListActivity;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -61,18 +64,18 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
     firebase db = new firebase();
-    private ImageView back_arrow, editEmBtn;
+    private ImageView back_arrow, editEmBtn, menuBtn;
     private TextView nameTV, titleTV, GenderTV, ageTV, emplyDateTV, salaryTV, emplymentStatusTV, totalAdvance, totalSalary, PaymentTitle;
     private CircularImageView ProfilePic, dProfilePic;
     private RecyclerView paymentsRV;
 
-    private Dialog EmployeeDialog, advanceDialog;
-    private ImageView CloseBillDialog, CloseAdvDialog;
+    private Dialog EmployeeDialog, advanceDialog, suspendDialog;
+    private ImageView CloseBillDialog, CloseAdvDialog, ClosessDialog;
     private RadioButton maleRB, femaleRB;
-    private Button AdvSaveBtn, SaveBtn;
-    private TextView name, dateOfEmployment, advDateTV, dobTV;
+    private Button AdvSaveBtn, SaveBtn, SaveSusBtn;
+    private TextView name, dateOfEmployment, advDateTV, dobTV, susDateTV;
     private EditText PhoneNo,
-            advAmtET, advReasonET, advDateEt;
+            advAmtET, advReasonET, susReasonET;
     private EditText eSalary, jobDesc;
     private String AdminEmail, AdminPassword;
     private Spinner departmentSpiner;
@@ -106,6 +109,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
     final int DOB_DATE = 0;
     final int DOE_DATE = 1;
     final int DOA_DATE = 2;
+    final int SUS_DATE = 3;
     private int dateFor = 0;
     FirebaseUser user;
     private String Username;
@@ -124,7 +128,14 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
 
+        calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH) + 1;
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        todate = day + "/" + month + "/" + year;
+
         back_arrow = findViewById(R.id.back_arrow);
+        menuBtn = findViewById(R.id.menuBtn);
         editEmBtn = findViewById(R.id.editEmBtn);
         nameTV = findViewById(R.id.nameTV);
         titleTV = findViewById(R.id.titleTV);
@@ -142,6 +153,65 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         paymentsRV.smoothScrollToPosition(0);
 
 
+        suspendDialog = new Dialog(this);
+        suspendDialog.setCanceledOnTouchOutside(false);
+        suspendDialog.setContentView(R.layout.employee_change_status_dialog);
+        suspendDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        ClosessDialog = suspendDialog.findViewById(R.id.ClosessDialog);
+        susReasonET = suspendDialog.findViewById(R.id.susReasonET);
+        susDateTV = suspendDialog.findViewById(R.id.susDateTV);
+        susDateTV.setText(todate);
+        SaveSusBtn = suspendDialog.findViewById(R.id.SaveSusBtn);
+
+
+        ClosessDialog.setOnClickListener(view -> {
+            suspendDialog.dismiss();
+        });
+        SaveSusBtn.setOnClickListener(view -> {
+            String rsn = susReasonET.getText().toString().trim();
+            if(rsn.length()<3){
+                susReasonET.setError("Enter Valid Reason");
+                susReasonET.requestFocus();
+            }else {
+                String sDate = susDateTV.getText().toString().trim();
+                new SweetAlertDialog(EmployeeManActivity.this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Suspend Employee?")
+                        .setContentText("Are you sure")
+                        .setConfirmText("Yes!")
+                        .showCancelButton(true)
+                        .setCancelText("Cancel")
+                        .setCancelClickListener(sweetAlertDialog -> {
+                            sweetAlertDialog.dismiss();
+                        })
+                        .setConfirmClickListener(sDialog -> {
+                            int index = employee.getIdex(employees, employee.getId());
+                            employee.setActive(false);
+                            employee.setStatusReason(rsn);
+                            employee.setStatus("Inactive");
+                            employee.setTerminationDate(sDate);
+                            employees.set(index, employee);
+                            db.saveEmployees(employees);
+
+                            sDialog
+                                    .setTitleText("Suspended!")
+                                    .setContentText("Employee Suspended!")
+                                    .setConfirmText("OK")
+                                    .showCancelButton(false)
+                                    .setConfirmClickListener(sweetAlertDialog -> {
+                                        suspendDialog.dismiss();
+                                        sweetAlertDialog.dismiss();
+                                        finish();
+                                    })
+                                    .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                        })
+                        .show();
+            }
+
+
+
+
+        });
+
         advanceDialog = new Dialog(this);
         advanceDialog.setCanceledOnTouchOutside(false);
         advanceDialog.setContentView(R.layout.give_advance_dialog);
@@ -156,11 +226,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
         totalAdvance = advanceDialog.findViewById(R.id.totalAdvance);
         totalSalary = advanceDialog.findViewById(R.id.totalSalary);
 
-        calendar = Calendar.getInstance();
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH) + 1;
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        todate = day + "/" + month + "/" + year;
+
 
         advDateTV.setText(todate);
 
@@ -170,6 +236,11 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
 
         advDateTV.setOnClickListener(v -> {
             dateFor = DOA_DATE;
+            showDialog(999);
+        });
+
+        susDateTV.setOnClickListener(v -> {
+            dateFor = SUS_DATE;
             showDialog(999);
         });
 
@@ -217,6 +288,88 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
             finish();
         });
 
+        menuBtn.setOnClickListener((view) -> {
+            //Creating the instance of PopupMenu
+            PopupMenu popup = new PopupMenu(this, menuBtn);
+            //Inflating the Popup using xml file
+            popup.getMenuInflater().inflate(R.menu.employee_options, popup.getMenu());
+
+            //registering popup with OnMenuItemClickListener
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getItemId() == R.id.resume) {
+                        new SweetAlertDialog(EmployeeManActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Activate Employee?")
+                                .setContentText("Are you sure")
+                                .setConfirmText("Yes!")
+                                .showCancelButton(true)
+                                .setCancelText("Cancel")
+                                .setCancelClickListener(sweetAlertDialog -> {
+                                    sweetAlertDialog.dismiss();
+                                })
+                                .setConfirmClickListener(sDialog -> {
+                                    int index = employee.getIdex(employees, employee.getId());
+                                    employee.setActive(true);
+                                    employee.setStatusReason("");
+                                    employee.setStatus("Active");
+                                    employee.setTerminationDate("");
+                                    employees.set(index, employee);
+                                    db.saveEmployees(employees);
+
+                                    sDialog
+                                            .setTitleText("Activated!")
+                                            .setContentText("Employee Activated!")
+                                            .setConfirmText("OK")
+                                            .showCancelButton(false)
+                                            .setConfirmClickListener(sweetAlertDialog -> {
+                                                sweetAlertDialog.dismiss();
+                                                finish();
+                                            })
+                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                })
+                                .show();
+                    } else if (item.getItemId() == R.id.suspend) {
+                        susReasonET.setText("");
+                        suspendDialog.show();
+                    } else if (item.getItemId() == R.id.delete) {
+                        new SweetAlertDialog(EmployeeManActivity.this, SweetAlertDialog.WARNING_TYPE)
+                                .setTitleText("Are you sure?")
+                                .setContentText("Won't be able to recover this file!")
+                                .setConfirmText("delete!")
+                                .showCancelButton(true)
+                                .setCancelText("Cancel")
+                                .setCancelClickListener(sweetAlertDialog -> {
+                                    sweetAlertDialog.dismiss();
+                                })
+                                .setConfirmClickListener(sDialog -> {
+                                    int index = employee.getIdex(employees, employee.getId());
+                                    employees.remove(index);
+                                    db.saveEmployees(employees);
+
+                                    sDialog
+                                            .setTitleText("Deleted!")
+                                            .setContentText("Employee file has been deleted!")
+                                            .setConfirmText("OK")
+                                            .showCancelButton(false)
+                                            .setConfirmClickListener(sweetAlertDialog -> {
+                                                sweetAlertDialog.dismiss();
+                                                finish();
+                                            })
+                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                })
+                                .show();
+
+
+                    } else {
+                        Toast.makeText(EmployeeManActivity.this, "Coming soon: " + item.getTitle(), Toast.LENGTH_SHORT).show();
+
+                    }
+                    return true;
+                }
+            });
+
+            popup.show();//showing popup menu
+        });
         editEmBtn.setOnClickListener((view) -> {
             populateEMployeeUI();
         });
@@ -299,9 +452,9 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                     dQuestion = "Are you sure you want to give advance of Ksh. " + amt + " to " + employee.getName() + "?";
                 } else {
                     type = "S";
-                    if(amt + initialAdvTotal < employee.getSalary()){
+                    if (amt + initialAdvTotal < employee.getSalary()) {
                         currentAdv = 0;
-                    }else {
+                    } else {
                         currentAdv = amt + initialAdvTotal - employee.getSalary();
                     }
 
@@ -686,6 +839,9 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
                             break;
                         case DOE_DATE:
                             dateOfEmployment.setText(DateDisplaying);
+                            break;
+                        case SUS_DATE:
+                            susDateTV.setText(DateDisplaying);
                             break;
                     }
 
