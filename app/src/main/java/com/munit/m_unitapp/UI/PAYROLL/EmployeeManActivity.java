@@ -690,6 +690,7 @@ public class EmployeeManActivity extends AppCompatActivity implements EasyPermis
 
         // Read from the database
         myRef = database.getReference("employees");
+        myRef.keepSynced(true);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

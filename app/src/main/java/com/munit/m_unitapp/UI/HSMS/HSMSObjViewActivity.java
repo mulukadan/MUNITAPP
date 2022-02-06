@@ -15,10 +15,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.munit.m_unitapp.MODELS.HSMSObject;
 import com.munit.m_unitapp.R;
 
@@ -229,6 +229,7 @@ public class HSMSObjViewActivity extends AppCompatActivity {
         sdialog.showCancelButton(false);
 //        HSMSObjs.add(hsmsObject);
         myRef = database.getReference("depts/hsms/clients");
+        myRef.keepSynced(true);
         myRef.setValue(HSMSObjs);
         sdialog.dismiss();
     }

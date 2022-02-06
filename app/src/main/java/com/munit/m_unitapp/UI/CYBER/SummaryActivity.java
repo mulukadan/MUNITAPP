@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.eftimoff.viewpagertransformers.CubeOutTransformer;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.munit.m_unitapp.ADAPTERS.AllDailySalesAdapter;
 import com.munit.m_unitapp.ADAPTERS.WeeklySalesFragAdapter;
@@ -75,7 +76,10 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         sweetAlertDialog.setTitleText("Fetching Data....");
         sweetAlertDialog.setCancelable(false);
         firedb = FirebaseFirestore.getInstance();
-
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        firedb.setFirestoreSettings(settings);
 
         back_arrow = findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener((view) -> {

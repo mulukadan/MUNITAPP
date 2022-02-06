@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.gson.Gson;
@@ -89,7 +90,6 @@ public class PoolTableActivity extends AppCompatActivity {
     FirebaseFirestore firedb;
 
     FirebaseDatabase database;
-    DatabaseReference myRef;
     FirebaseUser user;
     private Calendar calendar;
     private int year, month, day;
@@ -117,6 +117,10 @@ public class PoolTableActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         firedb = FirebaseFirestore.getInstance();
 
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        firedb.setFirestoreSettings(settings);
         getSupportActionBar().hide();
 
         Gson gson = new Gson();

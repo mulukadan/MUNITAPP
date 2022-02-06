@@ -314,6 +314,7 @@ public class EmployeesListActivity extends AppCompatActivity implements EasyPerm
 
         // Read from the database
         myRef = database.getReference("employees");
+        myRef.keepSynced(true);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

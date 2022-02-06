@@ -312,7 +312,7 @@ public class ViewUserActivity extends AppCompatActivity {
         pDialog.show();
 
         myRef = database.getReference("users");
-
+        myRef.keepSynced(true);
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

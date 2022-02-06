@@ -384,6 +384,7 @@ public class PoolHomeActivity extends AppCompatActivity {
         String newDateFormt = Year + "-" + Month + "-" + day;
         String path = "depts/pool/collections/" + newDateFormt;
         myRef = database.getReference(path);
+        myRef.keepSynced(true);
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

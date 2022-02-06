@@ -22,6 +22,7 @@ public class firebase {
     public firebase() {
         database = FirebaseDatabase.getInstance();
         salesCategoriesPath = "depts/sales/categories";
+
     }
 
     public String getSalesCategoriesPath() {
@@ -56,6 +57,7 @@ public class firebase {
         String newDateFormt = Year + "-" + Month + "-" + day;
         String path = "depts/sales/dailysales/" + userId + "/" + newDateFormt;
         myRef = database.getReference(path);
+        myRef.keepSynced(true);
         myRef.setValue(dailySales);
     }
 
@@ -74,23 +76,28 @@ public class firebase {
         String newDateFormt = Year + "-" + Month + "-" + day;
         String path = "depts/pool/collections/" + newDateFormt;
         myRef = database.getReference(path);
+        myRef.keepSynced(true);
         myRef.setValue(record);
     }
 
     public void saveUsers(List<User> users) {
         myRef = database.getReference("users");
+        myRef.keepSynced(true);
         myRef.setValue(users);
     }
     public void savePoolTables(List<PoolTable> poolTables) {
         myRef = database.getReference("depts/pool/pooltables");
+        myRef.keepSynced(true);
         myRef.setValue(poolTables);
     }
     public void savePoolTable(PoolTable poolTables) {
         myRef = database.getReference("depts/pool/pooltables");
+        myRef.keepSynced(true);
         myRef.child(String.valueOf(poolTables.getId())).setValue(poolTables);
     }
     public void saveEmployees(List<Employee> employees) {
         myRef = database.getReference("employees");
+        myRef.keepSynced(true);
         myRef.setValue(employees);
     }
 
@@ -123,6 +130,7 @@ public class firebase {
         String newDateFormt = Year + "-" + Month + "-" + day;
         String path = "depts/pool/" + newDateFormt;
         myRef = database.getReference(path);
+        myRef.keepSynced(true);
 //        myRef = database.getReference("msg");
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
@@ -165,6 +173,7 @@ public class firebase {
         String newDateFormt = Year + "-" + Month + "-" + day;
         String path = "depts/sales/dailysales/" + userId + "/" + newDateFormt;
         myRef = database.getReference(path);
+        myRef.keepSynced(true);
 //        myRef = database.getReference("msg");
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {

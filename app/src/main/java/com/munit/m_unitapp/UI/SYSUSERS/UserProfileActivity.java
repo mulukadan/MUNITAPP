@@ -368,6 +368,7 @@ public class UserProfileActivity extends AppCompatActivity implements EasyPermis
         pDialog.show();
 
         myRef = database.getReference( "users");
+        myRef.keepSynced(true);
 
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {

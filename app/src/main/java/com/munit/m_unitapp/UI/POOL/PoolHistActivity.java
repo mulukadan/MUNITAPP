@@ -114,6 +114,7 @@ public class PoolHistActivity extends AppCompatActivity {
     public void fetchData() {
         pDialog.show();
         myRef = database.getReference("depts/pool/collections");
+        myRef.keepSynced(true);
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

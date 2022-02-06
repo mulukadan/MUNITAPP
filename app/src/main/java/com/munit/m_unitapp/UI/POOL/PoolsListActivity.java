@@ -195,6 +195,7 @@ public class PoolsListActivity extends AppCompatActivity {
 
         // Read from the database
         myRef = database.getReference("depts/pool/pooltables");
+        myRef.keepSynced(true);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

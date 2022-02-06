@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.PoolRecordNew;
 import com.munit.m_unitapp.TOOLS.Constants;
@@ -18,6 +19,10 @@ public class Firestore {
     public Firestore(Context mcontext) {
         firedb = FirebaseFirestore.getInstance();
         this.mcontext = mcontext;
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        firedb.setFirestoreSettings(settings);
     }
 
     public void addDailySale(DailySales dailySales) {
