@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -62,6 +63,8 @@ public class PoolSummaryActivity extends AppCompatActivity {
     private TextView listViewBtn, chartViewBtn;
     private TextView yearlyBtn, monthlyBtn, dailyBtn;
     private ScrollView scroll;
+    private CheckBox groupCheckBox;
+
 
     SweetAlertDialog pDialog;
     FirebaseFirestore firedb;
@@ -113,6 +116,7 @@ public class PoolSummaryActivity extends AppCompatActivity {
         ek1Btn = findViewById(R.id.ek1Btn);
         kv1Btn = findViewById(R.id.kv1Btn);
         allBtn = findViewById(R.id.allBtn);
+        groupCheckBox = findViewById(R.id.groupCheckBox);
 
         ek1Btn.setBackgroundResource(R.color.colorPrimary);
         kv1Btn.setBackgroundResource(R.color.gray_btn_bg_color);
@@ -172,6 +176,7 @@ public class PoolSummaryActivity extends AppCompatActivity {
         monthlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
         dailyBtn.setOnClickListener(v -> {
             pDialog.show();
+            groupCheckBox.setVisibility(View.VISIBLE);
             showingDataFor = DAILY_DATA;
             fetchPoolRecords();
             yearlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
@@ -180,6 +185,7 @@ public class PoolSummaryActivity extends AppCompatActivity {
         });
         yearlyBtn.setOnClickListener(v -> {
             pDialog.show();
+            groupCheckBox.setVisibility(View.GONE);
             showingDataFor = YEARLY_DATA;
             fetchPoolRecords();
             yearlyBtn.setBackgroundResource(R.color.colorPrimary);
@@ -188,13 +194,16 @@ public class PoolSummaryActivity extends AppCompatActivity {
         });
         monthlyBtn.setOnClickListener(v -> {
             pDialog.show();
+            groupCheckBox.setVisibility(View.GONE);
             showingDataFor = MONTHLY_DATA;
             fetchPoolRecords();
             yearlyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             monthlyBtn.setBackgroundResource(R.color.colorPrimary);
             dailyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
         });
-
+        groupCheckBox.setOnCheckedChangeListener((compoundButton, b) -> {
+            fetchPoolRecords();
+        });
         chartViewBtn.setOnClickListener(v -> {
             chartViewLL.setVisibility(View.VISIBLE);
             listViewLL.setVisibility(View.GONE);
@@ -297,7 +306,7 @@ public class PoolSummaryActivity extends AppCompatActivity {
                 });
     }
 
- public void UpdateKiv(String key) {
+    public void UpdateKiv(String key) {
         pDialog.show();
         firedb.collection(Constants.poolRecordsPath)
                 .whereEqualTo("poolId", "1639402083")
@@ -309,7 +318,7 @@ public class PoolSummaryActivity extends AppCompatActivity {
 
                     if (e != null) {
                         pDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), "Error: "+ e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         return;
                     } else if (value.isEmpty()) {
 
@@ -339,12 +348,39 @@ public class PoolSummaryActivity extends AppCompatActivity {
         records2.addAll(records);
         switch (showingDataFor) {
             case DAILY_DATA:
-//                for (PoolRecordNew poolRecordNew : records) {
-////                    poolRecordNew.setUserName(sale.getDate());
-//                    DisplayingRecords.add(poolRecordNew);
-//                }
 
-                DisplayingRecords.addAll(records2);
+                if (groupCheckBox.isChecked()) {
+                    //Group records
+                    List<PoolRecordNew> records3 = new ArrayList<>();
+                    for (PoolRecordNew poolRecordNew : records2) {
+                        boolean found = false;
+                        for (PoolRecordNew recordNew : records3) {
+                            if (poolRecordNew.getDate().equals(recordNew.getDate())) {
+                                found = true;
+                                recordNew.setAmount(recordNew.getAmount() + poolRecordNew.getAmount());
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            poolRecordNew.setPoolName(poolRecordNew.getLocation());
+                            records3.add(poolRecordNew);
+                        }
+                    }
+                    DisplayingRecords.addAll(records3);
+                    if (locDataFor == All_DATA) {
+
+                        adapter.setShowName(true);
+                    } else {
+
+                        adapter.setShowName(false);
+                    }
+
+                } else {
+                    //Display records individually
+                    adapter.setShowName(true);
+                    DisplayingRecords.addAll(records2);
+                }
+
                 break;
 
             case MONTHLY_DATA:
@@ -364,6 +400,7 @@ public class PoolSummaryActivity extends AppCompatActivity {
                     }
 
                 }
+                adapter.setShowName(false);
                 break;
 
             case YEARLY_DATA:
@@ -383,6 +420,7 @@ public class PoolSummaryActivity extends AppCompatActivity {
                     }
 
                 }
+                adapter.setShowName(false);
                 break;
         }
 

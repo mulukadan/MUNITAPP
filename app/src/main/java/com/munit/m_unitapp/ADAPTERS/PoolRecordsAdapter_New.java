@@ -21,6 +21,7 @@ public class PoolRecordsAdapter_New extends RecyclerView.Adapter<PoolRecordsAdap
     private LayoutInflater inflator;
     private List<PoolRecordNew> data = Collections.emptyList();
     private Context mContext;
+    private boolean showName = true;
 
 //    FirebaseService db = new FirebaseService();
 
@@ -41,16 +42,15 @@ public class PoolRecordsAdapter_New extends RecyclerView.Adapter<PoolRecordsAdap
 
     @Override
     public void onBindViewHolder(myViewHolder holder, int position) {
-
         PoolRecordNew current = data.get(position);
         holder.nameTV.setText(current.getPoolName());
         holder.Date.setText(current.getDate());
         holder.Total.setText(currencyFormatter(current.getAmount()));
 
-        if(!current.getDate().contains("/")){
-            holder.nameTV.setVisibility(View.GONE);
-        }else {
+        if(showName){
             holder.nameTV.setVisibility(View.VISIBLE);
+        }else {
+            holder.nameTV.setVisibility(View.GONE);
         }
     }
 
@@ -94,4 +94,11 @@ public class PoolRecordsAdapter_New extends RecyclerView.Adapter<PoolRecordsAdap
         return String.format("%,.2f", amount);
     }
 
+    public boolean isShowName() {
+        return showName;
+    }
+
+    public void setShowName(boolean showName) {
+        this.showName = showName;
+    }
 }

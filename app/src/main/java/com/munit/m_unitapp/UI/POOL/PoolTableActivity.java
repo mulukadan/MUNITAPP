@@ -100,6 +100,7 @@ public class PoolTableActivity extends AppCompatActivity {
     List<PoolRecordNew> records = new ArrayList<>();
     List<PoolRecordNew> DisplayingRecords = new ArrayList<>();
     int poolReturns = 0;
+    private  boolean showName = true;
 
 
     final int DAILY_DATA = 0;

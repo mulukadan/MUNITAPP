@@ -156,11 +156,12 @@
                 android:orientation="horizontal"
                 android:padding="3dp">
 
-                <TextView
+                <CheckBox
+                    android:id="@+id/groupCheckBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:text="View:" />
+                    android:text="Group:" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
