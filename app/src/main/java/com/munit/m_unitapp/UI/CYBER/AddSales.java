@@ -325,7 +325,8 @@ public class AddSales extends AppCompatActivity {
                 }
                 dailySales.setUserId(USERID);
                 dailySales.setDate(DateDisplaying);
-                dailySales.setYear_week(year +""+ new GeneralMethods().getWeekNumber(DateDisplaying));
+                int weekNo = new GeneralMethods().getWeekNumber(DateDisplaying);
+                dailySales.setYear_week(year +""+weekNo);
                 dailySales.setYear_month(new GeneralMethods().getDateParts(DateDisplaying,"yy")+new GeneralMethods().getDateParts(DateDisplaying, "MM"));
                 dailySales.setYear(new GeneralMethods().getDateParts(DateDisplaying,"yy"));
                 dailySales.setUserName(dbuser.getName());

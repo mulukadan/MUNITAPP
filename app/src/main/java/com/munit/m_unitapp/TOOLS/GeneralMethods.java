@@ -66,11 +66,13 @@ public class GeneralMethods {
     public int getWeekNumber(String sDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
+        cal.setMinimalDaysInFirstWeek(1);
         try {
             cal.setTime(sdf.parse(sDate));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         int number = cal.get(Calendar.WEEK_OF_YEAR);
         if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
             number = number-1;

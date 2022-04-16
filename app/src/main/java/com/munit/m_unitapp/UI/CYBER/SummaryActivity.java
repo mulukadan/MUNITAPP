@@ -500,6 +500,7 @@ public class SummaryActivity extends AppCompatActivity implements AllDailySalesA
         weekDates = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
+        cal.setMinimalDaysInFirstWeek(1);
         cal.set(Calendar.YEAR, currentDisplayedYear);
         cal.set(Calendar.WEEK_OF_YEAR, weekNo);
         for (int i = 2; i < 8; i++) {

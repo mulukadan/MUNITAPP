@@ -1,12 +1,6 @@
 package com.munit.m_unitapp.UI.POOL;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -15,6 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
@@ -25,7 +23,6 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -34,7 +31,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.munit.m_unitapp.ADAPTERS.PoolRecordsAdapter_New;
 import com.munit.m_unitapp.DB.Firestore;
 import com.munit.m_unitapp.DB.firebase;
-import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.PoolRecordNew;
 import com.munit.m_unitapp.MODELS.User;
 import com.munit.m_unitapp.R;
@@ -44,7 +40,6 @@ import com.munit.m_unitapp.TOOLS.GeneralMethods;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +60,6 @@ public class PoolSummaryActivity extends AppCompatActivity {
     private ScrollView scroll;
     private CheckBox groupCheckBox;
 
-
     SweetAlertDialog pDialog;
     FirebaseFirestore firedb;
 
@@ -74,13 +68,11 @@ public class PoolSummaryActivity extends AppCompatActivity {
     private Calendar calendar;
     private int year, month, day;
     String todate, DateDisplaying;
-
     private Date todateDate;
 
     List<PoolRecordNew> records = new ArrayList<>();
     List<PoolRecordNew> DisplayingRecords = new ArrayList<>();
     int poolReturns = 0;
-
 
     final int EK_DATA = 0;
     final int KV_DATA = 1;
@@ -223,7 +215,6 @@ public class PoolSummaryActivity extends AppCompatActivity {
             chartViewBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             listViewBtn.setBackgroundResource(R.color.colorPrimary);
         });
-
 //        updateUi();
         fetchPoolRecords();
     }
@@ -470,7 +461,6 @@ public class PoolSummaryActivity extends AppCompatActivity {
         chart.setData(data);
         chart.animateXY(2000, 2000);
         chart.invalidate();
-
     }
 
     public String shortenForChart(String title) {
@@ -510,11 +500,9 @@ public class PoolSummaryActivity extends AppCompatActivity {
         if (title.contains("Dec")) {
             return "Dec";
         }
-
         title = title.replace("Week", "wk");
         title = title.replace("Last", "L.");
         title = title.replace("but", "bt");
-
         return title;
     }
 }
