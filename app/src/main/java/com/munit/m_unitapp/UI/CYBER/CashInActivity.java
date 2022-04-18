@@ -97,6 +97,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     int showingDataFor = DAILY_DATA;
     int pos = 0;
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -308,6 +309,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void computeUserSales(List<DailySales> allweeklySales) {
         userSales.clear();
         switch (showingDataFor) {
@@ -330,6 +332,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                             dailySales.setCashPayment(dailySales.getCashPayment() + sale.getCashPayment());
                             dailySales.setTotal(dailySales.getTotal() + sale.getTotal());
                             dailySales.setCount(dailySales.getCount() + sale.getCount());
+                            dailySales.setDate(sale.getDate());
                             found = true;
                             break;
                         }
@@ -347,6 +350,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                         sale.setUserName(weekTitle);
                         userSales.add(sale);
                     }
+
                 }
                 break;
             case MONTHLY_DATA:
@@ -375,7 +379,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                 }
                 break;
         }
-
+//        userSales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
         allDailySalesAdapter.notifyDataSetChanged();
         usersNamesAdapter.notifyDataSetChanged();
         populateChart(userSales);
@@ -393,6 +397,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         myRef = database.getReference("users");
         myRef.keepSynced(true);
         myRef.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 users.clear();

@@ -35,15 +35,16 @@
                     android:text="CASH IN"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
+
                 <Button
                     android:id="@+id/summaryBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#4CAF50"
                     android:layout_alignParentEnd="true"
                     android:layout_marginRight="5dp"
+                    android:background="#4CAF50"
                     android:text="Summary"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#263238" />
             </RelativeLayout>
 
             <LinearLayout

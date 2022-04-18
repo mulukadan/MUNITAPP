@@ -161,23 +161,23 @@
                                     android:clickable="true"
                                     android:background="?android:attr/selectableItemBackground"
                                     android:padding="10dp">
+
                                     <ImageView
                                         android:id="@+id/cashinIcon"
                                         android:layout_width="60dp"
                                         android:layout_height="60dp"
-                                        android:src="@drawable/cashin"
                                         android:layout_centerHorizontal="true"
-                                        />
+                                        android:src="@drawable/cashin" />
+
                                     <TextView
-                                        android:layout_alignParentBottom="true"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Sales"
-                                        android:textAlignment="center"
-                                        android:textSize="18dp"
-                                        android:textColor="@color/colorPrimary"
+                                        android:layout_alignParentBottom="true"
                                         android:fontFamily="@font/bold"
-                                        />
+                                        android:text="Cyber Cafe"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorPrimary"
+                                        android:textSize="18dp" />
 
 
                                 </RelativeLayout>
@@ -204,47 +204,28 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:clickable="true"
+                                    android:background="?android:attr/selectableItemBackground"
 
                                     android:padding="10dp">
+
                                     <ImageView
                                         android:id="@+id/cashOut"
-                                        android:layout_width="60dp"
-                                        android:layout_height="60dp"
-                                        android:src="@drawable/cashout"
+                                        android:layout_width="80dp"
+                                        android:layout_height="80dp"
                                         android:layout_centerHorizontal="true"
-                                        />
+                                        android:src="@drawable/car_wash_logo" />
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_below="@+id/cashOut"
-                                        android:text="Expense"
-                                        android:textAlignment="center"
-                                        android:textSize="18dp"
-                                        android:textColor="@color/Red"
-                                        android:fontFamily="@font/bold"
-                                        />
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
                                         android:layout_alignParentBottom="true"
-                                        android:weightSum="10"
-                                        android:orientation="horizontal">
-                                        <ImageView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="5"
-                                            android:layout_marginRight="5dp"
-                                            android:background="?android:attr/selectableItemBackground"
-                                            android:src="@drawable/add"/>
-                                        <ImageView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="5"
-                                            android:layout_marginLeft="5dp"
-                                            android:background="?android:attr/selectableItemBackground"
-                                            android:src="@drawable/eye"/>
+                                        android:fontFamily="@font/bold"
+                                        android:text="Car Wash"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/colorPrimary"
+                                        android:textSize="18dp" />
 
-                                    </LinearLayout>
+
                                 </RelativeLayout>
                             </androidx.cardview.widget.CardView>
 
