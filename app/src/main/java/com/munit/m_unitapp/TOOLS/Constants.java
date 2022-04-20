@@ -5,6 +5,10 @@ public class Constants {
 //    public static String dailySalesPath = "dailysales";// Test
     public static String dailySalesPath = "dailysaleslv"; // Live
 
+//    Carwash
+    public static String carWashRecPath = "car_wash_rec_test";// Test
+//    public static String carWashRecPath = "car_wash_rec_live"; // Live
+
 
     //Pool Table Records
     public static String poolRecordsPath = "pool_records_test";// Test

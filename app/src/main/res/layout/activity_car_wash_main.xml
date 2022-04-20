@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:fab="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".UI.CARWASH.CarWashMainActivity">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary">
+            <ImageView
+                android:id="@+id/back_arrow"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/arrow_back" />
+
+            <TextView
+                android:id="@+id/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/bold"
+                android:text="ACTIVITIES"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/summaryBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="5dp"
+                android:background="#4CAF50"
+                android:text="Summary"
+                android:textColor="#263238" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                app:cardCornerRadius="10dp"
+                android:visibility="gone"
+                app:cardElevation="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/daysDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/bold"
+                        android:text="Today Sales"
+                        android:textAlignment="center"
+                        android:textSize="14dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingVertical="5dp"
+                            android:background="#FF5722"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textAlignment="center"
+                                android:text="Comp Service" />
+                            <TextView
+                                android:id="@+id/compServTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textColor="#000000"
+                                android:textAlignment="center"
+                                android:text="Ksh. 00" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingVertical="5dp"
+                            android:background="#FFC107"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textAlignment="center"
+                                android:text="Comp Sales" />
+
+                            <TextView
+                                android:id="@+id/compSalesTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textColor="#000000"
+                                android:textAlignment="center"
+                                android:text="Ksh. 00" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingVertical="5dp"
+                            android:background="#9C27B0"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textAlignment="center"
+                                android:text="Games" />
+
+                            <TextView
+                                android:id="@+id/GamesTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textColor="#000000"
+                                android:textAlignment="center"
+                                android:text="Ksh. 00" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingVertical="5dp"
+                            android:background="#E91E63"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textAlignment="center"
+                                android:text="Movies" />
+
+                            <TextView
+                                android:id="@+id/moviesTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textColor="#000000"
+                                android:textAlignment="center"
+                                android:text="Ksh. 00" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingVertical="5dp"
+                            android:background="#09C3B1"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textAlignment="center"
+                                android:text="Mpesa" />
+                            <TextView
+                                android:id="@+id/mpesaTillTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textColor="#000000"
+                                android:textAlignment="center"
+                                android:text="Ksh. 00" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:layout_marginHorizontal="5dp"
+                            android:paddingVertical="5dp"
+                            android:background="#CDDC39"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textAlignment="center"
+                                android:text="Cash" />
+                            <TextView
+                                android:id="@+id/cashTV"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="5"
+                                android:textColor="#000000"
+                                android:textAlignment="center"
+                                android:text="Ksh. 00" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:paddingVertical="5dp"
+                        android:background="#1F736B"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:textAlignment="center"
+                            android:text="TOTAL" />
+
+                        <TextView
+                            android:id="@+id/totalPayTV"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:textColor="#000000"
+                            android:textAlignment="center"
+                            android:text="Ksh. 00" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:elevation="10dp"
+                app:cardCornerRadius="5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="9">
+
+                    <TextView
+                        android:id="@+id/motorbksBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="MotorBikes"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/carsBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="Cars"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                    <TextView
+                        android:id="@+id/trucksBtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/colorPrimary"
+                        android:padding="5dp"
+                        android:text="Trucks"
+                        android:textAlignment="center"
+                        android:textColor="#000000" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:id="@+id/listViewLL"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="#2196F3"
+                    android:orientation="horizontal"
+                    android:padding="2dp"
+                    android:weightSum="6">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/medium"
+                        android:text="Reg. No"
+                        android:textColor="@color/white"
+                        android:textSize="15dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:fontFamily="@font/medium"
+                        android:text="By."
+                        android:textColor="@color/white"
+                        android:textAlignment="viewEnd"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/medium"
+                        android:text="Amount"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/medium"
+                        android:text="Paid"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/white"
+                        android:textSize="12dp" />
+
+
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/activityRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="10dp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/chartViewLL"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
+
+<com.github.clans.fab.FloatingActionMenu
+    android:id="@+id/fab"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom|right"
+    android:layout_marginRight="8dp"
+    android:layout_marginBottom="8dp"
+    app:fab_colorNormal="#F11B1B"
+    app:menu_backgroundColor="@android:color/transparent"
+    app:menu_fab_label=""
+    app:menu_labels_colorNormal="@color/colorPrimary"
+    app:menu_labels_textColor="@color/white"
+    app:menu_openDirection="up"
+    app:menu_showShadow="true"
+    fab:menu_fab_size="normal">
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/addSaleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/add"
+        app:fab_colorNormal="#4CAF50"
+        app:fab_label="Add Sales"
+        app:fab_size="mini" />
+
+
+</com.github.clans.fab.FloatingActionMenu>
+</FrameLayout>

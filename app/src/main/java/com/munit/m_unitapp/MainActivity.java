@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.UI.CARWASH.CarWashMainActivity;
 import com.munit.m_unitapp.UI.CYBER.CashInActivity;
 import com.munit.m_unitapp.UI.HSMS.HSMSActivationActivity;
 import com.munit.m_unitapp.UI.PAYROLL.PayrollActivity;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem payrollItem;
     Calendar c = Calendar.getInstance();
 
-    private RelativeLayout sales,pool, logo, newsPapers, expense;
+    private RelativeLayout sales,pool, logo, newsPapers, carwash;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,11 +146,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        expense = findViewById(R.id.expense);
-        expense.setOnClickListener((view) -> {
-//            Intent intent = new Intent(MainActivity.this, CashInActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            startActivity(intent);
+        carwash = findViewById(R.id.carwash);
+        carwash.setOnClickListener((view) -> {
+            Intent intent = new Intent(MainActivity.this, CarWashMainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
 
         });
 

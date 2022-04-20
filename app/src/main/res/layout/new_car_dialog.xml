@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/CloseAdvDialog"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="7dp"
+        android:background="@drawable/ic_close_black_24dp"
+        android:elevation="5dp" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="15dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/PaymentTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:fontFamily="@font/bold"
+                    android:text="Customer Information"
+                    android:textAlignment="center"
+                    android:textAllCaps="true"
+                    android:textColor="#4CAF50"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10"
+
+                        >
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="8"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/bold"
+                                    android:text="User: "
+                                    android:textSize="15dp" />
+
+                                <TextView
+                                    android:id="@+id/usernameTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/bold"
+                                    android:text="XXX XXXX"
+                                    android:textSize="15dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/bold"
+                                    android:text="Date: "
+                                    android:textSize="15dp" />
+
+                                <TextView
+                                    android:id="@+id/daysDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/bold"
+                                    android:text="08/11/2019"
+                                    android:textSize="15dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <RelativeLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="2">
+
+                            <ImageView
+                                android:id="@+id/dateIcon"
+                                android:layout_width="50dp"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/calender" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <RadioGroup
+                    android:id="@+id/radioGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/bold"
+                        android:text="Type"
+                        android:textColor="#000000"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/rBike"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Motorbike"
+                       />
+
+                    <RadioButton
+                        android:id="@+id/rCar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Car"
+                       />
+
+                    <RadioButton
+                        android:id="@+id/rTruck"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Truck/Tractor"
+                       />
+
+                    <RadioButton
+                        android:id="@+id/rOther"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="Other"
+                        />
+                </RadioGroup>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp">
+
+                    <EditText
+                        android:id="@+id/regNoET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/medium"
+                        android:hint="Number Plate"
+                        android:paddingLeft="20dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Attendant" />
+
+                    <Spinner
+                        android:id="@+id/attendantSpner"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="Amount to be paid"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="15dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp">
+
+                    <EditText
+                        android:id="@+id/toPayAmtET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/medium"
+                        android:hint="Amount"
+                        android:inputType="number"
+                        android:paddingLeft="20dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp">
+
+                    <EditText
+                        android:id="@+id/serviceDescET"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/medium"
+                        android:hint="Description (optional)"
+                        android:paddingLeft="20dp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/SaveBtn"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/primary_button_bk"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:text="Ok"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+        </ScrollView>
+
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
