@@ -63,6 +63,7 @@ public class GeneralMethods {
         }
         return null;
     }
+
     public int getWeekNumber(String sDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
@@ -74,26 +75,26 @@ public class GeneralMethods {
         }
 
         int number = cal.get(Calendar.WEEK_OF_YEAR);
-        if(cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-            number = number-1;
+        if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            number = number - 1;
         }
         return number;
     }
 
-    public String getDateParts(String sDate, String getWhat){
-       if(getWhat.equalsIgnoreCase("dd")){
-           return sDate.substring(0,sDate.indexOf("/"));
-       }else if(getWhat.equalsIgnoreCase("mm")){
-           return sDate.substring(sDate.indexOf("/")+1, sDate.lastIndexOf("/"));
-       }else {
-           return sDate.substring(sDate.lastIndexOf("/")+1);
-       }
+    public String getDateParts(String sDate, String getWhat) {
+        if (getWhat.equalsIgnoreCase("dd")) {
+            return sDate.substring(0, sDate.indexOf("/"));
+        } else if (getWhat.equalsIgnoreCase("mm")) {
+            return sDate.substring(sDate.indexOf("/") + 1, sDate.lastIndexOf("/"));
+        } else {
+            return sDate.substring(sDate.lastIndexOf("/") + 1);
+        }
 
     }
 
-    public String getMonthName(int monthNumber){
-        String monthName ;
-        switch(monthNumber){
+    public String getMonthName(int monthNumber) {
+        String monthName;
+        switch (monthNumber) {
             case 1:
                 monthName = "January";
                 break;
@@ -144,5 +145,27 @@ public class GeneralMethods {
         long diffDays = diff / (24 * 60 * 60 * 1000) + 1;
         daysdiff = (int) diffDays;
         return daysdiff;
+    }
+
+    public static int getCarwashCommission(int amount) {
+        int commission = 0;
+
+        if (amount < 35) {
+            commission = 0;
+        } else if (amount < 51) {
+            commission = 20;
+        } else if (amount < 101) {
+            commission = 30;
+        } else if (amount < 201) {
+            commission = 50;
+        } else if (amount < 301) {
+            commission = 70;
+        } else if (amount < 401) {
+            commission = 100;
+        } else if (amount < 501) {
+            commission = 130;
+        }
+        return commission;
+
     }
 }

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
+    android:layout_marginHorizontal="5dp"
     android:gravity="center">
 
     <ImageView
@@ -61,9 +60,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="10"
-
                         >
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -138,7 +135,7 @@
 
                 <RadioGroup
                     android:id="@+id/radioGroup"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="20dp">
 
@@ -149,39 +146,61 @@
                         android:text="Type"
                         android:textColor="#000000"
                         />
-
-                    <RadioButton
-                        android:id="@+id/rBike"
-                        android:layout_width="fill_parent"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="Motorbike"
-                       />
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/rBike"
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:textSize="18dp"
+                            android:text="Motorbike"
+                            />
 
-                    <RadioButton
-                        android:id="@+id/rCar"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="false"
-                        android:text="Car"
-                       />
+                        <RadioButton
+                            android:id="@+id/rCar"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:textSize="18dp"
+                            android:text="Car"
+                            />
+                    </LinearLayout>
 
-                    <RadioButton
-                        android:id="@+id/rTruck"
-                        android:layout_width="fill_parent"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:checked="false"
-                        android:text="Truck/Tractor"
-                       />
+                        android:orientation="horizontal"
+                        android:layout_marginTop="5dp"
+                        >
+                        <RadioButton
+                            android:id="@+id/rTruck"
+                            android:layout_width="0dp"
+                            android:layout_weight="2"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:textSize="18dp"
+                            android:text="Truck/Tractor"
+                            />
 
-                    <RadioButton
-                        android:id="@+id/rOther"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="false"
-                        android:text="Other"
-                        />
+                        <RadioButton
+                            android:id="@+id/rOther"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:textSize="18dp"
+                            android:text="Other"
+                            />
+                    </LinearLayout>
+
+
                 </RadioGroup>
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -191,8 +210,11 @@
                         android:id="@+id/regNoET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/medium"
+                        android:fontFamily="@font/bold"
                         android:hint="Number Plate"
+                        android:textColor="#063171"
+                        android:textSize="20dp"
+                        android:textAlignment="center"
                         android:paddingLeft="20dp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -202,12 +224,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
+                    android:background="#D8D4D4"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textSize="15dp"
+                        android:textColor="#000000"
+                        android:fontFamily="@font/bold"
                         android:text="Attendant" />
 
                     <Spinner
