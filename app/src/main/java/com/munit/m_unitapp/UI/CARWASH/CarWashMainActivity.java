@@ -64,16 +64,16 @@ import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class CarWashMainActivity extends AppCompatActivity {
-    private ImageView back_arrow, CloseCommDialog;
+public class CarWashMainActivity extends AppCompatActivity implements CarwashDailyRecsAdapter.ClickListener {
+    private ImageView back_arrow, CloseCommDialog, ClosePDialog;
     private Calendar calendar;
     private int year, month, day;
     String todate;
     private LinearLayout labourLL;
     String DateDisplaying;
-    private TextView motorbksBtn, carsBtn, trucksBtn, mainDaysDate, overrallTotalTV, laborTotalTV, expenseTV, remTotalTV;
+    private TextView motorbksBtn, carsBtn, trucksBtn, mainDaysDate, overrallTotalTV, laborTotalTV, expenseTV, remTotalTV, pdVehicletypeTV, pdRegnoTV, pdAmountTV;
     User userdb;
-    private Dialog newCustomerDialog, commissionsDialog;
+    private Dialog newCustomerDialog, commissionsDialog, paymentDialog;
     private RecyclerView activityRV;
     private Spinner attendantSpner;
     private ArrayAdapter<String> attendantSpnerAdapter;
@@ -83,7 +83,7 @@ public class CarWashMainActivity extends AppCompatActivity {
     private ImageView CloseDialog, dateIcon, mainDateIcon;
     private RadioButton rBike, rCar, rTruck, rOther;
     private EditText toPayAmtET, regNoET, serviceDescET;
-    private Button SaveBtn;
+    private Button SaveBtn, pdSaveBtn;
     private CarwashDailyRecsAdapter carwashDailyRecsAdapter;
 
     FirebaseDatabase database;
@@ -104,6 +104,7 @@ public class CarWashMainActivity extends AppCompatActivity {
     private List<CarwashRec> records = new ArrayList<>();
     private List<CarwashAttentantTotal> attentatsTotals = new ArrayList<>();
     String selectedType = "Motorbike";
+    private CarwashRec selectedRec = new CarwashRec();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +149,7 @@ public class CarWashMainActivity extends AppCompatActivity {
         activityRV.smoothScrollToPosition(0);
 
         carwashDailyRecsAdapter = new CarwashDailyRecsAdapter(getApplicationContext(), records);
-//        carwashDailyRecsAdapter.setListener(this);
+        carwashDailyRecsAdapter.setListener(this);
 //        carwashDailyRecsAdapter.setSelectedUserName("Total");
         activityRV.setAdapter(carwashDailyRecsAdapter);
 //  motorbksBtn, carsBtn, trucksBtn;
@@ -214,6 +215,25 @@ public class CarWashMainActivity extends AppCompatActivity {
         fetchUsers();
 
 
+        paymentDialog = new Dialog(this);
+        paymentDialog.setContentView(R.layout.carwash_payment_dialog);
+        paymentDialog.setCanceledOnTouchOutside(false);
+        paymentDialog.setCancelable(false);
+        paymentDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        pdVehicletypeTV = paymentDialog.findViewById(R.id.pdVehicletypeTV);
+        pdRegnoTV = paymentDialog.findViewById(R.id.pdRegnoTV);
+        pdAmountTV = paymentDialog.findViewById(R.id.pdAmountTV);
+        pdSaveBtn = paymentDialog.findViewById(R.id.pdSaveBtn);
+        pdSaveBtn.setOnClickListener(view -> {
+            SavePayment();
+
+        });
+        ClosePDialog = paymentDialog.findViewById(R.id.ClosePDialog);
+        ClosePDialog.setOnClickListener(view -> {
+            paymentDialog.dismiss();
+        });
+
+
         commissionsDialog = new Dialog(this);
         commissionsDialog.setContentView(R.layout.commission_dialog);
         commissionsDialog.setCanceledOnTouchOutside(false);
@@ -267,11 +287,11 @@ public class CarWashMainActivity extends AppCompatActivity {
             commissionTV.setText(Comms);
             commissionsDialog.show();
         });
-        attentantsSpinnerArray.add("Select");
+        attentantsSpinnerArray.add("Select Attendant");
         attentantsSpinnerArray.add("Kasyoka");
+        attentantsSpinnerArray.add("Muinde");
         attentantsSpinnerArray.add("Ndunda");
         attentantsSpinnerArray.add("Other");
-
 
         attendantSpnerAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, attentantsSpinnerArray);
@@ -329,6 +349,33 @@ public class CarWashMainActivity extends AppCompatActivity {
 
         });
         getRecords(todate, selectedType);
+    }
+
+    private void SavePayment() {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Comfirm Payment")
+                .setContentText("Are sure you have received Ksh. " + selectedRec.getAmount() + " for " + selectedRec.getRegNo() + "?")
+                .setConfirmText("Paid!")
+                .setConfirmClickListener(sDialog -> sDialog
+                        .setTitleText("Payment Confirmed!")
+                        .setContentText("Thank the Customer")
+                        .setConfirmText("OK")
+                        .showCancelButton(false)
+                        .setConfirmClickListener(sweetAlertDialog -> {
+                            //Update payment
+                            selectedRec.setPaid(true);
+                            new Firestore(this).addCarWashRec(selectedRec);
+                            sweetAlertDialog.dismiss();
+                            paymentDialog.dismiss();
+                        })
+                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE))
+                .showCancelButton(true)
+                .setCancelText("Cancel")
+                .setCancelClickListener(sweetAlertDialog -> {
+                    sweetAlertDialog.dismiss();
+                    paymentDialog.dismiss();
+                })
+                .show();
     }
 
     public void vihicleRG(RadioButton  rb) {
@@ -526,7 +573,7 @@ public class CarWashMainActivity extends AppCompatActivity {
 
         }
         carwashDailyRecsAdapter = new CarwashDailyRecsAdapter(getApplicationContext(), records);
-//        carwashDailyRecsAdapter.setListener(this);
+        carwashDailyRecsAdapter.setListener(this);
 //        carwashDailyRecsAdapter.setSelectedUserName("Total");
         activityRV.setAdapter(carwashDailyRecsAdapter);
 //        carwashDailyRecsAdapter.notifyDataSetChanged();
@@ -549,5 +596,14 @@ public class CarWashMainActivity extends AppCompatActivity {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy : HH:mm:ss", Locale.getDefault());
         return df.format(c);
+    }
+
+    @Override
+    public void acceptPayment(CarwashRec selectedRec, boolean refreshRV) {
+        this.selectedRec = selectedRec;
+        pdVehicletypeTV.setText(selectedRec.getVehicleType());
+        pdRegnoTV.setText(selectedRec.getRegNo());
+        pdAmountTV.setText("Ksh. " + selectedRec.getAmount());
+        paymentDialog.show();
     }
 }

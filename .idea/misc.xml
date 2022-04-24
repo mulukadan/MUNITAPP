@@ -19,14 +19,19 @@
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_table.xml" value="0.22" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pools_list.xml" value="0.2740036231884058" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_summary.xml" value="0.1546875" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/carwash_payment_dialog.xml" value="0.20208333333333334" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/commission_dialog.xml" value="0.264945652173913" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/employee_change_status_dialog.xml" value="0.22708333333333333" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/employee_dialog.xml" value="0.22708333333333333" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/give_advance_dialog.xml" value="0.22708333333333333" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/hsms_dialog.xml" value="0.264945652173913" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_carwash_rec.xml" value="0.21" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_dailysale.xml" value="0.3066123188405797" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_record_new.xml" value="0.15104166666666666" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/new_car_dialog.xml" value="0.33" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/new_sale_dialog.xml" value="0.18958333333333333" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/new_sales_dialog.xml" value="0.20208333333333334" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/user_dialog.xml" value="0.20208333333333334" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/menu/add_pool.xml" value="0.24895833333333334" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/menu/employee_options.xml" value="0.22708333333333333" />
       </map>

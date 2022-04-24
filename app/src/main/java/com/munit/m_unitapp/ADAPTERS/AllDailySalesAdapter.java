@@ -116,7 +116,7 @@ public class AllDailySalesAdapter extends RecyclerView.Adapter<AllDailySalesAdap
     }
 
     public interface ClickListener{
-        public void showCashBreakDown(DailySales dailySales, boolean refreshRV);
+        void showCashBreakDown(DailySales dailySales, boolean refreshRV);
     }
 
     public void setSelectedUserName(String selectedUserName) {

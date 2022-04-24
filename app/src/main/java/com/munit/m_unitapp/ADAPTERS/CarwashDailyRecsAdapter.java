@@ -66,7 +66,7 @@ public class CarwashDailyRecsAdapter extends RecyclerView.Adapter<CarwashDailyRe
             holder.regnoTV.setBackgroundColor(Color.parseColor("#AD9EBC58"));
 
         } else {
-            holder.regnoTV.setBackgroundColor(Color.parseColor("#ffffff"));
+            holder.regnoTV.setBackgroundColor(Color.parseColor("#FFC0BC"));
         }
     }
 
@@ -81,6 +81,7 @@ public class CarwashDailyRecsAdapter extends RecyclerView.Adapter<CarwashDailyRe
         TextView byTv;
         TextView amountTV;
         TextView paidStatusTV;
+        LinearLayout carRecViewLL;
 
         public myViewHolder(final View itemView) {
             super(itemView);
@@ -88,9 +89,17 @@ public class CarwashDailyRecsAdapter extends RecyclerView.Adapter<CarwashDailyRe
             byTv = itemView.findViewById(R.id.byTv);
             amountTV = itemView.findViewById(R.id.amountTV);
             paidStatusTV = itemView.findViewById(R.id.paidStatusTV);
+            carRecViewLL = itemView.findViewById(R.id.carRecViewLL);
+
+            carRecViewLL.setOnClickListener(view -> {
+                int pos = getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    CarwashRec selected = data.get(pos);
+                    if (listener != null)
+                        listener.acceptPayment(selected, true);
+                }
+            });
         }
-
-
     }
 
     public void setListener(ClickListener listener) {
@@ -98,11 +107,7 @@ public class CarwashDailyRecsAdapter extends RecyclerView.Adapter<CarwashDailyRe
     }
 
     public interface ClickListener {
-        public void showCashBreakDown(DailySales dailySales, boolean refreshRV);
-    }
-
-    public void setSelectedUserName(String selectedUserName) {
-        this.selectedUserName = selectedUserName;
+        void acceptPayment(CarwashRec selected, boolean refreshRV);
     }
 
 }

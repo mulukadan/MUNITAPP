@@ -150,20 +150,18 @@ public class GeneralMethods {
     public static int getCarwashCommission(int amount) {
         int commission = 0;
 
-        if (amount < 35) {
-            commission = 0;
-        } else if (amount < 51) {
-            commission = 20;
-        } else if (amount < 101) {
-            commission = 30;
-        } else if (amount < 201) {
-            commission = 50;
-        } else if (amount < 301) {
-            commission = 70;
-        } else if (amount < 401) {
-            commission = 100;
-        } else if (amount < 501) {
+        if (amount > 499) {
             commission = 130;
+        } else if (amount > 399) {
+            commission = 100;
+        } else if (amount > 299) {
+            commission = 70;
+        }else if (amount > 199) {
+            commission = 50;
+        }else if (amount > 99) {
+            commission = 30;
+        } else if (amount > 49) {
+            commission = 20;
         }
         return commission;
 
