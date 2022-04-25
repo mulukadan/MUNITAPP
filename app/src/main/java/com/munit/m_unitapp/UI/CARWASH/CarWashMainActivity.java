@@ -42,6 +42,7 @@ import com.google.gson.Gson;
 import com.munit.m_unitapp.ADAPTERS.AllDailySalesAdapter;
 import com.munit.m_unitapp.ADAPTERS.CarwashDailyRecsAdapter;
 import com.munit.m_unitapp.DB.Firestore;
+import com.munit.m_unitapp.MODELS.CarWashDailySummary;
 import com.munit.m_unitapp.MODELS.CarwashAttentantTotal;
 import com.munit.m_unitapp.MODELS.CarwashRec;
 import com.munit.m_unitapp.MODELS.DailySales;
@@ -208,13 +209,12 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
             //Reset Dialog
             attendantSpner.setSelection(0);
             regNoET.setText("");
-            toPayAmtET.setText("");
+            toPayAmtET.setText("50");
+            rBike.setChecked(true);
             serviceDescET.setText("");
             newCustomerDialog.show();
         });
         fetchUsers();
-
-
         paymentDialog = new Dialog(this);
         paymentDialog.setContentView(R.layout.carwash_payment_dialog);
         paymentDialog.setCanceledOnTouchOutside(false);
@@ -265,18 +265,22 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
 
         rBike.setOnClickListener(view -> {//
             vihicleRG(rBike);
+            toPayAmtET.setText("50");
         });
 
         rCar.setOnClickListener(view -> {//
             vihicleRG(rCar);
+            toPayAmtET.setText("200");
         });
 
         rTruck.setOnClickListener(view -> {//
             vihicleRG(rTruck);
+            toPayAmtET.setText("500");
         });
 
         rOther.setOnClickListener(view -> {//
             vihicleRG(rOther);
+            toPayAmtET.setText("");
         });
         labourLL.setOnClickListener(view -> {
             String Comms = "";
@@ -522,7 +526,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
                         return;
                     } else if (value.isEmpty()) {
                         pDialog.dismiss();
-                        sortByType(allRecords, type);
+                        sortByType(allRecords, type, date);
                     } else {
 
                         for (QueryDocumentSnapshot doc : value) {
@@ -531,13 +535,13 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
                                 allRecords.add(rec);
                             }
                         }
-                        sortByType(allRecords, type);
+                        sortByType(allRecords, type, date);
                     }
                 });
 
     }
 
-    public void sortByType(List<CarwashRec> allRecords, String type) {
+    public void sortByType(List<CarwashRec> allRecords, String type, String date) {
         int mBikes = 0, cars = 0, trucks = 0, overTotal = 0;
         int labour = 0;
         int expense = 0;
@@ -586,6 +590,24 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         expenseTV.setText("Ksh. " + expense);
         int rem = overTotal - (expense + labour);
         remTotalTV.setText("Ksh. " + rem);
+
+        CarWashDailySummary summary = new CarWashDailySummary();
+        summary.setDate(date);
+        summary.setBalTotal(rem);
+        summary.setExpense(expense);
+        summary.setOverallTotal(overTotal);
+        summary.setMotorbikes(mBikes);
+        summary.setCars(cars);
+        summary.setTrucks(trucks);
+        summary.setAttentantsTotals(attentatsTotals);
+        summary.setLabourTotal(labour);
+        int weekNo = new GeneralMethods().getWeekNumber(DateDisplaying);
+        summary.setYear_week(year +""+weekNo);
+        summary.setYear_month(new GeneralMethods().getDateParts(DateDisplaying,"yy")+new GeneralMethods().getDateParts(DateDisplaying, "MM"));
+        summary.setYear(new GeneralMethods().getDateParts(DateDisplaying,"yy"));
+
+
+        new Firestore(this).addCarWashSummary(summary);
 
         pDialog.dismiss();
 

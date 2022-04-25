@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.munit.m_unitapp.MODELS.CarWashDailySummary;
 import com.munit.m_unitapp.MODELS.CarwashRec;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.MODELS.PoolRecordNew;
@@ -14,9 +15,10 @@ public class Firestore {
     FirebaseFirestore firedb;
     Context mcontext;
 
-    String carWashRecPath = Constants.carWashRecPath;
     String dailysalesPath = Constants.dailySalesPath;
     String poolRecordsPath = Constants.poolRecordsPath;
+    String carwashDailySummary = Constants.carwashDailySummary;
+    String carWashRecPath = Constants.carWashRecPath;
 
     public Firestore(Context mcontext) {
         firedb = FirebaseFirestore.getInstance();
@@ -42,6 +44,17 @@ public class Firestore {
         String docId = rec.getRegNo() + ":" + rec.getRecordedTimeNDate();
         firedb.collection(carWashRecPath).document(docId)
                 .set(rec)
+                .addOnSuccessListener(aVoid -> {
+                    // Success
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(mcontext, "Error adding document", Toast.LENGTH_SHORT).show();
+                });
+    }
+    public void addCarWashSummary(CarWashDailySummary summary) {
+        String docId = summary.getDate().replace("/", "-");
+        firedb.collection(carwashDailySummary).document(docId)
+                .set(summary)
                 .addOnSuccessListener(aVoid -> {
                     // Success
                 })

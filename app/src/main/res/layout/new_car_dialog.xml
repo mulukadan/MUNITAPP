@@ -264,6 +264,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/medium"
                         android:hint="Amount"
+                        android:text="50"
                         android:inputType="number"
                         android:paddingLeft="20dp" />
 

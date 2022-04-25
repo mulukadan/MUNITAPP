@@ -425,7 +425,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/add"
             app:fab_colorNormal="#4CAF50"
-            app:fab_label="Add Sales"
+            app:fab_label="Add new"
             app:fab_size="mini" />
 
 

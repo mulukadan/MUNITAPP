@@ -95,7 +95,7 @@ public class CarwashDailyRecsAdapter extends RecyclerView.Adapter<CarwashDailyRe
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     CarwashRec selected = data.get(pos);
-                    if (listener != null)
+                    if (listener != null && !selected.isPaid())
                         listener.acceptPayment(selected, true);
                 }
             });

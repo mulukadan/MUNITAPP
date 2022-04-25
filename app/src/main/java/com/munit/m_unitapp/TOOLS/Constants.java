@@ -9,6 +9,9 @@ public class Constants {
 //    public static String carWashRecPath = "car_wash_rec_test";// Test
     public static String carWashRecPath = "car_wash_rec_live"; // Live
 
+//    public static String carwashDailySummary = "carwash_daily_summary_test";// Test
+    public static String carwashDailySummary = "carwash_daily_summary_lv"; // Live
+
 
     //Pool Table Records
     public static String poolRecordsPath = "pool_records_test";// Test
