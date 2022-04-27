@@ -12,250 +12,259 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom"
+            android:orientation="vertical">
 
             <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/colorPrimary">
+
+                <ImageView
+                    android:id="@+id/back_arrow"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/arrow_back" />
+
+                <TextView
+                    android:id="@+id/Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/bold"
+                    android:text="ACTIVITIES"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/summaryBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="5dp"
+                    android:background="#4CAF50"
+                    android:text="Summary"
+                    android:textColor="#263238" />
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <RelativeLayout
+
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@color/colorPrimary">
-
-                    <ImageView
-                        android:id="@+id/back_arrow"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
-                        android:src="@drawable/arrow_back" />
-
-                    <TextView
-                        android:id="@+id/Title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:fontFamily="@font/bold"
-                        android:text="ACTIVITIES"
-                        android:textColor="@color/white"
-                        android:textSize="15dp" />
-
-                    <Button
-                        android:id="@+id/summaryBtn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginRight="5dp"
-                        android:background="#4CAF50"
-                        android:text="Summary"
-                        android:textColor="#263238" />
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="10">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginRight="20dp"
-                                android:layout_marginBottom="10dp"
-                                android:layout_weight="8"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:id="@+id/usernameTV"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:fontFamily="@font/bold"
-                                        android:text="Day's Summary"
-                                        android:textColor="@color/colorPrimaryDark"
-                                        android:textSize="20dp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:fontFamily="@font/bold"
-                                        android:text="Date: "
-                                        android:textSize="15dp" />
-
-                                    <TextView
-                                        android:id="@+id/mainDaysDate"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="match_parent"
-                                        android:fontFamily="@font/bold"
-                                        android:text="08/11/2019"
-                                        android:textSize="15dp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <RelativeLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="2">
-
-                                <ImageView
-                                    android:id="@+id/mainDateIcon"
-                                    android:layout_width="50dp"
-                                    android:layout_height="40dp"
-                                    android:layout_centerInParent="true"
-                                    android:background="@drawable/calender" />
-
-                            </RelativeLayout>
-
-                        </LinearLayout>
-
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:elevation="10dp"
-                        app:cardCornerRadius="5dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="9">
-
-                            <TextView
-                                android:id="@+id/motorbksBtn"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:background="@color/colorPrimary"
-                                android:padding="5dp"
-                                android:text="MotorBikes"
-                                android:textAlignment="center"
-                                android:textColor="#000000" />
-
-                            <TextView
-                                android:id="@+id/carsBtn"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:background="@color/colorPrimary"
-                                android:padding="5dp"
-                                android:text="Cars"
-                                android:textAlignment="center"
-                                android:textColor="#000000" />
-
-                            <TextView
-                                android:id="@+id/trucksBtn"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:background="@color/colorPrimary"
-                                android:padding="5dp"
-                                android:text="Trucks"
-                                android:textAlignment="center"
-                                android:textColor="#000000" />
-
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
-                        android:id="@+id/listViewLL"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:background="#2196F3"
-                            android:orientation="horizontal"
-                            android:paddingHorizontal="10dp"
-                            android:weightSum="6">
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_weight="8"
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="0dp"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/medium"
-                                android:text="Reg. No"
-                                android:textColor="@color/white"
-                                android:textSize="15dp" />
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="0dp"
+                                <TextView
+                                    android:id="@+id/usernameTV"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/bold"
+                                    android:text="Day's Summary"
+                                    android:textColor="@color/colorPrimaryDark"
+                                    android:textSize="20dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/medium"
-                                android:text="By."
-                                android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/medium"
-                                android:text="Amount"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/white"
-                                android:textSize="12dp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/bold"
+                                    android:text="Date: "
+                                    android:textSize="15dp" />
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/medium"
-                                android:text="Paid"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/white"
-                                android:textSize="12dp" />
-
-
+                                <TextView
+                                    android:id="@+id/mainDaysDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:fontFamily="@font/bold"
+                                    android:text="08/11/2019"
+                                    android:textSize="15dp" />
+                            </LinearLayout>
                         </LinearLayout>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/activityRV"
-                            android:layout_width="match_parent"
+                        <RelativeLayout
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginHorizontal="10dp" />
+                            android:layout_weight="2">
+
+                            <ImageView
+                                android:id="@+id/mainDateIcon"
+                                android:layout_width="50dp"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/calender" />
+
+                        </RelativeLayout>
 
                     </LinearLayout>
 
 
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:elevation="10dp"
+                    app:cardCornerRadius="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="12">
+
+                        <TextView
+                            android:id="@+id/motorbksBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@color/colorPrimary"
+                            android:padding="5dp"
+                            android:text="MotorBikes"
+                            android:textAlignment="center"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/carsBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@color/colorPrimary"
+                            android:padding="5dp"
+                            android:text="Cars"
+                            android:textAlignment="center"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/trucksBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@color/colorPrimary"
+                            android:padding="5dp"
+                            android:text="Trucks"
+                            android:textAlignment="center"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/othersBtn"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:background="@color/colorPrimary"
+                            android:padding="5dp"
+                            android:text="Others"
+                            android:textAlignment="center"
+                            android:textColor="#000000" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/listViewLL"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#2196F3"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="10dp"
+                        android:weightSum="6">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/medium"
+                            android:text="Reg. No"
+                            android:textColor="@color/white"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:fontFamily="@font/medium"
+                            android:text="By."
+                            android:textColor="@color/white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/medium"
+                            android:text="Amount"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/white"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/medium"
+                            android:text="Paid"
+                            android:textAlignment="viewEnd"
+                            android:textColor="@color/white"
+                            android:textSize="12dp" />
+
+
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/activityRV"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="10dp" />
+
                 </LinearLayout>
 
-            </RelativeLayout>
-        </ScrollView>
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -277,18 +286,18 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/bold"
                     android:text="Overall Total:"
-                    android:textSize="15dp"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/overrallTotalTV"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="15dp"
                     android:fontFamily="@font/bold"
                     android:text="Ksh. 10:"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="15dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -297,10 +306,10 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"
                 android:background="#E5F4E5"
+                android:orientation="horizontal"
                 android:paddingHorizontal="10dp"
                 android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:orientation="horizontal">
+                android:paddingBottom="5dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -331,15 +340,16 @@
                     android:text="Ksh. 10:"
                     android:textColor="#000000" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"
                 android:background="#F6E5E5"
+                android:orientation="horizontal"
                 android:paddingHorizontal="10dp"
                 android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:orientation="horizontal">
+                android:paddingBottom="5dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -384,8 +394,8 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/bold"
                     android:text="Total:"
-                    android:textSize="18dp"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="18dp" />
 
                 <TextView
                     android:id="@+id/remTotalTV"
@@ -394,8 +404,8 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/bold"
                     android:text="Ksh. 10:"
-                    android:textSize="18dp"
-                    android:textColor="#000000" />
+                    android:textColor="#000000"
+                    android:textSize="18dp" />
             </LinearLayout>
 
 

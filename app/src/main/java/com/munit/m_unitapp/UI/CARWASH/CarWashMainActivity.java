@@ -72,7 +72,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
     String todate;
     private LinearLayout labourLL;
     String DateDisplaying;
-    private TextView motorbksBtn, carsBtn, trucksBtn, mainDaysDate, overrallTotalTV, laborTotalTV, expenseTV, remTotalTV, pdVehicletypeTV, pdRegnoTV, pdAmountTV;
+    private TextView motorbksBtn, carsBtn, trucksBtn,othersBtn, mainDaysDate, overrallTotalTV, laborTotalTV, expenseTV, remTotalTV, pdVehicletypeTV, pdRegnoTV, pdAmountTV;
     User userdb;
     private Dialog newCustomerDialog, commissionsDialog, paymentDialog;
     private RecyclerView activityRV;
@@ -157,16 +157,20 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         carsBtn = findViewById(R.id.carsBtn);
         trucksBtn = findViewById(R.id.trucksBtn);
         motorbksBtn = findViewById(R.id.motorbksBtn);
+        othersBtn = findViewById(R.id.othersBtn);
 
         motorbksBtn.setBackgroundResource(R.color.colorPrimary);
         carsBtn.setBackgroundResource(R.color.gray_btn_bg_color);
         trucksBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+        othersBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+
         motorbksBtn.setOnClickListener(v -> {
             pDialog.show();
             selectedType = "Motorbike";
             getRecords(DateDisplaying, selectedType);
             carsBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             trucksBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            othersBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             motorbksBtn.setBackgroundResource(R.color.colorPrimary);
         });
         carsBtn.setOnClickListener(v -> {
@@ -175,6 +179,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
             getRecords(DateDisplaying, selectedType);
             carsBtn.setBackgroundResource(R.color.colorPrimary);
             trucksBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            othersBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             motorbksBtn.setBackgroundResource(R.color.gray_btn_bg_color);
         });
         trucksBtn.setOnClickListener(v -> {
@@ -183,6 +188,16 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
             getRecords(DateDisplaying, selectedType);
             carsBtn.setBackgroundResource(R.color.gray_btn_bg_color);
             trucksBtn.setBackgroundResource(R.color.colorPrimary);
+            othersBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            motorbksBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+        });
+        othersBtn.setOnClickListener(v -> {
+            pDialog.show();
+            selectedType = "Other";
+            getRecords(DateDisplaying, selectedType);
+            carsBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            trucksBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+            othersBtn.setBackgroundResource(R.color.colorPrimary);
             motorbksBtn.setBackgroundResource(R.color.gray_btn_bg_color);
         });
         back_arrow = findViewById(R.id.back_arrow);
@@ -211,6 +226,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
             regNoET.setText("");
             toPayAmtET.setText("50");
             rBike.setChecked(true);
+            vihicleRG(rBike);
             serviceDescET.setText("");
             newCustomerDialog.show();
         });
@@ -295,6 +311,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         attentantsSpinnerArray.add("Kasyoka");
         attentantsSpinnerArray.add("Muinde");
         attentantsSpinnerArray.add("Ndunda");
+        attentantsSpinnerArray.add("Internal");
         attentantsSpinnerArray.add("Other");
 
         attendantSpnerAdapter = new ArrayAdapter<>(
@@ -516,7 +533,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         pDialog.show();
         firedb.collection(Constants.carWashRecPath)
                 .whereEqualTo("date", date)
-//            .orderBy("date", Query.Direction.DESCENDING)
+            .orderBy("recordedTimeNDate", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, e) -> {
                     List<CarwashRec> allRecords = new ArrayList<>();
                     if (e != null) {
@@ -542,7 +559,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
     }
 
     public void sortByType(List<CarwashRec> allRecords, String type, String date) {
-        int mBikes = 0, cars = 0, trucks = 0, overTotal = 0;
+        int mBikes = 0, cars = 0, trucks = 0, overTotal = 0, others =0;
         int labour = 0;
         int expense = 0;
         attentatsTotals = new ArrayList<>();
@@ -554,6 +571,8 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
                 cars++;
             } else if (rec.getVehicleType().equals("Truck")) {
                 trucks++;
+            } else if (rec.getVehicleType().equals("Other")) {
+                others++;
             }
 
             if (rec.getVehicleType().equals(type)) {
@@ -562,7 +581,9 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
             overTotal = overTotal + rec.getAmount();
 
             int commission = GeneralMethods.getCarwashCommission(rec.getAmount());
-            labour = labour + commission;
+            if(!rec.getAttendant().equals("Internal")){
+                labour = labour + commission;
+            }
 
             boolean attentantFound = false;
             for (CarwashAttentantTotal attentantTotal : attentatsTotals) {
@@ -571,7 +592,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
                     attentantFound = true;
                 }
             }
-            if (!attentantFound) {
+            if (!attentantFound && !rec.getAttendant().equals("Internal")) {
                 attentatsTotals.add(new CarwashAttentantTotal(rec.getAttendant(), commission));
             }
 
@@ -582,9 +603,10 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         activityRV.setAdapter(carwashDailyRecsAdapter);
 //        carwashDailyRecsAdapter.notifyDataSetChanged();
 
-        motorbksBtn.setText("MotorBikes (" + mBikes + ")");
+        motorbksBtn.setText("M. Bikes (" + mBikes + ")");
         carsBtn.setText("Cars (" + cars + ")");
         trucksBtn.setText("Trucks (" + trucks + ")");
+        othersBtn.setText("Others (" + others + ")");
         overrallTotalTV.setText("Ksh. " + overTotal);
         laborTotalTV.setText("Ksh. " + labour);
         expenseTV.setText("Ksh. " + expense);
