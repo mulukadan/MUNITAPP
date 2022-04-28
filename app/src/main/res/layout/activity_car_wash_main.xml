@@ -295,7 +295,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/bold"
-                    android:text="Ksh. 10:"
+                    android:text="Ksh. 0:"
                     android:textColor="#000000"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -337,7 +337,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/medium"
-                    android:text="Ksh. 10:"
+                    android:text="Ksh. 0:"
                     android:textColor="#000000" />
             </LinearLayout>
 
@@ -377,7 +377,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/medium"
-                    android:text="Ksh. 10:"
+                    android:text="Ksh. 0:"
                     android:textColor="#000000" />
             </LinearLayout>
 
@@ -403,7 +403,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/bold"
-                    android:text="Ksh. 10:"
+                    android:text="Ksh. 0:"
                     android:textColor="#000000"
                     android:textSize="18dp" />
             </LinearLayout>

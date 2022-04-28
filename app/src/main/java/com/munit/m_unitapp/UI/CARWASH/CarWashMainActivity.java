@@ -218,9 +218,11 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
 //            String userJson = gson.toJson(userdb);
 //            addSales.putExtra("userJson", userJson);
 //            startActivity(addSales);
-            daysDate.setText(todate);
-            mainDaysDate.setText(todate);
-            getRecords(todate, selectedType);
+//            daysDate.setText(todate);
+//            mainDaysDate.setText(todate);
+            daysDate.setText(DateDisplaying);
+            mainDaysDate.setText(DateDisplaying);
+            getRecords(DateDisplaying, selectedType);
             //Reset Dialog
             attendantSpner.setSelection(0);
             regNoET.setText("");
@@ -533,12 +535,12 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         pDialog.show();
         firedb.collection(Constants.carWashRecPath)
                 .whereEqualTo("date", date)
-            .orderBy("recordedTimeNDate", Query.Direction.DESCENDING)
+            .orderBy("recordedTimeNDate", Query.Direction.ASCENDING)
                 .addSnapshotListener((value, e) -> {
                     List<CarwashRec> allRecords = new ArrayList<>();
                     if (e != null) {
 //                            Log.w(TAG, "Listen failed.", e);
-//                        Toast.makeText(this, "Error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                         pDialog.dismiss();
                         return;
                     } else if (value.isEmpty()) {
