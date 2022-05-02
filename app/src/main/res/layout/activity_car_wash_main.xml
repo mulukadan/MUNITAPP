@@ -113,6 +113,16 @@
                                     android:fontFamily="@font/bold"
                                     android:text="08/11/2019"
                                     android:textSize="15dp" />
+                                <TextView
+                                    android:id="@+id/expenseViewBtn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="View Expenses"
+                                    android:paddingBottom="5dp"
+                                    android:background="@drawable/send_button_bk"
+                                    android:textColor="@color/white"
+                                    android:paddingHorizontal="10dp"
+                                    android:layout_marginLeft="30dp"/>
                             </LinearLayout>
                         </LinearLayout>
 
@@ -136,6 +146,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/salesTitleCV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
@@ -433,9 +444,18 @@
             android:id="@+id/addSaleBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/add"
+            android:src="@drawable/ic_twotone_local_car_wash_24"
             app:fab_colorNormal="#4CAF50"
             app:fab_label="Add new"
+            app:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/addExpenseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_shopping_cart_24"
+            app:fab_colorNormal="#4CAF50"
+            app:fab_label="Add Expense"
             app:fab_size="mini" />
 
 

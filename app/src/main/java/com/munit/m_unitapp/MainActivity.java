@@ -148,9 +148,13 @@ public class MainActivity extends AppCompatActivity {
 
         carwash = findViewById(R.id.carwash);
         carwash.setOnClickListener((view) -> {
-            Intent intent = new Intent(MainActivity.this, CarWashMainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            if(userdb.getLevel()<3){
+                Intent intent = new Intent(MainActivity.this, CarWashMainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }else {
+                Toast.makeText(MainActivity.this,"Comin Soon!",Toast.LENGTH_SHORT).show();
+            }
 
         });
 

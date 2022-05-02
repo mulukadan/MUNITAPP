@@ -2,6 +2,7 @@ package com.munit.m_unitapp.UI.CARWASH;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -74,24 +77,30 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
     String DateDisplaying;
     private TextView motorbksBtn, carsBtn, trucksBtn,othersBtn, mainDaysDate, overrallTotalTV, laborTotalTV, expenseTV, remTotalTV, pdVehicletypeTV, pdRegnoTV, pdAmountTV;
     User userdb;
-    private Dialog newCustomerDialog, commissionsDialog, paymentDialog;
+    private Dialog newCustomerDialog, commissionsDialog, paymentDialog, expenseDialog;
     private RecyclerView activityRV;
-    private Spinner attendantSpner;
+    private Spinner attendantSpner, expenseSpner;
     private ArrayAdapter<String> attendantSpnerAdapter;
+    private ArrayAdapter<String> expenseSpnerAdapter;
     List<String> attentantsSpinnerArray = new ArrayList<>();
+    List<String> expenseSpinnerArray = new ArrayList<>();
 
-    private TextView usernameTV, daysDate, commissionTV;
+    private TextView usernameTV, daysDate, commissionTV, dialogTitle, expenseViewBtn;
+    private CardView salesTitleCV;
     private ImageView CloseDialog, dateIcon, mainDateIcon;
     private RadioButton rBike, rCar, rTruck, rOther;
     private EditText toPayAmtET, regNoET, serviceDescET;
     private Button SaveBtn, pdSaveBtn;
     private CarwashDailyRecsAdapter carwashDailyRecsAdapter;
+    private LinearLayout  expenseTypeLL,attentantLL;
+    private RadioGroup radioGroup;
+    TextInputLayout regNoETIT;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
     FirebaseUser user;
     FloatingActionMenu fab;
-    FloatingActionButton addSaleBtn;
+    FloatingActionButton addSaleBtn, addExpenseBtn;
     String USERID;
     Gson gson;
     SweetAlertDialog pDialog;
@@ -137,12 +146,33 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         overrallTotalTV = findViewById(R.id.overrallTotalTV);
         laborTotalTV = findViewById(R.id.laborTotalTV);
         expenseTV = findViewById(R.id.expenseTV);
+        expenseViewBtn = findViewById(R.id.expenseViewBtn);
+        salesTitleCV = findViewById(R.id.salesTitleCV);
         remTotalTV = findViewById(R.id.remTotalTV);
         mainDateIcon = findViewById(R.id.mainDateIcon);
         mainDateIcon.setOnClickListener(view -> {
             setDate();
         });
+        expenseViewBtn.setOnClickListener(view -> {
+            pDialog.show();
+            if(salesTitleCV.isShown()){
+                selectedType = "Expense";
+                getRecords(DateDisplaying, selectedType);
+                salesTitleCV.setVisibility(View.GONE);
+                expenseViewBtn.setText("View Sales");
+            }else{
+                salesTitleCV.setVisibility(View.VISIBLE);
+                selectedType = "Motorbike";
+                getRecords(DateDisplaying, selectedType);
+                carsBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+                trucksBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+                othersBtn.setBackgroundResource(R.color.gray_btn_bg_color);
+                motorbksBtn.setBackgroundResource(R.color.colorPrimary);
+                expenseViewBtn.setText("View Expenses");
+            }
 
+
+        });
         mainDaysDate = findViewById(R.id.mainDaysDate);
         mainDaysDate.setText(todate);
         activityRV = findViewById(R.id.activityRV);
@@ -213,24 +243,12 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         addSaleBtn = findViewById(R.id.addSaleBtn);
         addSaleBtn.setOnClickListener(v -> {
             fab.close(true);
-            Intent addSales = new Intent(this, AddSales.class);
-            Gson gson = new Gson();
-//            String userJson = gson.toJson(userdb);
-//            addSales.putExtra("userJson", userJson);
-//            startActivity(addSales);
-//            daysDate.setText(todate);
-//            mainDaysDate.setText(todate);
-            daysDate.setText(DateDisplaying);
-            mainDaysDate.setText(DateDisplaying);
-            getRecords(DateDisplaying, selectedType);
-            //Reset Dialog
-            attendantSpner.setSelection(0);
-            regNoET.setText("");
-            toPayAmtET.setText("50");
-            rBike.setChecked(true);
-            vihicleRG(rBike);
-            serviceDescET.setText("");
-            newCustomerDialog.show();
+            showCWDialog("customer");
+        });
+        addExpenseBtn = findViewById(R.id.addExpenseBtn);
+        addExpenseBtn.setOnClickListener(v -> {
+            fab.close(true);
+            showCWDialog("expense");
         });
         fetchUsers();
         paymentDialog = new Dialog(this);
@@ -263,11 +281,13 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
             commissionsDialog.dismiss();
         });
 
+
         newCustomerDialog = new Dialog(this);
         newCustomerDialog.setContentView(R.layout.new_car_dialog);
         newCustomerDialog.setCanceledOnTouchOutside(false);
         newCustomerDialog.setCancelable(false);
         newCustomerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogTitle = newCustomerDialog.findViewById(R.id.dialogTitle);
         rBike = newCustomerDialog.findViewById(R.id.rBike);
         rCar = newCustomerDialog.findViewById(R.id.rCar);
         rTruck = newCustomerDialog.findViewById(R.id.rTruck);
@@ -279,7 +299,12 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         daysDate = newCustomerDialog.findViewById(R.id.daysDate);
         daysDate.setText(DateDisplaying);
         usernameTV = newCustomerDialog.findViewById(R.id.usernameTV);
+        expenseTypeLL = newCustomerDialog.findViewById(R.id.expenseTypeLL);
+        attentantLL = newCustomerDialog.findViewById(R.id.attentantLL);
+        regNoETIT = newCustomerDialog.findViewById(R.id.regNoETIT);
         attendantSpner = newCustomerDialog.findViewById(R.id.attendantSpner);
+        expenseSpner = newCustomerDialog.findViewById(R.id.expenseSpner);
+        radioGroup = newCustomerDialog.findViewById(R.id.radioGroup);
 
         rBike.setOnClickListener(view -> {//
             vihicleRG(rBike);
@@ -322,6 +347,20 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         attendantSpnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         attendantSpner.setAdapter(attendantSpnerAdapter);
 
+
+        expenseSpinnerArray.add("Select Expense");
+        expenseSpinnerArray.add("Electricity");
+        expenseSpinnerArray.add("Petro");
+        expenseSpinnerArray.add("Water");
+        expenseSpinnerArray.add("Soap");
+        expenseSpinnerArray.add("Other");
+
+        expenseSpnerAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, expenseSpinnerArray);
+
+        expenseSpnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        expenseSpner.setAdapter(expenseSpnerAdapter);
+
         dateIcon.setOnClickListener(v -> {
             setDate();
         });
@@ -334,7 +373,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         SaveBtn.setOnClickListener(v -> {
             try {
                 int error = 0;
-                if (regNoET.getText().toString().length() < 2) {
+                if (regNoET.isShown() && regNoET.getText().toString().length() < 2) {
                     regNoET.setError("Invalid");
                     regNoET.requestFocus();
                     error = 1;
@@ -356,10 +395,15 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
                     }
                 }
 
-                if (attendantSpner.getSelectedItemPosition() < 1) {
+                if (attendantSpner.isShown() && attendantSpner.getSelectedItemPosition() < 1) {
                     error = 1;
                     attendantSpner.requestFocus();
-                    Toast.makeText(getApplicationContext(), "Select Attentant", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Select Attendant", Toast.LENGTH_SHORT).show();
+                }
+                if (expenseSpner.isShown() && expenseSpner.getSelectedItemPosition() < 1) {
+                    error = 1;
+                    attendantSpner.requestFocus();
+                    Toast.makeText(getApplicationContext(), "Select Expense type", Toast.LENGTH_SHORT).show();
                 }
 
                 if (error == 0) {
@@ -372,6 +416,41 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
 
         });
         getRecords(todate, selectedType);
+    }
+
+    private void showCWDialog(String type) {
+        daysDate.setText(DateDisplaying);
+        mainDaysDate.setText(DateDisplaying);
+        getRecords(DateDisplaying, selectedType);
+        //Reset Dialog
+
+        if(type.equals("customer")){ //new Customer
+            expenseTypeLL.setVisibility(View.GONE);
+            radioGroup.setVisibility(View.VISIBLE);
+            attentantLL.setVisibility(View.VISIBLE);
+            regNoETIT.setVisibility(View.VISIBLE);
+            attendantSpner.setSelection(0);
+            regNoET.setText("");
+            toPayAmtET.setText("50");
+            rBike.setChecked(true);
+            vihicleRG(rBike);
+            serviceDescET.setText("");
+            dialogTitle.setText("Customer Information");
+
+        }else{ //New Expense
+            radioGroup.setVisibility(View.GONE);
+            expenseTypeLL.setVisibility(View.VISIBLE);
+            regNoETIT.setVisibility(View.GONE);
+            attentantLL.setVisibility(View.GONE);
+            expenseSpner.setSelection(0);
+            toPayAmtET.setText("");
+            serviceDescET.setText("");
+            dialogTitle.setText("Expense Information");
+        }
+
+
+        newCustomerDialog.show();
+
     }
 
     private void SavePayment() {
@@ -412,27 +491,38 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
 
     public void saveCarWashRec() {
         CarwashRec carwashRec = new CarwashRec();
+
         carwashRec.setRecordedBy(userdb.getName());
         carwashRec.setDate(daysDate.getText().toString());
         carwashRec.setRecordedTimeNDate(getDateNTime());
-        carwashRec.setRegNo(regNoET.getText().toString().toUpperCase());
-        carwashRec.setAttendant(attendantSpner.getSelectedItem().toString());
+
+        if(dialogTitle.getText().toString().contains("Customer")){
+            // new Customer
+            carwashRec.setRegNo(regNoET.getText().toString().toUpperCase());
+            carwashRec.setAttendant(attendantSpner.getSelectedItem().toString());
+            String vehicleType = "Other";
+
+            if (rBike.isChecked()) {
+                vehicleType = "Motorbike";
+            } else if (rCar.isChecked()) {
+                vehicleType = "Car";
+            } else if (rTruck.isChecked()) {
+                vehicleType = "Truck";
+            } else {
+
+            }
+            carwashRec.setVehicleType(vehicleType);
+        }else {
+            //new Expense
+            carwashRec.setRegNo(expenseSpner.getSelectedItem().toString());
+            carwashRec.setVehicleType("Expense");
+        }
+
         carwashRec.setAmount(Integer.parseInt(toPayAmtET.getText().toString().trim()));
         carwashRec.setDesc(serviceDescET.getText().toString().trim());
         carwashRec.setPaid(false);
 
-        String vehicleType = "Other";
 
-        if (rBike.isChecked()) {
-            vehicleType = "Motorbike";
-        } else if (rCar.isChecked()) {
-            vehicleType = "Car";
-        } else if (rTruck.isChecked()) {
-            vehicleType = "Truck";
-        } else {
-
-        }
-        carwashRec.setVehicleType(vehicleType);
 
         new Firestore(CarWashMainActivity.this).addCarWashRec(carwashRec);
 
@@ -580,24 +670,26 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
             if (rec.getVehicleType().equals(type)) {
                 records.add(rec);
             }
-            overTotal = overTotal + rec.getAmount();
+            if(rec.getVehicleType().equalsIgnoreCase("Expense")){
+                expense = expense + rec.getAmount();
+            }else{
+                overTotal = overTotal + rec.getAmount();
+                int commission = GeneralMethods.getCarwashCommission(rec.getAmount());
+                if(!rec.getVehicleType().equals("Expense") &&!rec.getAttendant().equals("Internal")){
+                    labour = labour + commission;
+                }
 
-            int commission = GeneralMethods.getCarwashCommission(rec.getAmount());
-            if(!rec.getAttendant().equals("Internal")){
-                labour = labour + commission;
-            }
-
-            boolean attentantFound = false;
-            for (CarwashAttentantTotal attentantTotal : attentatsTotals) {
-                if (attentantTotal.getName().equals(rec.getAttendant())) {
-                    attentantTotal.addToTotal(commission);
-                    attentantFound = true;
+                boolean attentantFound = false;
+                for (CarwashAttentantTotal attentantTotal : attentatsTotals) {
+                    if (attentantTotal.getName().equals(rec.getAttendant())) {
+                        attentantTotal.addToTotal(commission);
+                        attentantFound = true;
+                    }
+                }
+                if (rec.getAttendant() != null && !attentantFound && !rec.getAttendant().equals("Internal")) {
+                    attentatsTotals.add(new CarwashAttentantTotal(rec.getAttendant(), commission));
                 }
             }
-            if (!attentantFound && !rec.getAttendant().equals("Internal")) {
-                attentatsTotals.add(new CarwashAttentantTotal(rec.getAttendant(), commission));
-            }
-
         }
         carwashDailyRecsAdapter = new CarwashDailyRecsAdapter(getApplicationContext(), records);
         carwashDailyRecsAdapter.setListener(this);
@@ -612,7 +704,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
         overrallTotalTV.setText("Ksh. " + overTotal);
         laborTotalTV.setText("Ksh. " + labour);
         expenseTV.setText("Ksh. " + expense);
-        int rem = overTotal - (expense + labour);
+        int rem = overTotal - labour;
         remTotalTV.setText("Ksh. " + rem);
 
         CarWashDailySummary summary = new CarWashDailySummary();

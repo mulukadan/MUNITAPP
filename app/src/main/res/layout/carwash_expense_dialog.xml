@@ -38,13 +38,13 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/dialogTitle"
+                    android:id="@+id/PaymentTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:fontFamily="@font/bold"
-                    android:text="Customer Information"
+                    android:text="Expense Information"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="#4CAF50"
@@ -133,119 +133,6 @@
 
                 </androidx.cardview.widget.CardView>
 
-                <RadioGroup
-                    android:id="@+id/radioGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="20dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/bold"
-                        android:text="Type"
-                        android:textColor="#000000"
-                        />
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <RadioButton
-                            android:id="@+id/rBike"
-                            android:layout_width="0dp"
-                            android:layout_weight="2"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:textSize="18dp"
-                            android:text="Motorbike"
-                            />
-
-                        <RadioButton
-                            android:id="@+id/rCar"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:textSize="18dp"
-                            android:text="Car"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="5dp"
-                        >
-                        <RadioButton
-                            android:id="@+id/rTruck"
-                            android:layout_width="0dp"
-                            android:layout_weight="2"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:textSize="18dp"
-                            android:text="Truck/Tractor"
-                            />
-
-                        <RadioButton
-                            android:id="@+id/rOther"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:textSize="18dp"
-                            android:text="Other"
-                            />
-                    </LinearLayout>
-
-
-                </RadioGroup>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/regNoETIT"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp">
-
-                    <EditText
-                        android:id="@+id/regNoET"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/bold"
-                        android:hint="Number Plate"
-                        android:textColor="#063171"
-                        android:textSize="20dp"
-                        android:textAlignment="center"
-                        android:paddingHorizontal="20dp"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <LinearLayout
-                    android:id="@+id/attentantLL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="#D8D4D4"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="15dp"
-                        android:textColor="#000000"
-                        android:fontFamily="@font/bold"
-                        android:text="Attendant" />
-
-                    <Spinner
-                        android:id="@+id/attendantSpner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000000" />
-
-                </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/expenseTypeLL"
                     android:layout_width="match_parent"
@@ -278,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/bold"
                     android:layout_marginHorizontal="20dp"
-                    android:text="Amount to be paid"
+                    android:text="Amount paid"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="15dp" />
 
