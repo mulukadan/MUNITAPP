@@ -9,6 +9,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_add_sales.xml" value="0.18958333333333333" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_car_wash_hist.xml" value="0.2857789855072464" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_car_wash_home.xml" value="0.2857789855072464" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_car_wash_main.xml" value="0.20967741935483872" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_cash_in.xml" value="0.22" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_employee_man.xml" value="0.22708333333333333" />
@@ -19,14 +21,17 @@
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_table.xml" value="0.22" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pools_list.xml" value="0.2740036231884058" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_summary.xml" value="0.1546875" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_user_profile.xml" value="0.2857789855072464" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/carwash_expense_dialog.xml" value="0.209375" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/carwash_payment_dialog.xml" value="0.20208333333333334" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/commission_dialog.xml" value="0.264945652173913" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/employee_change_status_dialog.xml" value="0.22708333333333333" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/employee_dialog.xml" value="0.22708333333333333" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/fragment_daily_sales_all.xml" value="0.2857789855072464" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/give_advance_dialog.xml" value="0.22708333333333333" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/hsms_dialog.xml" value="0.264945652173913" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_carwash_rec.xml" value="0.21" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_daily_car_wash_sale.xml" value="0.2857789855072464" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_dailysale.xml" value="0.3066123188405797" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_record_new.xml" value="0.15104166666666666" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/new_car_dialog.xml" value="0.33" />

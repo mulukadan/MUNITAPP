@@ -27,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.munit.m_unitapp.MODELS.User;
+import com.munit.m_unitapp.UI.CARWASH.CarWashHomeActivity;
 import com.munit.m_unitapp.UI.CARWASH.CarWashMainActivity;
 import com.munit.m_unitapp.UI.CYBER.CashInActivity;
 import com.munit.m_unitapp.UI.HSMS.HSMSActivationActivity;
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         carwash = findViewById(R.id.carwash);
         carwash.setOnClickListener((view) -> {
             if(userdb.getLevel()<3){
-                Intent intent = new Intent(MainActivity.this, CarWashMainActivity.class);
+                Intent intent = new Intent(MainActivity.this, CarWashHomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }else {

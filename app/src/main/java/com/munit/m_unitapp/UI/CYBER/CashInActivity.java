@@ -75,7 +75,6 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     User userdb = new User();
     private LinearLayout chartViewLL, listViewLL;
 
-    List<List<DailySales>> allUsersWeeklySales = new ArrayList<>();
     Gson gson;
     SweetAlertDialog pDialog;
     FirebaseFirestore firedb;
@@ -536,6 +535,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         fetchUsers();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void getSelectedUser(User user) {
         userdb = user;
