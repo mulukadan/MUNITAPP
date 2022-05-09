@@ -37,6 +37,15 @@
 
         </LinearLayout>
     </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bacgrd"/>
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/Rooms"
         android:layout_width="match_parent"
@@ -69,10 +78,10 @@
 
                 <ImageView
                     android:id="@+id/cashinIcon"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/cashin" />
+                    android:src="@mipmap/new_car" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -118,7 +127,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/car_wash_logo" />
+                    android:src="@drawable/carwash_hist" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -163,12 +172,13 @@
                 android:clickable="true"
                 android:background="?android:attr/selectableItemBackground"
                 android:padding="10dp">
+
                 <ImageView
                     android:id="@+id/rept"
                     android:layout_width="80dp"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/newspapers"/>
+                    android:src="@drawable/setings_icon" />
 
                 <TextView
                     android:id="@+id/title"
@@ -214,7 +224,7 @@
                     android:layout_width="80dp"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/pool" />
+                    android:src="@drawable/ic_twotone_local_car_wash_24" />
 
                 <TextView
                     android:id="@+id/ptitle"
@@ -230,5 +240,6 @@
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
+
 
 </LinearLayout>

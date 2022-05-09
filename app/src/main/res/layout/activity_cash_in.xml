@@ -51,6 +51,48 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="View Sales based on:"
+                        android:textAlignment="center"
+                        android:fontFamily="@font/bold"
+                        />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imageView"
+                        android:layout_marginTop="5dp"
+                        android:weightSum="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:id="@+id/radioGroup">
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Shops"
+                            android:id="@+id/rShops"
+                            android:checked="false"
+                            android:textSize="15dp" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Employees"
+                            android:id="@+id/rEmployees"
+                            android:checked="true"
+                            android:textSize="15dp"
+                            android:layout_marginLeft="20dp" />
+                    </RadioGroup>
+
+                </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_marginTop="10dp"
                     android:id="@+id/allUsersRV"

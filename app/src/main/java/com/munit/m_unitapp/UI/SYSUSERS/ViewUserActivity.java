@@ -61,12 +61,12 @@ public class ViewUserActivity extends AppCompatActivity {
     private Dialog UserDialog;
     private ImageView CloseBillDialog;
     private Button SaveBtn;
-    private TextView name;
+    private TextView name, deptTV;
     private EditText PhoneNo;
     private EditText UserName;
     private EditText password;
     private String AdminEmail, AdminPassword;
-    private Spinner userLevelSpiner;
+    private Spinner userLevelSpiner, departmentSpiner;
 
     private TextView uName;
     private TextView uPhoneNo;
@@ -132,6 +132,7 @@ public class ViewUserActivity extends AppCompatActivity {
         PhoneNo = UserDialog.findViewById(R.id.PhoneNo);
         UserName = UserDialog.findViewById(R.id.UserName);
         userLevelSpiner = UserDialog.findViewById(R.id.userLevelSpiner);
+        departmentSpiner = UserDialog.findViewById(R.id.departmentSpiner);
         password = UserDialog.findViewById(R.id.password);
         SaveBtn = UserDialog.findViewById(R.id.SaveBtn);
 
@@ -188,6 +189,7 @@ public class ViewUserActivity extends AppCompatActivity {
                                 user.setPassword(upPassword);
                                 user.setActive(true);
                                 user.setLevel(userLevelSpiner.getSelectedItemPosition() + 1);
+                                user.setDepartment(departmentSpiner.getSelectedItem().toString());
                                 updateFirebaseDb();
                             }
                         })
@@ -199,6 +201,7 @@ public class ViewUserActivity extends AppCompatActivity {
         uPassword = findViewById(R.id.password);
         showPassword = findViewById(R.id.showPassword);
         uName = findViewById(R.id.name);
+        deptTV = findViewById(R.id.deptTV);
         uPhoneNo = findViewById(R.id.PhoneNo);
         uUserName = findViewById(R.id.userName);
         userLevelTv = findViewById(R.id.userLevelTv);
@@ -486,6 +489,7 @@ public class ViewUserActivity extends AppCompatActivity {
 
     public void updateUI() {
         uName.setText(user.getName());
+        deptTV.setText("Department: "+user.getDepartment());
         uPhoneNo.setText(user.getPhoneNo());
         uUserName.setText(user.getUsername());
         if (user.getActive()) {
@@ -510,8 +514,18 @@ public class ViewUserActivity extends AppCompatActivity {
         UserName.setEnabled(false);
         password.setText(user.getPassword());
         userLevelSpiner.setSelection(user.getLevel() - 1);
+        departmentSpiner.setSelection(getIndex(departmentSpiner, user.getDepartment()));
         UserDialog.show();
 
+    }
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+
+        return 0;
     }
 
     public void GetUserInfo() {

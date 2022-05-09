@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -64,6 +65,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     private BarChart chart;
     private TextView listViewBtn, chartViewBtn;
     private RecyclerView allUsersRV;
+    private RadioButton rShops, rEmployees;
 
     FirebaseDatabase database;
     DatabaseReference myRef;
@@ -71,6 +73,10 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     FloatingActionMenu fab;
     FloatingActionButton addSaleBtn;
     String USERID;
+    List<String> userIds = new ArrayList<>();
+    List<String> allUserIds = new ArrayList<>();
+    List<String> M_1UserIds = new ArrayList<>();
+    List<String> M_2userIds = new ArrayList<>();
     List<User> users = new ArrayList<>();
     User userdb = new User();
     private LinearLayout chartViewLL, listViewLL;
@@ -140,6 +146,9 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
 //        usersNamesAdapter.setListener(this);
 //        allUsersRV.setAdapter(usersNamesAdapter);
 
+        rShops = findViewById(R.id.rShops);
+        rEmployees = findViewById(R.id.rEmployees);
+
         listViewBtn = findViewById(R.id.listViewBtn);
         chartViewBtn = findViewById(R.id.chartViewBtn);
         chartViewLL = findViewById(R.id.chartViewLL);
@@ -158,6 +167,17 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         weeklyBtn = findViewById(R.id.weeklyBtn);
         monthlyBtn = findViewById(R.id.monthlyBtn);
         dailyBtn = findViewById(R.id.dailyBtn);
+
+        rShops.setOnClickListener(view -> {
+            if (rShops.isChecked()) {
+                fetchCybers();
+            }
+        });
+        rEmployees.setOnClickListener(view -> {
+            if (rEmployees.isChecked()) {
+                fetchUsers();
+            }
+        });
 
         dailyBtn.setBackgroundResource(R.color.colorPrimary);
         weeklyBtn.setBackgroundResource(R.color.gray_btn_bg_color);
@@ -222,7 +242,9 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void displayRecords(int dataFor) {
         showingDataFor = dataFor;
-        fetchUserSales(USERID);
+//        userIds.clear();
+//        userIds.add(USERID);
+        fetchUserSales(userIds);
     }
 
     public void getDailySale() {
@@ -259,7 +281,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void fetchUserSales(String key) {
+    public void fetchUserSales(List<String> keys) {
         usersNamesAdapter = new UsersNamesAdapter(CashInActivity.this, users, userdb);
         usersNamesAdapter.setListener(this);
         pos = users.indexOf(userdb);
@@ -268,7 +290,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         allDailySalesAdapter.setSelectedUserName("Total");
         pDialog.show();
         firedb.collection(Constants.dailySalesPath)
-                .whereEqualTo("userId", key)
+//                .whereEqualTo("userId", key)
+                .whereIn("userId", keys)
                 .orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener((value, e) -> {
                     if (e != null) {
@@ -277,10 +300,10 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                         pDialog.dismiss();
                         computeUserSales(new ArrayList<>());
                         return;
-                    }else if (value.isEmpty()) {
+                    } else if (value.isEmpty()) {
                         computeUserSales(new ArrayList<>());
                         pDialog.dismiss();
-                    }else {
+                    } else {
                         List<DailySales> allweeklySales = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get("date") != null) {
@@ -300,7 +323,6 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                         allweeklySales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
                         computeUserSales(allweeklySales);
                     }
-
 
 
                     usersNamesAdapter.notifyDataSetChanged();
@@ -400,6 +422,10 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 users.clear();
+                M_1UserIds.clear();
+                M_2userIds.clear();
+                allUserIds.clear();
+
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     String Key = postSnapshot.getKey();
                     User u = postSnapshot.getValue(User.class);
@@ -407,6 +433,16 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                         userdb = u;
                         USERID = "" + userdb.getId();
                     }
+                    if(u.getDepartment()!=null){
+                        if (u.getDepartment().equalsIgnoreCase("M-Unit Cyber 1")) {
+                            M_1UserIds.add("" + u.getId());
+                        } else if (u.getDepartment().equalsIgnoreCase("M-Unit Cyber 2")) {
+                            M_2userIds.add("" + u.getId());
+                        }
+                        allUserIds.add("" + u.getId());
+                    }
+
+
                     users.add(u);
                 }
                 if (userdb.getLevel() > 2) {
@@ -414,9 +450,11 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                     allUsersRV.setVisibility(View.GONE);
                 }
                 pDialog.dismiss();
-                getDailySale();
+//                getDailySale();
 
-                fetchUserSales(USERID);
+                userIds.clear();
+                userIds.add(USERID);
+                fetchUserSales(userIds);
 
             }
 
@@ -435,6 +473,27 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void fetchCybers() {
+        SweetAlertDialog pDialog = new SweetAlertDialog(CashInActivity.this, SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading ...");
+        pDialog.setCancelable(false);
+        pDialog.show();
+        users.clear();
+        User all = new User(1001, 5, "All", "all");
+        User m_unit1 = new User(1002, 5, "M-Unit 1","M-Unit 1" );
+        User m_unit2 = new User(1003, 5, "M-Unit 2", "M-Unit 2");
+        users.add(all);
+        users.add(m_unit1);
+        users.add(m_unit2);
+        pDialog.dismiss();
+        userIds.clear();
+        userIds.addAll(allUserIds);
+        userdb = all;
+        fetchUserSales(userIds);
+    }
+
     public void populateChart(List<DailySales> sales) {
         List<DailySales> salesRev = new ArrayList<>();
         salesRev.addAll(sales);
@@ -447,16 +506,16 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         }
 
         BarDataSet set1;
-        String desc="";
+        String desc = "";
         switch (showingDataFor) {
             case DAILY_DATA:
-                desc="Daily sales";
+                desc = "Daily sales";
                 break;
             case WEEKLY_DATA:
-                desc="Weekly Sales";
+                desc = "Weekly Sales";
                 break;
             case MONTHLY_DATA:
-                desc="Monthly Sales";
+                desc = "Monthly Sales";
                 break;
         }
 
@@ -541,14 +600,25 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         userdb = user;
         USERID = "" + userdb.getId();
         USERID = "" + user.getId();
-        fetchUserSales(USERID);
+        userIds.clear();
+        if(USERID.equalsIgnoreCase("1001")){
+            userIds.addAll(allUserIds);
+        }else if(USERID.equalsIgnoreCase("1002")){
+            userIds.addAll(M_1UserIds);
+        }else if(USERID.equalsIgnoreCase("1003")){
+            userIds.addAll(M_2userIds);
+        }else {
+            userIds.add(USERID);
+        }
+
+        fetchUserSales(userIds);
         if (userdb.getLevel() > 2) {
             summaryBtn.setVisibility(View.GONE);
-        }else {
+        } else {
             summaryBtn.setVisibility(View.VISIBLE);
         }
-        int ScrlTo =users.indexOf(user);
-        if(ScrlTo<users.size()-1){
+        int ScrlTo = users.indexOf(user);
+        if (ScrlTo < users.size() - 1) {
             ScrlTo = ScrlTo + 1;
         }
         allUsersRV.smoothScrollToPosition(ScrlTo);

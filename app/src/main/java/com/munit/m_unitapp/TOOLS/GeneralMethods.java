@@ -96,40 +96,40 @@ public class GeneralMethods {
         String monthName;
         switch (monthNumber) {
             case 1:
-                monthName = "January";
+                monthName = "Jan";
                 break;
             case 2:
-                monthName = "February";
+                monthName = "Feb";
                 break;
             case 3:
-                monthName = "March";
+                monthName = "Mar";
                 break;
             case 4:
-                monthName = "April";
+                monthName = "Apr";
                 break;
             case 5:
                 monthName = "May";
                 break;
             case 6:
-                monthName = "June";
+                monthName = "Jun";
                 break;
             case 7:
-                monthName = "July";
+                monthName = "Jul";
                 break;
             case 8:
-                monthName = "August";
+                monthName = "Aug";
                 break;
             case 9:
-                monthName = "September";
+                monthName = "Sep";
                 break;
             case 10:
-                monthName = "October";
+                monthName = "Oct";
                 break;
             case 11:
-                monthName = "November";
+                monthName = "Nov";
                 break;
             case 12:
-                monthName = "December";
+                monthName = "Dec";
                 break;
             default:
                 monthName = "Invalid month";

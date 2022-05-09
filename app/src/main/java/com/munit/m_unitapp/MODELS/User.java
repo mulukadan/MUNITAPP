@@ -9,9 +9,18 @@ public class User {
     String status;
     String imgUrl;
     String phoneNo;
+    String department;
     Boolean active;
 
     public User() {
+    }
+
+    public User(int id, int level, String name, String username ) {
+        this.id = id;
+        this.level = level;
+        this.name = name;
+        this.username = username;
+
     }
 
     public int getId() { return id;  }
@@ -80,5 +89,13 @@ public class User {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }

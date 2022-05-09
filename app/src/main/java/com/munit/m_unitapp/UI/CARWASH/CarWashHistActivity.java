@@ -234,6 +234,7 @@ public class CarWashHistActivity extends AppCompatActivity {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void computeUserSales(List<CarWashDailySummary> allweeklySales) {
         records.clear();
         switch (showingDataFor) {
@@ -257,6 +258,10 @@ public class CarWashHistActivity extends AppCompatActivity {
                             dailySales.setBalTotal(dailySales.getBalTotal() + sale.getBalTotal());
                             dailySales.setOthers(dailySales.getOthers() + sale.getOthers());
 //                            dailySales.setDate(sale.getDate());
+//                            dailySales.setSortValue(sale.getSortValue());
+                            if(dailySales.getSortValue()>sale.getSortValue()) {
+                                dailySales.setSortValue(sale.getSortValue());
+                            }
                             found = true;
                             break;
                         }
@@ -271,7 +276,7 @@ public class CarWashHistActivity extends AppCompatActivity {
                         } else {
                             weekTitle = "Last Week but " + ((todaysWeekNo - theWeeksNo) - 1);
                         }
-                        sale.setDate(weekTitle);
+                        sale.setDate(weekTitle  +" this Week: "+ todaysWeekNo + " wk: "+ theWeeksNo + "SN: "+ sale.getSortValue());
                         records.add(sale);
                     }
 
@@ -304,7 +309,7 @@ public class CarWashHistActivity extends AppCompatActivity {
                 }
                 break;
         }
-//        userSales.sort(Comparator.comparing(DailySales::getSortValue).reversed());
+        records.sort(Comparator.comparing(CarWashDailySummary::getSortValue).reversed());
         adapter.notifyDataSetChanged();
         populateChart(records);
         pDialog.dismiss();

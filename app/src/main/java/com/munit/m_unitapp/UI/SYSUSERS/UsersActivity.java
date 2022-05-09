@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,7 +68,7 @@ public class UsersActivity extends AppCompatActivity {
     private EditText UserName;
     private EditText password;
     private String AdminEmail, AdminPassword;
-    private Spinner userLevelSpiner;
+    private Spinner userLevelSpiner, departmentSpiner;
 
     SweetAlertDialog sdialog;
     String UserType;
@@ -112,6 +116,7 @@ public class UsersActivity extends AppCompatActivity {
         PhoneNo = UserDialog.findViewById(R.id.PhoneNo);
         UserName = UserDialog.findViewById(R.id.UserName);
         userLevelSpiner = UserDialog.findViewById(R.id.userLevelSpiner);
+        departmentSpiner = UserDialog.findViewById(R.id.departmentSpiner);
         password = UserDialog.findViewById(R.id.password);
         SaveBtn = UserDialog.findViewById(R.id.SaveBtn);
 
@@ -161,10 +166,10 @@ public class UsersActivity extends AppCompatActivity {
                 String email = uUserName + "@munit.com";
                 user.setUsername(email);
                 user.setPassword(upassword);
-                user.setId(Integer.parseInt(users.size()+uPhoneNo.substring(5,7)));
+                user.setId(Integer.parseInt(users.size() + uPhoneNo.substring(5, 7)));
                 user.setActive(true);
-                user.setLevel( userLevelSpiner.getSelectedItemPosition()+1);
-
+                user.setLevel(userLevelSpiner.getSelectedItemPosition() + 1);
+                user.setDepartment(departmentSpiner.getSelectedItem().toString());
                 sdialog.setTitleText("Save User?")
                         .setContentText("Are you sure you want to save!")
                         .setConfirmText("Save")
@@ -177,6 +182,7 @@ public class UsersActivity extends AppCompatActivity {
                             users.add(user);
 //                            db.saveUsers(users);
                             addUserToFirebase(user);
+
                         })
                         .show();
 
@@ -214,7 +220,7 @@ public class UsersActivity extends AppCompatActivity {
                         int Index7 = user.getPhoneNo().indexOf("7");
                         String Phone = "254" + user.getPhoneNo().substring(Index7);
                         String userFname = user.getName();
-                        if(userFname.contains(" ")){
+                        if (userFname.contains(" ")) {
                             userFname = userFname.substring(0, userFname.indexOf(" "));
                         }
 
@@ -234,7 +240,7 @@ public class UsersActivity extends AppCompatActivity {
                 });
     }
 
-    public void fetchData(){
+    public void fetchData() {
         SweetAlertDialog pDialog = new SweetAlertDialog(UsersActivity.this, SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         pDialog.setTitleText("Loading ...");
@@ -247,7 +253,7 @@ public class UsersActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 users.clear();
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     String Key = postSnapshot.getKey();
                     User user = postSnapshot.getValue(User.class);
 //                      if(room_ic.getId().equals("l Room 12"))
@@ -293,7 +299,7 @@ public class UsersActivity extends AppCompatActivity {
                                     .setConfirmText("OK")
                                     .setConfirmClickListener(sweetAlertDialog -> {
                                         UserDialog.dismiss();
-                                        sdialog.dismissWithAnimation();
+                                        sdialog.dismiss();
                                     })
                                     .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
 
@@ -331,7 +337,7 @@ public class UsersActivity extends AppCompatActivity {
                                 .setConfirmText("OK")
                                 .setConfirmClickListener(sweetAlertDialog -> {
                                     finish();
-                                    sdialog.dismissWithAnimation();
+                                    sdialog.dismiss();
                                 })
                                 .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
                     } else {
