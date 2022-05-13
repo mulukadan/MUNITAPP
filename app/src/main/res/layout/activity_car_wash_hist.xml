@@ -39,6 +39,32 @@
             android:text="Summary"
             android:textColor="#263238" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/expenseTypeLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#D8D4D4"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="15dp"
+            android:textColor="#000000"
+            android:fontFamily="@font/bold"
+            android:text="Report Type" />
+
+        <Spinner
+            android:id="@+id/reportsSpner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000" />
+
+    </LinearLayout>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -184,6 +210,7 @@
                 android:textSize="12dp" />
 
             <TextView
+                android:id="@+id/field1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -194,6 +221,7 @@
                 android:textSize="12dp" />
 
             <TextView
+                android:id="@+id/field2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

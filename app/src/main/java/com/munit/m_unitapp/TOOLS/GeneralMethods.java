@@ -1,5 +1,6 @@
 package com.munit.m_unitapp.TOOLS;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -64,7 +65,7 @@ public class GeneralMethods {
         return null;
     }
 
-    public int getWeekNumber(String sDate) {
+    public static int getWeekNumber(String sDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar cal = Calendar.getInstance();
         cal.setMinimalDaysInFirstWeek(1);
@@ -76,9 +77,22 @@ public class GeneralMethods {
 
         int number = cal.get(Calendar.WEEK_OF_YEAR);
         if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-            number = number - 1;
+//            number = number - 1;
         }
         return number;
+    }
+    public static String ChangeDateToSimpleFormat(String DateToConvert) {
+        String newDate = "";
+        try {
+            String FOR = "dd/M/yyyy";
+            DateFormat gmtFormat = new SimpleDateFormat("EEE, dd MMM, yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat(FOR);
+            newDate = gmtFormat.format(sdf.parse(DateToConvert));
+            return newDate;
+        } catch (Exception e) {
+
+        }
+        return newDate;
     }
 
     public String getDateParts(String sDate, String getWhat) {

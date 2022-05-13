@@ -60,6 +60,7 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
                         android:layout_margin="5dp"
                         app:cardElevation="10dp">
 
@@ -67,18 +68,19 @@
                             android:id="@+id/leftArrow"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/left_navigate"/>
+                            android:src="@drawable/left_navigate" />
 
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@+id/leftCV"
-                        android:layout_toLeftOf="@+id/rightCV"
+                        android:layout_centerInParent="true"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_centerInParent="true">
+                        android:layout_toLeftOf="@+id/rightCV"
+                        android:layout_toRightOf="@+id/leftCV"
+                        app:cardElevation="0dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -99,22 +101,25 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                    android:orientation="vertical">
 
                                     <TextView
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:fontFamily="@font/bold"
                                         android:text="Date: "
+                                        android:textAlignment="center"
                                         android:textSize="15dp" />
 
                                     <TextView
                                         android:id="@+id/mainDaysDate"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:fontFamily="@font/bold"
                                         android:text="08/11/2019"
-                                        android:textSize="15dp" />
+                                        android:textAlignment="center"
+                                        android:textColor="#041A45"
+                                        android:textSize="18dp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -125,7 +130,7 @@
 
                                     <TextView
                                         android:id="@+id/expenseViewBtn"
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="0dp"
                                         android:layout_marginTop="5dp"
@@ -133,6 +138,7 @@
                                         android:paddingHorizontal="10dp"
                                         android:paddingBottom="5dp"
                                         android:text="View Expenses"
+                                        android:textAlignment="center"
                                         android:textColor="@color/white" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -161,6 +167,7 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
                         android:layout_margin="5dp"
                         app:cardElevation="10dp">
 
@@ -168,7 +175,7 @@
                             android:id="@+id/rightArrow"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/right_navigate_next_24"/>
+                            android:src="@drawable/right_navigate_next_24" />
 
                     </androidx.cardview.widget.CardView>
                 </RelativeLayout>
@@ -382,6 +389,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/expenseLL"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="10dp"
@@ -478,6 +486,22 @@
             app:fab_label="Add new"
             app:fab_size="mini" />
 
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/addTokenReadingBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_shopping_cart_24"
+            app:fab_colorNormal="#4CAF50"
+            app:fab_label="Token Reading"
+            app:fab_size="mini" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/addWaterReadingBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_shopping_cart_24"
+            app:fab_colorNormal="#4CAF50"
+            app:fab_label="Water Reading"
+            app:fab_size="mini" />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/addExpenseBtn"
             android:layout_width="wrap_content"

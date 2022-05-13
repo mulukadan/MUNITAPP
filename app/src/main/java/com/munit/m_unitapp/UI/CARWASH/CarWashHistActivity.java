@@ -9,8 +9,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
@@ -58,12 +61,15 @@ public class CarWashHistActivity extends AppCompatActivity {
     private String todate;
     private BarChart chart;
     private TextView listViewBtn, chartViewBtn;
-    private RecyclerView allUsersRV;
+    private Spinner reportsSpner;
 
+    List<String> reportsSpinnerArray = new ArrayList<>();
+    String reportFor;
+    private ArrayAdapter<String> reportSpnerAdapter;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private FirebaseUser user;
-    private TextView daysDate, compServTV, compSalesTV, GamesTV, moviesTV, mpesaTillTV, cashTV, totalPayTV, weeklyBtn, monthlyBtn, dailyBtn;
+    private TextView daysDate, field1, field2, weeklyBtn, monthlyBtn, dailyBtn;
     private User userdb = new User();
     private LinearLayout chartViewLL, listViewLL;
     private Gson gson;
@@ -90,10 +96,44 @@ public class CarWashHistActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
+        reportsSpner = findViewById(R.id.reportsSpner);
         weeklyBtn = findViewById(R.id.weeklyBtn);
         monthlyBtn = findViewById(R.id.monthlyBtn);
         dailyBtn = findViewById(R.id.dailyBtn);
+        field1 = findViewById(R.id.field1);
+        field2 = findViewById(R.id.field2);
 
+        reportsSpinnerArray.add("Labour and Expense");
+        reportsSpinnerArray.add("Token and Water");
+        reportFor = reportsSpinnerArray.get(0);
+        reportSpnerAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, reportsSpinnerArray);
+
+        reportSpnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        reportsSpner.setAdapter(reportSpnerAdapter);
+
+        reportsSpner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // your code here
+                reportFor = reportsSpner.getSelectedItem().toString();
+                if (reportFor.equalsIgnoreCase("Labour and Expense")) {
+                    field1.setText("Lbr");
+                    field2.setText("Exp.");
+                } else {
+                    field1.setText("H2O");
+                    field2.setText("Token");
+                }
+                adapter.setReportFor(reportFor);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
         gson = new Gson();
         database = FirebaseDatabase.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -117,7 +157,7 @@ public class CarWashHistActivity extends AppCompatActivity {
         weeklySummary.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         weeklySummary.smoothScrollToPosition(0);
 
-        adapter = new AllCarwashSalesAdapter(weeklySummary.getContext(), records);
+        adapter = new AllCarwashSalesAdapter(weeklySummary.getContext(), records, reportFor);
 //        adapter.setListener(this);
         adapter.setSelectedUserName("Total");
         weeklySummary.setAdapter(adapter);
@@ -202,10 +242,10 @@ public class CarWashHistActivity extends AppCompatActivity {
                         pDialog.dismiss();
                         computeUserSales(new ArrayList<>());
                         return;
-                    }else if (value.isEmpty()) {
+                    } else if (value.isEmpty()) {
                         computeUserSales(new ArrayList<>());
                         pDialog.dismiss();
-                    }else {
+                    } else {
                         List<CarWashDailySummary> allSales = new ArrayList<>();
                         for (QueryDocumentSnapshot doc : value) {
                             if (doc.get("date") != null) {
@@ -219,13 +259,15 @@ public class CarWashHistActivity extends AppCompatActivity {
                                 }
                                 int dateInt = (int) (date1.getTime() / 1000);
                                 dailySales.setSortValue(dateInt);
+                                String yrWkNo = dailySales.getYear() + GeneralMethods.getWeekNumber(dailySales.getDate());
+                                dailySales.setYear_week(yrWkNo);
+
                                 allSales.add(dailySales);
                             }
                         }
                         allSales.sort(Comparator.comparing(CarWashDailySummary::getSortValue).reversed());
                         computeUserSales(allSales);
                     }
-
 
 
 //                    usersNamesAdapter.notifyDataSetChanged();
@@ -241,6 +283,7 @@ public class CarWashHistActivity extends AppCompatActivity {
             case DAILY_DATA:
                 for (CarWashDailySummary sale : allweeklySales) {
 //                    sale.setUserName(sale.getDate());
+                    sale.setTitle(sale.getDate());
                     records.add(sale);
                 }
                 break;
@@ -257,9 +300,10 @@ public class CarWashHistActivity extends AppCompatActivity {
                             dailySales.setTrucks(dailySales.getTrucks() + sale.getTrucks());
                             dailySales.setBalTotal(dailySales.getBalTotal() + sale.getBalTotal());
                             dailySales.setOthers(dailySales.getOthers() + sale.getOthers());
-//                            dailySales.setDate(sale.getDate());
+                            dailySales.setDate(sale.getDate() + ", " + dailySales.getDate());
 //                            dailySales.setSortValue(sale.getSortValue());
-                            if(dailySales.getSortValue()>sale.getSortValue()) {
+                            dailySales.setCount(dailySales.getCount() + 1);
+                            if (dailySales.getSortValue() > sale.getSortValue()) {
                                 dailySales.setSortValue(sale.getSortValue());
                             }
                             found = true;
@@ -274,9 +318,9 @@ public class CarWashHistActivity extends AppCompatActivity {
                         } else if (todaysWeekNo - theWeeksNo == 1) {
                             weekTitle = "Last Week";
                         } else {
-                            weekTitle = "Last Week but " + ((todaysWeekNo - theWeeksNo) - 1);
+                            weekTitle = "L.Wk but " + ((todaysWeekNo - theWeeksNo) - 1);
                         }
-                        sale.setDate(weekTitle  +" this Week: "+ todaysWeekNo + " wk: "+ theWeeksNo + "SN: "+ sale.getSortValue());
+                        sale.setTitle(weekTitle);
                         records.add(sale);
                     }
 
@@ -296,13 +340,14 @@ public class CarWashHistActivity extends AppCompatActivity {
                             dailySales.setBalTotal(dailySales.getBalTotal() + sale.getBalTotal());
                             dailySales.setOthers(dailySales.getOthers() + sale.getOthers());
 //                            dailySales.setDate(sale.getDate());
+                            dailySales.setCount(dailySales.getCount() + 1);
                             found = true;
                             break;
                         }
                     }
                     if (!found) {
                         //Add new
-                        sale.setDate(new GeneralMethods().getMonthName(Integer.parseInt(sale.getYear_month().substring(4))) + " " + sale.getYear());
+                        sale.setTitle(new GeneralMethods().getMonthName(Integer.parseInt(sale.getYear_month().substring(4))) + " " + sale.getYear());
                         records.add(sale);
                     }
 
@@ -327,16 +372,16 @@ public class CarWashHistActivity extends AppCompatActivity {
         }
 
         BarDataSet set1;
-        String desc="";
+        String desc = "";
         switch (showingDataFor) {
             case DAILY_DATA:
-                desc="Daily sales";
+                desc = "Daily sales";
                 break;
             case WEEKLY_DATA:
-                desc="Weekly Sales";
+                desc = "Weekly Sales";
                 break;
             case MONTHLY_DATA:
-                desc="Monthly Sales";
+                desc = "Monthly Sales";
                 break;
         }
 

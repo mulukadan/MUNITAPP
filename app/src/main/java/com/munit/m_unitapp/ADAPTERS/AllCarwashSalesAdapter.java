@@ -30,17 +30,21 @@ public class AllCarwashSalesAdapter extends RecyclerView.Adapter<AllCarwashSales
     Context mContext;
     ClickListener listener;
     String selectedUserName = "";
+    String reportFor = "";
 
-    public AllCarwashSalesAdapter(Context context, List<CarWashDailySummary> data) {
+    public AllCarwashSalesAdapter(Context context, List<CarWashDailySummary> data, String reportFor) {
         inflator = LayoutInflater.from(context);
         mContext = context;
         this.data = data;
+        this.reportFor = reportFor;
     }
-    public AllCarwashSalesAdapter(Context context, List<CarWashDailySummary> data, String selectedUserName) {
+
+    public AllCarwashSalesAdapter(Context context, List<CarWashDailySummary> data, String selectedUserName, String reportFor) {
         inflator = LayoutInflater.from(context);
         mContext = context;
         this.data = data;
         this.selectedUserName = selectedUserName;
+        this.reportFor = reportFor;
     }
 
     @Override
@@ -56,18 +60,30 @@ public class AllCarwashSalesAdapter extends RecyclerView.Adapter<AllCarwashSales
     public void onBindViewHolder(myViewHolder holder, int position) {
         CarWashDailySummary current = data.get(position);
         String date = current.getDate();
+        String title = current.getTitle();
+        String count = current.getCount() + "";
+        if(count.equals("1")){
+            count = "";
+        }
 
-        holder.name.setText(date);
+        holder.name.setText(title + ": " + count);
 
-        holder.countTV.setText(current.getMotorbikes()+"|" + current.getCars()+"|"+current.getTrucks()+"|"+current.getOthers());
+        holder.countTV.setText(current.getMotorbikes() + "|" + current.getCars() + "|" + current.getTrucks() + "|" + current.getOthers());
 
         holder.overalTotalTV.setText("" + current.getOverallTotal());
-        holder.lbrTotalTv.setText("" + current.getLabourTotal());
-        holder.expenseTV.setText("" + current.getExpense());
+
+        if(reportFor.equalsIgnoreCase("Labour and Expense")){
+            holder.lbrTotalTv.setText("" + current.getLabourTotal());
+            holder.expenseTV.setText("" + current.getExpense());
+        }else{
+            holder.lbrTotalTv.setText("" + current.getWaterReading().getUnits());
+            holder.expenseTV.setText("" +  current.getDailyTokenReading().getUnits());
+        }
+
         holder.balTotalTV.setText("" + current.getBalTotal());
         holder.GroupcardView.setOnClickListener(v -> {
-            if(listener!=null)
-            listener.showCashBreakDown(current, true);
+            if (listener != null)
+                listener.showCashBreakDown(current, true);
         });
 
 //        if(selectedUserName.equalsIgnoreCase(current.getUserName())){
@@ -102,8 +118,8 @@ public class AllCarwashSalesAdapter extends RecyclerView.Adapter<AllCarwashSales
             expenseTV = itemView.findViewById(R.id.expenseTV);
             balTotalTV = itemView.findViewById(R.id.balTotalTV);
             countTV = itemView.findViewById(R.id.countTV);
-            GroupcardView =  itemView.findViewById(R.id.GroupcardView);
-            bkLL =  itemView.findViewById(R.id.bkLL);
+            GroupcardView = itemView.findViewById(R.id.GroupcardView);
+            bkLL = itemView.findViewById(R.id.bkLL);
         }
 
 
@@ -113,7 +129,7 @@ public class AllCarwashSalesAdapter extends RecyclerView.Adapter<AllCarwashSales
         this.listener = listener;
     }
 
-    public interface ClickListener{
+    public interface ClickListener {
         void showCashBreakDown(CarWashDailySummary summary, boolean refreshRV);
     }
 
@@ -121,4 +137,11 @@ public class AllCarwashSalesAdapter extends RecyclerView.Adapter<AllCarwashSales
         this.selectedUserName = selectedUserName;
     }
 
+    public String getReportFor() {
+        return reportFor;
+    }
+
+    public void setReportFor(String reportFor) {
+        this.reportFor = reportFor;
+    }
 }

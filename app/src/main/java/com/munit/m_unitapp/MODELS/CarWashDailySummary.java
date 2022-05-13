@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CarWashDailySummary {
+    String title;
     String date;
     List<CarwashAttentantTotal> attentantsTotals;
     int labourTotal;
@@ -14,10 +15,16 @@ public class CarWashDailySummary {
     int cars;
     int trucks;
     int others;
+    int profit;
     String year_week;
     String year_month;
     String year;
     int sortValue = 0;
+    int count = 1; //used for summary recs count
+
+    private DailyMeterReading waterReading = new DailyMeterReading("Water", 250);
+    private DailyMeterReading DailyTokenReading = new DailyMeterReading("Token", 30);
+
 
     public CarWashDailySummary() {
     }
@@ -139,5 +146,45 @@ public class CarWashDailySummary {
 
     public void setOthers(int others) {
         this.others = others;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getProfit() {
+        return profit;
+    }
+
+    public void setProfit(int profit) {
+        this.profit = profit;
+    }
+
+    public DailyMeterReading getWaterReading() {
+        return waterReading;
+    }
+
+    public void setWaterReading(DailyMeterReading waterReading) {
+        this.waterReading = waterReading;
+    }
+
+    public DailyMeterReading getDailyTokenReading() {
+        return DailyTokenReading;
+    }
+
+    public void setDailyTokenReading(DailyMeterReading dailyTokenReading) {
+        DailyTokenReading = dailyTokenReading;
     }
 }

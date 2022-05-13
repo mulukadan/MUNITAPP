@@ -317,6 +317,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                                 }
                                 int dateInt = (int) (date1.getTime() / 1000);
                                 dailySales.setSortValue(dateInt);
+                                String yrWkNo = dailySales.getYear() + GeneralMethods.getWeekNumber(dailySales.getDate());
+                                dailySales.setYear_week(yrWkNo);
                                 allweeklySales.add(dailySales);
                             }
                         }
@@ -358,7 +360,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                             break;
                         }
                     }
-                    if (!found) {
+                    if (!found && sale.getYear().equals(String.valueOf(year))) {
                         int theWeeksNo = new GeneralMethods().getWeekNumber(sale.getDate());
                         String weekTitle = "";
                         if (todaysWeekNo == theWeeksNo) {
@@ -366,7 +368,7 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
                         } else if (todaysWeekNo - theWeeksNo == 1) {
                             weekTitle = "Last Week";
                         } else {
-                            weekTitle = "Last Week but " + ((todaysWeekNo - theWeeksNo) - 1);
+                            weekTitle = "L.Wk but " + ((todaysWeekNo - theWeeksNo) - 1);
                         }
                         sale.setUserName(weekTitle);
                         userSales.add(sale);
@@ -482,8 +484,8 @@ public class CashInActivity extends AppCompatActivity implements AllDailySalesAd
         pDialog.show();
         users.clear();
         User all = new User(1001, 5, "All", "all");
-        User m_unit1 = new User(1002, 5, "M-Unit 1","M-Unit 1" );
-        User m_unit2 = new User(1003, 5, "M-Unit 2", "M-Unit 2");
+        User m_unit1 = new User(1002, 5, "M-Unit Cyber1","M-Unit 1" );
+        User m_unit2 = new User(1003, 5, "M-Unit Cyber2", "M-Unit 2");
         users.add(all);
         users.add(m_unit1);
         users.add(m_unit2);

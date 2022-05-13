@@ -85,4 +85,5 @@ public class CarwashRec {
     public void setPaid(boolean paid) {
         this.paid = paid;
     }
+
 }
