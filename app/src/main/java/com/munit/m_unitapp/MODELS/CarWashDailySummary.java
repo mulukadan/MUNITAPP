@@ -6,7 +6,8 @@ import java.util.List;
 public class CarWashDailySummary {
     String title;
     String date;
-    List<CarwashAttentantTotal> attentantsTotals;
+    List<CarwashExpenseModel> attentantsTotals;
+    List<CarwashExpenseModel> expenseTotals;
     int labourTotal;
     int expense;
     int overallTotal;
@@ -44,11 +45,11 @@ public class CarWashDailySummary {
         }
     }
 
-    public List<CarwashAttentantTotal> getAttentantsTotals() {
+    public List<CarwashExpenseModel> getAttentantsTotals() {
         return attentantsTotals;
     }
 
-    public void setAttentantsTotals(List<CarwashAttentantTotal> attentantsTotals) {
+    public void setAttentantsTotals(List<CarwashExpenseModel> attentantsTotals) {
         this.attentantsTotals = attentantsTotals;
     }
 
@@ -186,5 +187,13 @@ public class CarWashDailySummary {
 
     public void setDailyTokenReading(DailyMeterReading dailyTokenReading) {
         DailyTokenReading = dailyTokenReading;
+    }
+
+    public List<CarwashExpenseModel> getExpenseTotals() {
+        return expenseTotals;
+    }
+
+    public void setExpenseTotals(List<CarwashExpenseModel> expenseTotals) {
+        this.expenseTotals = expenseTotals;
     }
 }

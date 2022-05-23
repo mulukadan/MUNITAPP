@@ -16,6 +16,7 @@ import com.munit.m_unitapp.MODELS.CarwashRec;
 import com.munit.m_unitapp.MODELS.DailySales;
 import com.munit.m_unitapp.R;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class AllCarwashSalesAdapter extends RecyclerView.Adapter<AllCarwashSales
     ClickListener listener;
     String selectedUserName = "";
     String reportFor = "";
-
+    private static final DecimalFormat df = new DecimalFormat("0.00");
     public AllCarwashSalesAdapter(Context context, List<CarWashDailySummary> data, String reportFor) {
         inflator = LayoutInflater.from(context);
         mContext = context;
@@ -76,8 +77,8 @@ public class AllCarwashSalesAdapter extends RecyclerView.Adapter<AllCarwashSales
             holder.lbrTotalTv.setText("" + current.getLabourTotal());
             holder.expenseTV.setText("" + current.getExpense());
         }else{
-            holder.lbrTotalTv.setText("" + current.getWaterReading().getUnits());
-            holder.expenseTV.setText("" +  current.getDailyTokenReading().getUnits());
+            holder.lbrTotalTv.setText(df.format(current.getWaterReading().getUnits()));
+            holder.expenseTV.setText(df.format(current.getDailyTokenReading().getUnits()));
         }
 
         holder.balTotalTV.setText("" + current.getBalTotal());

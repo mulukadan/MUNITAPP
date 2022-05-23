@@ -1,13 +1,14 @@
 package com.munit.m_unitapp.MODELS;
 
-public class CarwashAttentantTotal {
+public class CarwashExpenseModel {
+    int count = 1;
     String name;
     int total;
 
-    public CarwashAttentantTotal() {
+    public CarwashExpenseModel() {
     }
 
-    public CarwashAttentantTotal(String name, int total) {
+    public CarwashExpenseModel(String name, int total) {
         this.name = name;
         this.total = total;
     }
@@ -29,5 +30,13 @@ public class CarwashAttentantTotal {
     }
     public void addToTotal(int amt) {
         this.total = this.total + amt;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

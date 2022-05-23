@@ -301,6 +301,8 @@ public class CarWashHistActivity extends AppCompatActivity {
                             dailySales.setBalTotal(dailySales.getBalTotal() + sale.getBalTotal());
                             dailySales.setOthers(dailySales.getOthers() + sale.getOthers());
                             dailySales.setDate(sale.getDate() + ", " + dailySales.getDate());
+                            dailySales.getWaterReading().setUnits(dailySales.getWaterReading().getUnits() + sale.getWaterReading().getUnits());
+                            dailySales.getDailyTokenReading().setUnits(dailySales.getDailyTokenReading().getUnits() + sale.getDailyTokenReading().getUnits());
 //                            dailySales.setSortValue(sale.getSortValue());
                             dailySales.setCount(dailySales.getCount() + 1);
                             if (dailySales.getSortValue() > sale.getSortValue()) {
@@ -339,6 +341,9 @@ public class CarWashHistActivity extends AppCompatActivity {
                             dailySales.setTrucks(dailySales.getTrucks() + sale.getTrucks());
                             dailySales.setBalTotal(dailySales.getBalTotal() + sale.getBalTotal());
                             dailySales.setOthers(dailySales.getOthers() + sale.getOthers());
+
+                            dailySales.getWaterReading().setUnits(dailySales.getWaterReading().getUnits() + sale.getWaterReading().getUnits());
+                            dailySales.getDailyTokenReading().setUnits(dailySales.getDailyTokenReading().getUnits() + sale.getDailyTokenReading().getUnits());
 //                            dailySales.setDate(sale.getDate());
                             dailySales.setCount(dailySales.getCount() + 1);
                             found = true;
@@ -368,7 +373,7 @@ public class CarWashHistActivity extends AppCompatActivity {
         final ArrayList<String> xAxisLabel = new ArrayList<>();
         for (CarWashDailySummary dailySales : salesRev) {
             yVals1.add(new BarEntry(salesRev.indexOf(dailySales), dailySales.getBalTotal()));
-            xAxisLabel.add(shortenForChart(dailySales.getDate()));
+            xAxisLabel.add(shortenForChart(dailySales.getTitle()));
         }
 
         BarDataSet set1;

@@ -20,7 +20,8 @@
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_summary.xml" value="0.24895833333333334" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pool_table.xml" value="0.22" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_pools_list.xml" value="0.2740036231884058" />
-        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_summary.xml" value="0.1546875" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_summary.xml" value="0.18" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_summary2.xml" value="0.2526041666666667" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_user_profile.xml" value="0.2857789855072464" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_users.xml" value="0.16458333333333333" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/activity_view_user.xml" value="0.16458333333333333" />
@@ -32,6 +33,7 @@
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/fragment_daily_sales_all.xml" value="0.2857789855072464" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/give_advance_dialog.xml" value="0.22708333333333333" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/hsms_dialog.xml" value="0.264945652173913" />
+        <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_carwash_expense.xml" value="0.2421875" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_carwash_rec.xml" value="0.21" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_daily_car_wash_sale.xml" value="0.2857789855072464" />
         <entry key="..\:/test/MUNITAPP/app/src/main/res/layout/layout_dailysale.xml" value="0.3066123188405797" />

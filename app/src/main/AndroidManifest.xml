@@ -27,6 +27,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".UI.CARWASH.SummaryActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.CARWASH.CarWashHomeActivity"
             android:exported="false" />
         <activity

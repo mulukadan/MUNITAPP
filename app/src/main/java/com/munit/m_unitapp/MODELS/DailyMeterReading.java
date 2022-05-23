@@ -1,18 +1,20 @@
 package com.munit.m_unitapp.MODELS;
 
+import java.text.DecimalFormat;
+
 public class DailyMeterReading {
     String name;
-    float start=0;
-    float end=0;
-    float units;
-    float unitCost;
+    double start=0;
+    double end=0;
+    double units;
+    double unitCost;
     int cost =0;
     String description;
 
     public DailyMeterReading() {
     }
 
-    public DailyMeterReading(String name, float unitCost) {
+    public DailyMeterReading(String name, double unitCost) {
         this.name = name;
         this.unitCost = unitCost;
     }
@@ -25,19 +27,19 @@ public class DailyMeterReading {
         this.name = name;
     }
 
-    public float getStart() {
+    public double getStart() {
         return start;
     }
 
-    public void setStart(float start) {
+    public void setStart(double start) {
         this.start = start;
     }
 
-    public float getEnd() {
+    public double getEnd() {
         return end;
     }
 
-    public void setEnd(float end) {
+    public void setEnd(double end) {
         this.end = end;
         if(end !=0){
             this.units = this.end - this.start;
@@ -48,23 +50,23 @@ public class DailyMeterReading {
         }
     }
 
-    public float getUnits() {
+    public double getUnits() {
         return units;
     }
 
-    public void setUnits(float units) {
+    public void setUnits(double units) {
         this.units = units;
     }
 
-    public float getUnitCost() {
+    public double getUnitCost() {
         return unitCost;
     }
 
-    public void setUnitCost(float unitCost) {
+    public void setUnitCost(double unitCost) {
         this.unitCost = unitCost;
     }
 
-    public float getCost() {
+    public double getCost() {
         return cost;
     }
 

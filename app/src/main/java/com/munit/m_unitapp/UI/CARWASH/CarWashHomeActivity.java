@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import com.munit.m_unitapp.R;
 
 public class CarWashHomeActivity extends AppCompatActivity {
-    private RelativeLayout dailyW, carwashHist;
+    private RelativeLayout dailyW, carwashHist, CWSummary;
     private ImageView back_arrow;
 
     @Override
@@ -23,6 +23,7 @@ public class CarWashHomeActivity extends AppCompatActivity {
         dailyW = findViewById(R.id.dailyW);
         carwashHist = findViewById(R.id.carwashHist);
         back_arrow = findViewById(R.id.back_arrow);
+        CWSummary = findViewById(R.id.CWSummary);
 
         dailyW.setOnClickListener(view -> {
             Intent intent = new Intent(this, CarWashMainActivity.class);
@@ -30,6 +31,10 @@ public class CarWashHomeActivity extends AppCompatActivity {
         });
         carwashHist.setOnClickListener(view -> {
             Intent intent = new Intent(this, CarWashHistActivity.class);
+            startActivity(intent);
+        });
+        CWSummary.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SummaryActivity.class);
             startActivity(intent);
         });
         back_arrow.setOnClickListener(view -> {
