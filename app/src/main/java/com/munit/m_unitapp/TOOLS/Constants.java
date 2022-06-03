@@ -1,22 +1,19 @@
 package com.munit.m_unitapp.TOOLS;
 
 public class Constants {
-
-//    public static String dailySalesPath = "dailysales";// Test
+    //    public static String dailySalesPath = "dailysales";// Test
     public static String dailySalesPath = "dailysaleslv"; // Live
 
-//    Carwash
+    //    Carwash
 //    public static String carWashRecPath = "car_wash_rec_test";// Test
     public static String carWashRecPath = "car_wash_rec_live"; // Live
 
-//    public static String carwashDailySummary = "carwash_daily_summary_test";// Test
+    //    public static String carwashDailySummary = "carwash_daily_summary_test";// Test
     public static String carwashDailySummary = "carwash_daily_summary_lv"; // Live
-
 
     //Pool Table Records
     public static String poolRecordsPath = "pool_records_test";// Test
 //    public static String poolRecordsPath = "pool_records_live"; // Live
-
 
     public static String poolRecordsJson = "{\n" +
             "    \"Sheet1\": [\n" +
