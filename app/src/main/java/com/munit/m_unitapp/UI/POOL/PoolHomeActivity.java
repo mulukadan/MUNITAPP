@@ -1,6 +1,7 @@
 package com.munit.m_unitapp.UI.POOL;
 
 import static com.munit.m_unitapp.TOOLS.Constants.poolRecordsJson;
+import static com.munit.m_unitapp.TOOLS.Constants.rec2;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -229,14 +230,17 @@ public class PoolHomeActivity extends AppCompatActivity {
 
         newSales = findViewById(R.id.newSales);
         newSales.setOnClickListener(v -> {
-            DisplaySalesDialog = true;
-            DateDisplaying = todate;
-            getPoolSale(DateDisplaying);
+//            DisplaySalesDialog = true;
+//            DateDisplaying = todate;
+//            getPoolSale(DateDisplaying); // OLD
+            Intent intent = new Intent(this, PoolsListActivity.class);
+            startActivity(intent);
 
         });
         History = findViewById(R.id.History);
         History.setOnClickListener(v -> {
-            Intent intent = new Intent(this, PoolHistActivity.class);
+//            Intent intent = new Intent(this, PoolHistActivity.class);// Old
+            Intent intent = new Intent(this, PoolSummaryActivity.class);
             startActivity(intent);
         });
 
@@ -262,8 +266,9 @@ public class PoolHomeActivity extends AppCompatActivity {
 
     private void getRecords() {
         JsonParser parser = new JsonParser();
-        JsonObject jsonObject = parser.parse(poolRecordsJson).getAsJsonObject();
-        JsonArray jsonArray = jsonObject.get("Sheet1").getAsJsonArray();
+//        JsonObject jsonObject = parser.parse(poolRecordsJson).getAsJsonObject();
+//        JsonObject jsonObject = parser.parse(rec2).getAsJsonObject();
+        JsonArray jsonArray = parser.parse(rec2).getAsJsonArray();
         Toast.makeText(this, "Total : "+ jsonArray.size(), Toast.LENGTH_SHORT).show();
         int count =0;
         for (JsonElement element: jsonArray

@@ -413,6 +413,7 @@ public class CarWashMainActivity extends AppCompatActivity implements CarwashDai
 //        attentantsSpinnerArray.add("Muinde");
 //        attentantsSpinnerArray.add("Samson");
         attentantsSpinnerArray.add("Octa");
+        attentantsSpinnerArray.add("Tito");
         attentantsSpinnerArray.add("Internal");
         attentantsSpinnerArray.add("Other");
 

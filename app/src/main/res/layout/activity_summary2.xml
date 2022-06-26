@@ -34,20 +34,6 @@ tools:context=".UI.CARWASH.SummaryActivity">
             android:textColor="@color/white"
             android:textSize="15dp" />
 
-        <RelativeLayout
-            android:id="@+id/refreshBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@color/white"
-            android:padding="5dp">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/history" />
-        </RelativeLayout>
     </RelativeLayout>
 
     <ScrollView
@@ -249,7 +235,7 @@ tools:context=".UI.CARWASH.SummaryActivity">
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/userNameTV"
+                            android:id="@+id/totalTV"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
@@ -263,7 +249,7 @@ tools:context=".UI.CARWASH.SummaryActivity">
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/userNameTV"
+                            android:layout_below="@+id/totalTV"
                             android:orientation="horizontal">
 
                             <TextView

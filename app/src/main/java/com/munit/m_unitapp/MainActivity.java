@@ -142,14 +142,19 @@ public class MainActivity extends AppCompatActivity {
 
         sales = findViewById(R.id.sales);
         sales.setOnClickListener((view) -> {
-            Intent intent = new Intent(MainActivity.this, CashInActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            if(userdb.getLevel()<3 ||!userdb.getDepartment().equalsIgnoreCase("CarWash")){
+                Intent intent = new Intent(MainActivity.this, CashInActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }else {
+                Toast.makeText(MainActivity.this,"Comin Soon!",Toast.LENGTH_SHORT).show();
+            }
+
         });
 
         carwash = findViewById(R.id.carwash);
         carwash.setOnClickListener((view) -> {
-            if(userdb.getLevel()<3){
+            if(userdb.getLevel()<3 || userdb.getDepartment().equalsIgnoreCase("CarWash")){
                 Intent intent = new Intent(MainActivity.this, CarWashHomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);

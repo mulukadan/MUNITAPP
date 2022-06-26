@@ -42,14 +42,14 @@ public class SummaryActivity extends AppCompatActivity {
     List<String> reportsSpinnerArray = new ArrayList<>();
     String reportFor;
     private ArrayAdapter<String> reportSpnerAdapter;
-    TextView weekRangeTV, weekTitleTv, userNameTV, userTillPayTV, userCashPayTV, weeklyBtn, monthlyBtn, yealyBtn;
+    TextView weekRangeTV, weekTitleTv, totalTV, userTillPayTV, userCashPayTV, weeklyBtn, monthlyBtn, yealyBtn;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     int todaysWeekNo;
     int currentDisplayedWeek, currentDisplayedMonth, currentDisplayedYear;
     List<String> weekDates = new ArrayList<>();
     List<CarwashExpenseModel> displayingSummary = new ArrayList<>();
     CarwashExpenseModel totalSummary = new CarwashExpenseModel();
-    int year, month, day;
+    int year, month, day, totalAmt = 0;
     String todate, DateDisplaying;
     SweetAlertDialog sweetAlertDialog;
     FirebaseFirestore firedb;
@@ -164,7 +164,7 @@ public class SummaryActivity extends AppCompatActivity {
         });
 
 
-        userNameTV = findViewById(R.id.userNameTV);
+        totalTV = findViewById(R.id.totalTV);
         userTillPayTV = findViewById(R.id.userTillPayTV);
         userCashPayTV = findViewById(R.id.userCashPayTV);
 
@@ -316,6 +316,7 @@ public class SummaryActivity extends AppCompatActivity {
 
     private void computeWeeklySales(List<CarWashDailySummary> allExpenseSales) {
         displayingSummary.clear();
+        totalAmt = 0;
 
         for (CarWashDailySummary summary : allExpenseSales) {
             if(summary.getExpenseTotals() != null){
@@ -342,6 +343,8 @@ public class SummaryActivity extends AppCompatActivity {
                     if (!found) {//Insert New
                         displayingSummary.add(expenseModel);
                     }
+
+                    totalAmt = totalAmt + expenseModel.getTotal();
 
                 }
             }
@@ -370,6 +373,7 @@ public class SummaryActivity extends AppCompatActivity {
 //        totalSummary.setUserName("Total");
 //        displayingSummary.add(totalSummary);
         carwashExpenseAdapter.notifyDataSetChanged();
+        totalTV.setText("Total: Ksh. "+ totalAmt);
 
         //Set Dates Display
         String weekTitle = "";

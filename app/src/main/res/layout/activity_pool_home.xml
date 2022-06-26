@@ -93,7 +93,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true"
                             android:fontFamily="@font/bold"
-                            android:text="New"
+                            android:text="Pools"
                             android:textAlignment="center"
                             android:textColor="@color/colorPrimary"
                             android:textSize="18dp" />
@@ -244,6 +244,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/Rooms"
+                android:visibility="gone"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
